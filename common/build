@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ -z ${X_SCLS+x} ]]; then
+   echo ""
+   echo "A version of g++ that supports C++14 is not available."
+   echo "This project requires C++14."
+   echo "If you're in a CentOS environment, these commands will fix this:"
+   echo "yum install centos-release-scl"
+   echo "scl enable devtoolset-7 bash"
+   echo ""
+
+   exit 1
+fi
+
+g++ -std=c++14 -Wall -Wpedantic -Ofast -o poker *.cpp
+
+exit 0
