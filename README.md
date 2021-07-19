@@ -29,4 +29,7 @@ The program can then be built as follows:
 OR  
 **cd poker/tableLookup**  
 
-**./build**
+**./build**  
+
+The program can then be run as follows:  
+**./poker**
