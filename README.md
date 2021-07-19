@@ -18,3 +18,6 @@ yum install centos-release-scl
 
 \# Do this in every shell session where you build this program  
 scl enable devtoolset-7 bash
+
+You can create a local clone of this project with this command:
+git clone https://github.com/dtheese/poker
