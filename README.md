@@ -25,5 +25,8 @@ You can create a local clone of this project with this command:
 **git clone https://github.com/dtheese/poker**
 
 The program can then be built as follows:  
-**cd poker**  
+**cd poker/main**  
+OR  
+**cd poker/tableLookup**  
+
 **./build**
