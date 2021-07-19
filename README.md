@@ -14,7 +14,7 @@ After empirical timing tests, C-style arrays are generally preferred to std::vec
 
 This project was built under CentOS 7.
 
-This project conforms to C++11. However, the **build** file first tries C++14 as that is the latest version of C++ with full support available for CentOS 7.
+This project conforms to C++11. However, the **build** script first tries C++14 as that is the latest version of C++ with full support available for CentOS 7. If this fails, the **build** script falls back to C++11.
 
 CentOS 7 does not support C++14 by default. If desired, this support may be obtained by executing these commands:  
 \# Do this one time only  
