@@ -1,4 +1,4 @@
-Project to count frequency of 5-card poker hands contained within N-card hands (5 <= N <= 52)
+# Project to count frequency of 5-card poker hands contained within N-card hands (5 <= N <= 52)
 
 Directory **main** contains a version of the program that enumerates all possible 5-card hands and determines each hand's rank by direct evaluation of the hand.
 
