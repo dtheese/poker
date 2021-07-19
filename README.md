@@ -4,9 +4,9 @@ Directory **main** contains a version of the program that enumerates all possibl
 
 The version of the program in directory **main** also has a second mode of operation. In this alternate mode of operation, hands are randomly generated until a target hand rank has been achieved a specified number of times. The intent of this mode is to check that the hand frequencies are coming out close to what is expected over a large number of trials.
 
-The mode of operation for the version of the program in **main** is selected in the file **main.cpp** with the use of a **\#if** preprocessor statement.
+The mode of operation for the version of the program in directory **main** is selected in the file **main.cpp** with the use of a **\#if** preprocessor statement.
 
-Directory **tableLookup** is an experimental version of the program where I pre-construct a lookup table to determine a hand's rank. Then, as with **main**, the program enumerates all possible 5-card hands and determines each hand's rank, but it does so by using the lookup table instead of by direct evaluation.
+Directory **tableLookup** is an experimental version of the program where I pre-construct a lookup table to determine a hand's rank. Then, as with directory **main**, the program enumerates all possible 5-card hands and determines each hand's rank, but it does so by using the lookup table instead of by direct evaluation.
 
 The "common" directory contains files that are common to both versions of this program.
 
