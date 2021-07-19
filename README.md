@@ -14,10 +14,10 @@ This project conforms to C++11. However, the "build" file specifies C++14 as tha
 
 CentOS 7 does not support C++11 (or higher) by default. To get this support, you must execute these commands:  
 \# Do this one time only  
-yum install centos-release-scl
+**yum install centos-release-scl**
 
 \# Do this in every shell session where you build this program  
-scl enable devtoolset-7 bash
+**scl enable devtoolset-7 bash**
 
-You can create a local clone of this project with this command:
-git clone https://github.com/dtheese/poker
+You can create a local clone of this project with this command:  
+**git clone https://github.com/dtheese/poker**
