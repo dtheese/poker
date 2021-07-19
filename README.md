@@ -23,3 +23,7 @@ CentOS 7 does not support C++11 (or higher) by default. To get this support, you
 
 You can create a local clone of this project with this command:  
 **git clone https://github.com/dtheese/poker**
+
+The program can then be built as follows:  
+**cd poker**
+**./build**
