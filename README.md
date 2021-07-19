@@ -12,11 +12,9 @@ This project was built under CentOS 7.
 
 This project conforms to C++11. However, the "build" file specifies C++14 as that is the latest version of C++ with support available for CentOS 7.
 
-CentOS 7 does not support C++11 (or higher) by default. To get this support, you must execute these commands:
-
-\# Do this one time only
-
+CentOS 7 does not support C++11 (or higher) by default. To get this support, you must execute these commands:  
+\# Do this one time only  
 yum install centos-release-scl
 
-\# Do this in every shell session where you build this program
+\# Do this in every shell session where you build this program  
 scl enable devtoolset-7 bash
