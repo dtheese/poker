@@ -12,7 +12,7 @@ using namespace std;
 
 enum class rank_t: unsigned int {
                                    First = 2,
-                                   Two   = 2,
+                                   Two   = First,
                                    Three = 3,
                                    Four  = 4,
                                    Five  = 5,
