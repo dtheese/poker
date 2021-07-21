@@ -1,18 +1,10 @@
-inline hand_t::hand_t(): id(1)
-{
-   vector<card_t> deck(deck_s::getInstance().getDeck());
-
-   for (unsigned int i = 52; i > 47; --i)
-   {
-      int rand_num(rand() % i);
-
-      cards[52 - i] = deck[rand_num];
-      id *= cards[52 - i].get_id();
-      deck.erase(deck.begin() + rand_num);
-   }
-
-   sort(cards, cards + 5);
-}
+// Leave this undefined to ensure we never call it.
+// Prefer to not mark it as "delete" in the header file because doing so would
+// require that the header file be duplicated, not common, between this program
+// version and other program versions that need the default constructor.
+// inline hand_t::hand_t()
+// {
+// }
 
 inline hand_t::hand_t(const card_t *cards_p): id(1)
 {
