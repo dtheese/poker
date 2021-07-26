@@ -1,7 +1,7 @@
-#include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <numeric>
+#include <random>
 #include <vector>
 
 #include "deck.h"
@@ -34,8 +34,6 @@ void average_random_hands_until_target_hand_rank_hit(
    cout << endl;
    cout << "average_random_hands_until_target_hand_rank_hit() called" << endl;
    cout << endl;
-
-   srand(time(0));
 
    vector<unsigned long long int> hands_dealt_v;
 
@@ -111,6 +109,7 @@ trial_result_t random_hands_until_target_hand_rank_hit(
    unsigned long long int num_cards
                                                       )
 {
+   static default_random_engine dre(time(0));
    unsigned long long int hands_dealt = 0;
 
    while (true)
@@ -124,7 +123,8 @@ trial_result_t random_hands_until_target_hand_rank_hit(
 
       for (unsigned int i = 52; i > 52 - num_cards; --i)
       {
-         int rand_num(rand() % i);
+         uniform_int_distribution<unsigned int> di(0, i - 1);
+         unsigned int rand_num(di(dre));
 
          cards.push_back(deck[rand_num]);
          deck.erase(deck.begin() + rand_num);
