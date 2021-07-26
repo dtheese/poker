@@ -1,9 +1,18 @@
 inline hand_t::hand_t()
 {
+   // Leave member id uninitialized since it is unused in this version.
+   //
+   // We want to leave it in hand.h though since hand.h is common between
+   // this version and a version that does use member id.
 }
 
 inline hand_t::hand_t(const card_t *cards_p)
 {
+   // Leave member id uninitialized since it is unused in this version.
+   //
+   // We want to leave it in hand.h though since hand.h is common between
+   // this version and a version that does use member id.
+
    for (unsigned int i = 0; i <= 4; ++i)
       cards[i] = cards_p[i];
 
