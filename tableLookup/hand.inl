@@ -1,10 +1,6 @@
-// Leave this undefined to ensure we never call it.
-// Prefer to not mark it as "delete" in the header file because doing so would
-// require that the header file be duplicated, not common, between this program
-// version and other program versions that need the default constructor.
-// inline hand_t::hand_t()
-// {
-// }
+inline hand_t::hand_t(): id(0)
+{
+}
 
 inline hand_t::hand_t(const card_t *cards_p): id(1)
 {

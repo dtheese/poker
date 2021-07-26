@@ -1,26 +1,11 @@
 inline hand_t::hand_t()
 {
-   vector<card_t> deck(deck_s::getInstance().getDeck());
-
-   for (unsigned int i = 52; i > 47; --i)
-   {
-      int rand_num(rand() % i);
-
-      cards[52 - i] = deck[rand_num];
-      // id *= cards[52 - i].get_id();
-      deck.erase(deck.begin() + rand_num);
-   }
-
-   sort(cards, cards + 5);
 }
 
 inline hand_t::hand_t(const card_t *cards_p)
 {
    for (unsigned int i = 0; i <= 4; ++i)
-   {
       cards[i] = cards_p[i];
-      // id *= cards[i].get_id();
-   }
 
    sort(cards, cards + 5);
 }
