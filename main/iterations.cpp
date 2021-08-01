@@ -82,8 +82,8 @@ static void operation_to_perform_2(const indexes_t &indexes)
    unsigned int j(0);
 
    for (
-          indexes_t::const_iterator i = indexes.begin();
-          i != indexes.end();
+          auto i = indexes.cbegin();
+          i != indexes.cend();
           ++i
        )
    {
@@ -99,14 +99,14 @@ static void operation_to_perform_2(const indexes_t &indexes)
 // *****************************************************************************
 static void operation_to_perform_1(const indexes_t &indexes)
 {
-   static const vector<card_t> &deck(deck_s::getInstance().getDeck());
+   static const auto &deck(deck_s::getInstance().getDeck());
 
    cards.clear();
    highest_hand_seen = hand_rank_t::HIGH_CARD;
 
    for (
-          indexes_t::const_iterator i = indexes.begin();
-          i != indexes.end();
+          auto i = indexes.cbegin();
+          i != indexes.cend();
           ++i
        )
    {

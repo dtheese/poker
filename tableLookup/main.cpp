@@ -74,7 +74,7 @@ static void operation_to_perform_1(const indexes_t &indexes)
    unsigned long long int hand_id(1);
 
    for (
-          indexes_t::const_iterator i = indexes.begin();
+          auto i = indexes.begin();
           i != indexes.end();
           ++i
        )

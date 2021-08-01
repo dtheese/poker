@@ -86,8 +86,8 @@ static void operation_to_perform_1(const indexes_t &indexes)
    unsigned int j(0);
 
    for (
-          indexes_t::const_iterator i = indexes.begin();
-          i != indexes.end();
+          auto i = indexes.cbegin();
+          i != indexes.cend();
           ++i
        )
    {
@@ -114,7 +114,7 @@ trial_result_t random_hands_until_target_hand_rank_hit(
 
    while (true)
    {
-      vector<card_t> deck(deck_s::getInstance().getDeck());
+      auto deck(deck_s::getInstance().getDeck());
 
       cards.clear();
       cards.reserve(num_cards);

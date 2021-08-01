@@ -8,14 +8,14 @@ static unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
 
 static void operation_to_perform_2(const indexes_t &indexes)
 {
-   static const vector<card_t> &deck(deck_s::getInstance().getDeck());
+   static const auto &deck(deck_s::getInstance().getDeck());
 
    card_t cards[5];
    unsigned int j(0);
 
    for (
-          indexes_t::const_iterator i = indexes.begin();
-          i != indexes.end();
+          auto i = indexes.cbegin();
+          i != indexes.cend();
           ++i
        )
    {
@@ -23,7 +23,7 @@ static void operation_to_perform_2(const indexes_t &indexes)
    }
 
    hand_t hand(cards);
-   unsigned long long int id = hand.get_id();
+   auto id = hand.get_id();
 
    hand_ranks_s[id] = hand.hand_rank();
 }

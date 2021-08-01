@@ -4,7 +4,7 @@ inline card_t::card_t(): rank(rank_t::None), suit(suit_t::None), id(0)
 
 inline card_t::card_t(rank_t rank_p, suit_t suit_p):rank(rank_p), suit(suit_p)
 {
-   vector<unsigned long long int>::size_type index =
+   auto index =
         13 * static_cast<underlying_type<suit_t>::type>(suit) +
         (static_cast<underlying_type<rank_t>::type>(rank) - 2);
 
