@@ -12,7 +12,7 @@
 using namespace std;
 
 static map<hand_rank_t, unsigned long long int> hand_rank_count;
-static unsigned long long int hands_dealt(0);
+static unsigned long long int hands_dealt{0};
 
 static void operation_to_perform_1(const indexes_t &indexes);
 
@@ -57,7 +57,7 @@ int main()
 
    cout << endl;
 
-   double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+   double time_taken = static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC);
 
    cout << "Time taken by program is : " << fixed 
         << time_taken << setprecision(5);
@@ -66,15 +66,15 @@ int main()
    cout << endl;
 }
 
-static const vector<card_t> &deck = deck_s::getInstance().getDeck();
-static const hand_rank_table_s &hrt = hand_rank_table_s::getInstance();
+static const auto &deck{deck_s::getInstance().getDeck()};
+static const auto &hrt{hand_rank_table_s::getInstance()};
 
 static void operation_to_perform_1(const indexes_t &indexes)
 {
    unsigned long long int hand_id(1);
 
    for (
-          auto i = indexes.begin();
+          auto i{indexes.begin()};
           i != indexes.end();
           ++i
        )

@@ -13,7 +13,7 @@ inline hand_t::hand_t(const card_t *cards_p)
    // We want to leave it in hand.h though since hand.h is common between
    // this version and a version that does use member id.
 
-   for (unsigned int i = 0; i <= 4; ++i)
+   for (unsigned int i{0}; i <= 4; ++i)
       cards[i] = cards_p[i];
 
    sort(cards, cards + 5);
@@ -32,8 +32,8 @@ inline hand_rank_t hand_t::hand_rank() const
    else if (is_one_pair())
       return hand_rank_t::ONE_PAIR;
 
-   bool is_a_flush(false);
-   bool is_a_straight(false);
+   bool is_a_flush{false};
+   bool is_a_straight{false};
 
    if (
          cards[0].get_suit() == cards[1].get_suit() &&
@@ -172,7 +172,7 @@ inline unsigned long long int hand_t::get_id() const
 
 inline void hand_t::print() const
 {
-   for (unsigned int i = 0; i <= 4; ++i)
+   for (unsigned int i{0}; i <= 4; ++i)
       cards[i].print();
 }
 

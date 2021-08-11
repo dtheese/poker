@@ -13,8 +13,8 @@ iteration_result_t::iteration_result_t(
                      const map<hand_rank_t, unsigned long long int> &hand_rank_count_p,
                      unsigned long long int hands_dealt_p
                                       ):
-   hand_rank_count(hand_rank_count_p),
-   hands_dealt(hands_dealt_p)
+   hand_rank_count{hand_rank_count_p},
+   hands_dealt{hands_dealt_p}
 {
 }
 
@@ -70,19 +70,19 @@ void evaluate_all_possible_hands(unsigned long long int num_cards)
 
 // Support functions and variables
 
-static unsigned long long int hands_dealt(0);
+static unsigned long long int hands_dealt{0};
 static map<hand_rank_t, unsigned long long int> hand_rank_count;
 static vector<card_t> cards;
-static hand_rank_t highest_hand_seen(hand_rank_t::HIGH_CARD);
+static hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
 
 // *****************************************************************************
 static void operation_to_perform_2(const indexes_t &indexes)
 {
    card_t cards_1[5];
-   unsigned int j(0);
+   unsigned int j{0};
 
    for (
-          auto i = indexes.cbegin();
+          auto i{indexes.cbegin()};
           i != indexes.cend();
           ++i
        )
@@ -90,7 +90,7 @@ static void operation_to_perform_2(const indexes_t &indexes)
       cards_1[j++] = cards[*i];
    }
 
-   hand_t hand(cards_1);
+   hand_t hand{cards_1};
 
    if (hand.hand_rank() > highest_hand_seen)
       highest_hand_seen = hand.hand_rank();
@@ -99,13 +99,13 @@ static void operation_to_perform_2(const indexes_t &indexes)
 // *****************************************************************************
 static void operation_to_perform_1(const indexes_t &indexes)
 {
-   static const auto &deck(deck_s::getInstance().getDeck());
+   static const auto &deck{deck_s::getInstance().getDeck()};
 
    cards.clear();
    highest_hand_seen = hand_rank_t::HIGH_CARD;
 
    for (
-          auto i = indexes.cbegin();
+          auto i{indexes.cbegin()};
           i != indexes.cend();
           ++i
        )

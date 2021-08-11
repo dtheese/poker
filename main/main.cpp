@@ -29,7 +29,7 @@ int main()
 #endif
 
    end = clock();
-   double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+   double time_taken{static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC)};
 
    cout << "Time taken by program is : " << fixed 
         << time_taken << setprecision(5);

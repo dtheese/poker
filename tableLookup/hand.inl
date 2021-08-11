@@ -4,7 +4,7 @@ inline hand_t::hand_t(): id(0)
 
 inline hand_t::hand_t(const card_t *cards_p): id(1)
 {
-   for (unsigned int i = 0; i <= 4; ++i)
+   for (unsigned int i{0}; i <= 4; ++i)
    {
       cards[i] = cards_p[i];
       id *= cards[i].get_id();
@@ -26,8 +26,8 @@ inline hand_rank_t hand_t::hand_rank() const
    else if (is_one_pair())
       return hand_rank_t::ONE_PAIR;
 
-   bool is_a_flush(false);
-   bool is_a_straight(false);
+   bool is_a_flush{false};
+   bool is_a_straight{false};
 
    if (
          cards[0].get_suit() == cards[1].get_suit() &&
@@ -166,7 +166,7 @@ inline unsigned long long int hand_t::get_id() const
 
 inline void hand_t::print() const
 {
-   for (unsigned int i = 0; i <= 4; ++i)
+   for (unsigned int i{0}; i <= 4; ++i)
       cards[i].print();
 }
 
