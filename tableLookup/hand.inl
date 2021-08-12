@@ -166,8 +166,8 @@ inline unsigned long long int hand_t::get_id() const
 
 inline void hand_t::print() const
 {
-   for (unsigned int i{0}; i <= 4; ++i)
-      cards[i].print();
+   for (const card_t &card : cards)
+      card.print();
 }
 
 inline void print_hand_rank(hand_rank_t hand_rank)

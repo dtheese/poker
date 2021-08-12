@@ -81,14 +81,8 @@ static void operation_to_perform_2(const indexes_t &indexes)
    card_t cards_1[5];
    unsigned int j{0};
 
-   for (
-          auto i{indexes.cbegin()};
-          i != indexes.cend();
-          ++i
-       )
-   {
-      cards_1[j++] = cards[*i];
-   }
+   for (unsigned int i : indexes)
+      cards_1[j++] = cards[i];
 
    hand_t hand{cards_1};
 
@@ -104,14 +98,8 @@ static void operation_to_perform_1(const indexes_t &indexes)
    cards.clear();
    highest_hand_seen = hand_rank_t::HIGH_CARD;
 
-   for (
-          auto i{indexes.cbegin()};
-          i != indexes.cend();
-          ++i
-       )
-   {
-      cards.push_back(deck[*i]);
-   }
+   for (unsigned int i : indexes)
+      cards.push_back(deck[i]);
 
    dynamic_loop_wrapper(cards.size(), 5, operation_to_perform_2);
 

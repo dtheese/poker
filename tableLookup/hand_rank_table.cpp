@@ -19,7 +19,8 @@ static void operation_to_perform_2(const indexes_t &indexes)
           ++i
        )
    {
-      cards[j++] = deck[*i];
+   for (unsigned int i : indexes)
+      cards[j++] = deck[i];
    }
 
    hand_t hand{cards};

@@ -85,14 +85,8 @@ static void operation_to_perform_1(const indexes_t &indexes)
    card_t cards_1[5];
    unsigned int j{0};
 
-   for (
-          auto i{indexes.cbegin()};
-          i != indexes.cend();
-          ++i
-       )
-   {
-      cards_1[j++] = cards[*i];
-   }
+   for (unsigned int i : indexes)
+      cards_1[j++] = cards[i];
 
    hand_t hand_1{cards_1};
 
