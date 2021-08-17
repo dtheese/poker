@@ -18,13 +18,16 @@ static void operation_to_perform_1(const indexes_t &indexes);
 
 int main()
 {
+   // This version of the program works only for 5-card hands.
+   constexpr unsigned int NUM_CARDS{5};
+
    system("date");
    cout << endl;
 
    clock_t start, end;
 
    start = clock();
-   dynamic_loop_wrapper(52, 5, operation_to_perform_1);
+   dynamic_loop_wrapper(52, NUM_CARDS, operation_to_perform_1);
    end = clock();
 
    cout << "Hands dealt: " << hands_dealt << endl;
