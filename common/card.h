@@ -8,7 +8,9 @@
 
 using namespace std;
 
+#ifdef USE_TABLE
 #include "primes.h"
+#endif
 
 enum class rank_t: unsigned int {
                                    First = 2,
