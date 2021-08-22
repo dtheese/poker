@@ -19,12 +19,15 @@ class primes_s
       void operator=(const primes_s &&) = delete;
       void operator=(primes_s &&) = delete;
 
+      primes_s *operator&() = delete;
+
       static const primes_s &getInstance();
 
       const unsigned long long int &operator[](unsigned int i) const;
 
    private:
       primes_s();
+      ~primes_s();
 
       unsigned long long int primes[52];
 };

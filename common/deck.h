@@ -25,12 +25,15 @@ class deck_s
       void operator=(const deck_s &&) = delete;
       void operator=(deck_s &&) = delete;
 
+      deck_s *operator&() = delete;
+
       static const deck_s &getInstance();
 
       const vector<card_t> &getDeck() const;
 
    private:
       deck_s();
+      ~deck_s();
 
       vector<card_t> deck;
 };

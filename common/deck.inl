@@ -9,6 +9,10 @@ inline deck_s::deck_s()
    }
 }
 
+inline deck_s::~deck_s()
+{
+}
+
 inline const deck_s &deck_s::getInstance()
 {
    static deck_s instance;

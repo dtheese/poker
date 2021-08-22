@@ -27,12 +27,15 @@ class hand_rank_table_s
       void operator=(const hand_rank_table_s &&) = delete;
       void operator=(hand_rank_table_s &&) = delete;
 
+      hand_rank_table_s *operator&() = delete;
+
       static const hand_rank_table_s &getInstance();
 
       hand_rank_t operator[](unsigned long long int i) const;
 
    private:
       hand_rank_table_s();
+      ~hand_rank_table_s();
 
       unordered_map<unsigned long long int, hand_rank_t> &hand_ranks;
 };

@@ -55,6 +55,10 @@ inline primes_s::primes_s(): primes{
 {
 }
 
+inline primes_s::~primes_s()
+{
+}
+
 inline const primes_s &primes_s::getInstance()
 {
    static primes_s instance;
