@@ -5,11 +5,10 @@ using namespace std;
 #include "hand_rank_table.h"
 
 static unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
+static const auto &deck{deck_s::getInstance().getDeck()};
 
 static void operation_to_perform_2(const indexes_t &indexes)
 {
-   static const auto &deck{deck_s::getInstance().getDeck()};
-
    card_t cards[5];
    unsigned int j{0};
 
