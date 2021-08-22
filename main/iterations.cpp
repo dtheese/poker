@@ -74,6 +74,7 @@ static unsigned long long int hands_dealt{0};
 static map<hand_rank_t, unsigned long long int> hand_rank_count;
 static vector<card_t> cards;
 static hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
+static const auto &deck{deck_s::getInstance().getDeck()};
 
 // *****************************************************************************
 static void operation_to_perform_2(const indexes_t &indexes)
@@ -93,8 +94,6 @@ static void operation_to_perform_2(const indexes_t &indexes)
 // *****************************************************************************
 static void operation_to_perform_1(const indexes_t &indexes)
 {
-   static const auto &deck{deck_s::getInstance().getDeck()};
-
    cards.clear();
    highest_hand_seen = hand_rank_t::HIGH_CARD;
 
