@@ -107,7 +107,7 @@ static void operation_to_perform_1(const indexes_t &indexes)
 }
 
 // *****************************************************************************
-iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
+static iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
 {
    hands_dealt = 0;
    hand_rank_count.clear();

@@ -106,10 +106,10 @@ static random_device rd;
 static default_random_engine dre{rd()};
 
 // *****************************************************************************
-trial_result_t random_hands_until_target_hand_rank_hit(
+static trial_result_t random_hands_until_target_hand_rank_hit(
    hand_rank_t target_hand_rank,
    unsigned long long int num_cards
-                                                      )
+                                                             )
 {
    unsigned long long int hands_dealt{0};
 
