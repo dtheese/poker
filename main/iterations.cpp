@@ -100,7 +100,7 @@ static void operation_to_perform_1(const indexes_t &indexes)
    for (unsigned int i : indexes)
       cards.push_back(deck[i]);
 
-   dynamic_loop_wrapper(cards.size(), 5, operation_to_perform_2);
+   dynamic_loop_wrapper(0, cards.size(), 5, operation_to_perform_2);
 
    ++hand_rank_count[highest_hand_seen];
    ++hands_dealt;
@@ -112,7 +112,7 @@ iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_ca
    hands_dealt = 0;
    hand_rank_count.clear();
 
-   dynamic_loop_wrapper(52, num_cards, operation_to_perform_1);
+   dynamic_loop_wrapper(0, 52, num_cards, operation_to_perform_1);
 
    return iteration_result_t(hand_rank_count, hands_dealt);
 }

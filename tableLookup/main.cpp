@@ -27,7 +27,7 @@ int main()
    clock_t start, end;
 
    start = clock();
-   dynamic_loop_wrapper(52, NUM_CARDS, operation_to_perform_1);
+   dynamic_loop_wrapper(0, 52, NUM_CARDS, operation_to_perform_1);
    end = clock();
 
    cout << "Hands dealt: " << hands_dealt << endl;

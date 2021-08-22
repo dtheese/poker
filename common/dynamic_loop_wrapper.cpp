@@ -38,6 +38,7 @@ void dynamic_loop(
 }
 
 void dynamic_loop_wrapper(
+                            unsigned int first_object_index,
                             unsigned int num_objects_total,
                             unsigned int num_objects_to_select,
                             void (&operation_to_perform)(const indexes_t &)
@@ -48,8 +49,8 @@ void dynamic_loop_wrapper(
    indexes.reserve(num_objects_to_select);
 
    dynamic_loop(
-                  0,
-                  num_objects_total - num_objects_to_select,
+                  first_object_index,
+                  first_object_index + num_objects_total - num_objects_to_select,
                   0,
                   num_objects_to_select,
                   indexes,

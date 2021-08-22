@@ -32,5 +32,5 @@ static void operation_to_perform_2(const indexes_t &indexes)
 hand_rank_table_s::hand_rank_table_s(): hand_ranks(hand_ranks_s)
 {
    hand_ranks.clear();
-   dynamic_loop_wrapper(52, 5, operation_to_perform_2);
+   dynamic_loop_wrapper(0, 52, 5, operation_to_perform_2);
 }
