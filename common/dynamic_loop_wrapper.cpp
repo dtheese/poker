@@ -8,7 +8,7 @@ void dynamic_loop(
                     unsigned int current_depth,
                     unsigned int desired_depth,
                     indexes_t &indexes,
-                    void (&operation_to_perform)(const indexes_t &)
+                    void (*operation_to_perform)(const indexes_t &)
                  )
 {
    if (current_depth == desired_depth)
@@ -41,7 +41,7 @@ void dynamic_loop_wrapper(
                             unsigned int first_object_index,
                             unsigned int num_objects_total,
                             unsigned int num_objects_to_select,
-                            void (&operation_to_perform)(const indexes_t &)
+                            void (*operation_to_perform)(const indexes_t &)
                          )
 {
    indexes_t indexes;
