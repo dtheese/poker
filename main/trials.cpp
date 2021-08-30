@@ -78,7 +78,6 @@ void average_random_hands_until_target_hand_rank_hit(
 // Share information from random_hands_until_target_hand_rank_hit to operation_to_perform_1
 static vector<card_t> cards;
 
-
 // Share information from operation_to_perform_1 to random_hands_until_target_hand_rank_hit
 static hand_t hand;
 static hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
