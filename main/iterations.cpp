@@ -70,10 +70,18 @@ void evaluate_all_possible_hands(unsigned long long int num_cards)
 
 // Support functions and variables
 
+// Pass information from operation_to_perform_1 to iterate_over_all_possible_hands
 static unsigned long long int hands_dealt{0};
 static map<hand_rank_t, unsigned long long int> hand_rank_count;
+
+// Pass information from operation_to_perform_1 to operation_to_perform_2
 static vector<card_t> cards;
+
+// Pass information from operation_to_perform_2 to operation_to_perform_1
 static hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
+
+// Initialize here to prevent initialiing repeatedly in operation_to_perform_1
+// (This is a speed optimization)
 static const auto &deck{deck_s::getInstance().getDeck()};
 
 // *****************************************************************************
