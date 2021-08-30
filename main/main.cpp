@@ -17,7 +17,7 @@ int main()
 
    start = clock();
 
-#if 1
+#if 0
    // The parameter in this function call is the hand size (5 - 52).
    evaluate_all_possible_hands(5);
 #else
