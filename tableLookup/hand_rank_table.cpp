@@ -2,6 +2,7 @@ using namespace std;
 
 #include "hand.h"
 
+#include "dynamic_loop.h"
 #include "hand_rank_table.h"
 
 static unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
@@ -31,7 +32,7 @@ static void operation_to_perform_2(const indexes_t &indexes)
 hand_rank_table_s::hand_rank_table_s(): hand_ranks(hand_ranks_s)
 {
    hand_ranks.clear();
-   dynamic_loop_wrapper(0, 52, 5, operation_to_perform_2);
+   dynamic_loop_t dynamic_loop(0, 52, 5, operation_to_perform_2);
 }
 
 hand_rank_table_s::~hand_rank_table_s()

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "deck.h"
-#include "dynamic_loop_wrapper.h"
+#include "dynamic_loop.h"
 #include "hand.h"
 
 #include "trials.h"
@@ -132,7 +132,7 @@ static trial_result_t random_hands_until_target_hand_rank_hit(
       }
 
       ++hands_dealt;
-      dynamic_loop_wrapper(0, num_cards, 5, operation_to_perform_1);
+      dynamic_loop_t dynamic_loop(0, num_cards, 5, operation_to_perform_1);
 
       if (highest_hand_seen == target_hand_rank)
          return trial_result_t{hand, hands_dealt};

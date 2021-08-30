@@ -2,7 +2,7 @@
 #include <numeric>
 
 #include "deck.h"
-#include "dynamic_loop_wrapper.h"
+#include "dynamic_loop.h"
 #include "hand.h"
 
 #include "iterations.h"
@@ -100,7 +100,7 @@ static void operation_to_perform_1(const indexes_t &indexes)
    for (unsigned int i : indexes)
       cards.push_back(deck[i]);
 
-   dynamic_loop_wrapper(0, cards.size(), 5, operation_to_perform_2);
+   dynamic_loop_t dynamic_loop(0, cards.size(), 5, operation_to_perform_2);
 
    ++hand_rank_count[highest_hand_seen];
    ++hands_dealt;
@@ -112,7 +112,7 @@ static iteration_result_t iterate_over_all_possible_hands(unsigned long long int
    hands_dealt = 0;
    hand_rank_count.clear();
 
-   dynamic_loop_wrapper(0, 52, num_cards, operation_to_perform_1);
+   dynamic_loop_t dynamic_loop(0, 52, num_cards, operation_to_perform_1);
 
    return iteration_result_t(hand_rank_count, hands_dealt);
 }

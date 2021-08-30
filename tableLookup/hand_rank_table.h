@@ -6,7 +6,6 @@
 
 #include "card.h"
 #include "deck.h"
-#include "dynamic_loop_wrapper.h"
 #include "hand.h"
 
 using namespace std;

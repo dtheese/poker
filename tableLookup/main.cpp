@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "deck.h"
+#include "dynamic_loop.h"
 #include "hand.h"
 #include "hand_rank_table.h"
 
@@ -27,7 +28,7 @@ int main()
    clock_t start, end;
 
    start = clock();
-   dynamic_loop_wrapper(0, 52, NUM_CARDS, operation_to_perform_1);
+   dynamic_loop_t dynamic_loop(0, 52, NUM_CARDS, operation_to_perform_1);
    end = clock();
 
    cout << "Hands dealt: " << hands_dealt << endl;
