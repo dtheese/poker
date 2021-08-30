@@ -22,9 +22,7 @@ class dynamic_loop_t
                                unsigned int first_index,
                                unsigned int last_index,
                                unsigned int current_depth,
-                               unsigned int desired_depth,
-                               indexes_t &indexes,
-                               void (*operation_to_perform)(const indexes_t &)
+                               unsigned int desired_depth
                             );
 
       unsigned int first_object_index;

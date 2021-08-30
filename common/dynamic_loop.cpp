@@ -18,19 +18,15 @@ dynamic_loop_t::dynamic_loop_t(
                        first_object_index,
                        first_object_index + num_objects_total - num_objects_to_select,
                        0,
-                       num_objects_to_select,
-                       indexes,
-                       operation_to_perform
+                       num_objects_to_select
                     );
 }
 
 void dynamic_loop_t::dynamic_loop_body(
-                         unsigned int first_index,
-                         unsigned int last_index,
-                         unsigned int current_depth,
-                         unsigned int desired_depth,
-                         indexes_t &indexes,
-                         void (*operation_to_perform)(const indexes_t &)
+                                         unsigned int first_index,
+                                         unsigned int last_index,
+                                         unsigned int current_depth,
+                                         unsigned int desired_depth
                                       )
 {
    if (current_depth == desired_depth)
@@ -49,9 +45,7 @@ void dynamic_loop_t::dynamic_loop_body(
                              i + 1,
                              last_index + 1,
                              current_depth + 1,
-                             desired_depth,
-                             indexes,
-                             operation_to_perform
+                             desired_depth
                           );
 
          indexes.pop_back();
