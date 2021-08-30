@@ -39,7 +39,7 @@ void average_random_hands_until_target_hand_rank_hit(
 
    hands_dealt_v.reserve(target_hand_count);
 
-   for (unsigned long long int i = 0; i != target_hand_count; ++i)
+   for (unsigned long long int i{0}; i != target_hand_count; ++i)
    {
       auto trial_result(
          random_hands_until_target_hand_rank_hit(target_hand_rank, num_cards)
