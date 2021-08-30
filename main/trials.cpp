@@ -12,7 +12,7 @@
 
 using namespace std;
 
-trial_result_t::trial_result_t(const hand_t &hand_p, unsigned long long int hands_dealt_p):
+trial_result_t::trial_result_t(const hand_t &hand_p, const unsigned long long int hands_dealt_p):
    hand{hand_p},
    hands_dealt{hands_dealt_p}
 {

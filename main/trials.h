@@ -7,10 +7,10 @@ using namespace std;
 
 struct trial_result_t
 {
-   trial_result_t(const hand_t &hand_p, unsigned long long int hands_dealt_p);
+   trial_result_t(const hand_t &hand_p, const unsigned long long int hands_dealt_p);
 
-   hand_t hand;
-   unsigned long long int hands_dealt;
+   const hand_t &hand;
+   const unsigned long long int hands_dealt;
 };
 
 void average_random_hands_until_target_hand_rank_hit(
