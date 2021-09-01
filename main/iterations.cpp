@@ -10,7 +10,7 @@
 using namespace std;
 
 iteration_result_t::iteration_result_t(
-                     const map<hand_rank_t, unsigned long long int> &hand_rank_count_p,
+                     const map<hand_rank_t, unsigned long long int> hand_rank_count_p,
                      const unsigned long long int hands_dealt_p
                                       ):
    hand_rank_count{hand_rank_count_p},
@@ -71,61 +71,88 @@ void evaluate_all_possible_hands(unsigned long long int num_cards)
 // *****************************************************************************
 // *****************************************************************************
 
-// Support functions and variables
 namespace
 {
-   // Pass information from operation_to_perform_1 to iterate_over_all_possible_hands
-   unsigned long long int hands_dealt{0};
-   map<hand_rank_t, unsigned long long int> hand_rank_count;
+   // *****************************************************************************
+   class iteration_functor_2_t
+   {
+      public:
+         iteration_functor_2_t(const vector<card_t> &cards_p): cards(cards_p)
+         {
+         }
 
-   // Pass information from operation_to_perform_1 to operation_to_perform_2
-   vector<card_t> cards;
+         iteration_functor_2_t(const iteration_functor_2_t &) = delete;
+         iteration_functor_2_t &operator=(const iteration_functor_2_t &) = delete;
 
-   // Pass information from operation_to_perform_2 to operation_to_perform_1
-   hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
+         void operator()(const indexes_t &indexes)
+         {
+            card_t cards_1[5];
+            unsigned int j{0};
 
-   // Initialize here to prevent initialiing repeatedly in operation_to_perform_1
-   // (This is a speed optimization)
-   const auto &deck{deck_s::getInstance().getDeck()};
+            for (unsigned int i : indexes)
+               cards_1[j++] = cards[i];
+
+            hand_t hand{cards_1};
+
+            if (hand.hand_rank() > highest_hand_seen)
+               highest_hand_seen = hand.hand_rank();
+         }
+
+         hand_rank_t getResult() const
+         {
+            return highest_hand_seen;
+         }
+
+      private:
+         const vector<card_t> &cards;
+         hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
+   };
 
    // *****************************************************************************
-   void operation_to_perform_2(const indexes_t &indexes)
+   class iteration_functor_1_t
    {
-      card_t cards_1[5];
-      unsigned int j{0};
+      public:
+         iteration_functor_1_t(): deck{deck_s::getInstance().getDeck()}
+         {
+         }
 
-      for (unsigned int i : indexes)
-         cards_1[j++] = cards[i];
+         iteration_functor_1_t(const iteration_functor_1_t &) = delete;
+         iteration_functor_1_t &operator=(const iteration_functor_1_t &) = delete;
 
-      hand_t hand{cards_1};
+         void operator()(const indexes_t &indexes)
+         {
+            cards.clear();
 
-      if (hand.hand_rank() > highest_hand_seen)
-         highest_hand_seen = hand.hand_rank();
-   }
+            for (unsigned int i : indexes)
+               cards.push_back(deck[i]);
 
-   // *****************************************************************************
-   void operation_to_perform_1(const indexes_t &indexes)
-   {
-      cards.clear();
-      highest_hand_seen = hand_rank_t::HIGH_CARD;
+            iteration_functor_2_t iteration_functor_2(cards);
 
-      for (unsigned int i : indexes)
-         cards.push_back(deck[i]);
+            dynamic_loop_t<iteration_functor_2_t> dynamic_loop(0, cards.size(), 5, iteration_functor_2);
 
-      dynamic_loop_t dynamic_loop(0, cards.size(), 5, operation_to_perform_2);
+            ++hand_rank_count[iteration_functor_2.getResult()];
+            ++hands_dealt;
+         }
 
-      ++hand_rank_count[highest_hand_seen];
-      ++hands_dealt;
-   }
+         iteration_result_t getResult() const
+         {
+            return iteration_result_t(hand_rank_count, hands_dealt);
+         }
+
+      private:
+         const vector<card_t> &deck;
+         unsigned long long int hands_dealt{0};
+         map<hand_rank_t, unsigned long long int> hand_rank_count;
+         vector<card_t> cards;
+   };
 
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
    {
-      hands_dealt = 0;
-      hand_rank_count.clear();
+      iteration_functor_1_t iteration_functor_1;
 
-      dynamic_loop_t dynamic_loop(0, 52, num_cards, operation_to_perform_1);
+      dynamic_loop_t<iteration_functor_1_t> dynamic_loop(0, 52, num_cards, iteration_functor_1);
 
-      return iteration_result_t(hand_rank_count, hands_dealt);
+      return iteration_functor_1.getResult();
    }
 }
