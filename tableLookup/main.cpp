@@ -12,10 +12,13 @@
 
 using namespace std;
 
-static map<hand_rank_t, unsigned long long int> hand_rank_count;
-static unsigned long long int hands_dealt{0};
+namespace
+{
+   map<hand_rank_t, unsigned long long int> hand_rank_count;
+   unsigned long long int hands_dealt{0};
 
-static void operation_to_perform_1(const indexes_t &indexes);
+   void operation_to_perform_1(const indexes_t &indexes);
+}
 
 int main()
 {
@@ -70,22 +73,25 @@ int main()
    cout << endl;
 }
 
-static const auto &deck{deck_s::getInstance().getDeck()};
-static const auto &hrt{hand_rank_table_s::getInstance()};
-
-static void operation_to_perform_1(const indexes_t &indexes)
+namespace
 {
-   unsigned long long int hand_id(1);
+   const auto &deck{deck_s::getInstance().getDeck()};
+   const auto &hrt{hand_rank_table_s::getInstance()};
 
-   for (
-          auto i{indexes.begin()};
-          i != indexes.end();
-          ++i
-       )
+   void operation_to_perform_1(const indexes_t &indexes)
    {
-      hand_id *= deck[*i].get_id();
-   }
+      unsigned long long int hand_id(1);
 
-   ++hand_rank_count[hrt[hand_id]];
-   ++hands_dealt;
+      for (
+             auto i{indexes.begin()};
+             i != indexes.end();
+             ++i
+          )
+      {
+         hand_id *= deck[*i].get_id();
+      }
+
+      ++hand_rank_count[hrt[hand_id]];
+      ++hands_dealt;
+   }
 }

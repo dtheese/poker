@@ -19,10 +19,13 @@ trial_result_t::trial_result_t(const hand_t &hand_p, const unsigned long long in
 }
 
 // Support functions
-static trial_result_t random_hands_until_target_hand_rank_hit(
-                           hand_rank_t target_hand_rank,
-                           unsigned long long int num_cards
-                                                             );
+namespace
+{
+   trial_result_t random_hands_until_target_hand_rank_hit(
+                       hand_rank_t target_hand_rank,
+                       unsigned long long int num_cards
+                                                         );
+}
 
 // *****************************************************************************
 void average_random_hands_until_target_hand_rank_hit(
@@ -74,70 +77,72 @@ void average_random_hands_until_target_hand_rank_hit(
 // *****************************************************************************
 
 // Support functions and variables
-
-// Share information from random_hands_until_target_hand_rank_hit to operation_to_perform_1
-static vector<card_t> cards;
-
-// Share information from operation_to_perform_1 to random_hands_until_target_hand_rank_hit
-static hand_t hand;
-static hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
-
-// *****************************************************************************
-static void operation_to_perform_1(const indexes_t &indexes)
+namespace
 {
-   card_t cards_1[5];
-   unsigned int j{0};
+   // Share information from random_hands_until_target_hand_rank_hit to operation_to_perform_1
+   vector<card_t> cards;
 
-   for (unsigned int i : indexes)
-      cards_1[j++] = cards[i];
+   // Share information from operation_to_perform_1 to random_hands_until_target_hand_rank_hit
+   hand_t hand;
+   hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
 
-   hand_t hand_1{cards_1};
-
-   if (hand_1.hand_rank() >= highest_hand_seen)
+   // *****************************************************************************
+   void operation_to_perform_1(const indexes_t &indexes)
    {
-      highest_hand_seen = hand_1.hand_rank();
-      hand = hand_1;
-   }
-}
+      card_t cards_1[5];
+      unsigned int j{0};
 
-// Even though these are used only inside of random_hands_until_target_hand_rank_hit,
-// define them outside of the function for the sake of speed. We don't want to be
-// checking if they're initialized every time we enter the function.
-//
-// Seed a deterministic random number generator with a true random number.
-static random_device rd;
-static default_random_engine dre{rd()};
+      for (unsigned int i : indexes)
+         cards_1[j++] = cards[i];
 
-// *****************************************************************************
-static trial_result_t random_hands_until_target_hand_rank_hit(
-   hand_rank_t target_hand_rank,
-   unsigned long long int num_cards
-                                                             )
-{
-   unsigned long long int hands_dealt{0};
+      hand_t hand_1{cards_1};
 
-   while (true)
-   {
-      auto deck{deck_s::getInstance().getDeck()};
-
-      cards.clear();
-      cards.reserve(num_cards);
-
-      highest_hand_seen = hand_rank_t::HIGH_CARD;
-
-      for (unsigned int i{52}; i > 52 - num_cards; --i)
+      if (hand_1.hand_rank() >= highest_hand_seen)
       {
-         uniform_int_distribution<unsigned int> di{0, i - 1};
-         unsigned int rand_num{di(dre)};
-
-         cards.push_back(deck[rand_num]);
-         deck.erase(deck.begin() + rand_num);
+         highest_hand_seen = hand_1.hand_rank();
+         hand = hand_1;
       }
+   }
 
-      ++hands_dealt;
-      dynamic_loop_t dynamic_loop(0, num_cards, 5, operation_to_perform_1);
+   // Even though these are used only inside of random_hands_until_target_hand_rank_hit,
+   // define them outside of the function for the sake of speed. We don't want to be
+   // checking if they're initialized every time we enter the function.
+   //
+   // Seed a deterministic random number generator with a true random number.
+   random_device rd;
+   default_random_engine dre{rd()};
 
-      if (highest_hand_seen == target_hand_rank)
-         return trial_result_t{hand, hands_dealt};
+   // *****************************************************************************
+   trial_result_t random_hands_until_target_hand_rank_hit(
+      hand_rank_t target_hand_rank,
+      unsigned long long int num_cards
+                                                                )
+   {
+      unsigned long long int hands_dealt{0};
+
+      while (true)
+      {
+         auto deck{deck_s::getInstance().getDeck()};
+
+         cards.clear();
+         cards.reserve(num_cards);
+
+         highest_hand_seen = hand_rank_t::HIGH_CARD;
+
+         for (unsigned int i{52}; i > 52 - num_cards; --i)
+         {
+            uniform_int_distribution<unsigned int> di{0, i - 1};
+            unsigned int rand_num{di(dre)};
+
+            cards.push_back(deck[rand_num]);
+            deck.erase(deck.begin() + rand_num);
+         }
+
+         ++hands_dealt;
+         dynamic_loop_t dynamic_loop(0, num_cards, 5, operation_to_perform_1);
+
+         if (highest_hand_seen == target_hand_rank)
+            return trial_result_t{hand, hands_dealt};
+      }
    }
 }

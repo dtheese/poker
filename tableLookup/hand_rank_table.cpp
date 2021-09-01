@@ -5,28 +5,31 @@ using namespace std;
 #include "dynamic_loop.h"
 #include "hand_rank_table.h"
 
-static unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
-static const auto &deck{deck_s::getInstance().getDeck()};
-
-static void operation_to_perform_2(const indexes_t &indexes)
+namespace
 {
-   card_t cards[5];
-   unsigned int j{0};
+   unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
+   const auto &deck{deck_s::getInstance().getDeck()};
 
-   for (
-          auto i{indexes.cbegin()};
-          i != indexes.cend();
-          ++i
-       )
+   void operation_to_perform_2(const indexes_t &indexes)
    {
-   for (unsigned int i : indexes)
-      cards[j++] = deck[i];
+      card_t cards[5];
+      unsigned int j{0};
+
+      for (
+             auto i{indexes.cbegin()};
+             i != indexes.cend();
+             ++i
+          )
+      {
+      for (unsigned int i : indexes)
+         cards[j++] = deck[i];
+      }
+
+      hand_t hand{cards};
+      auto id{hand.get_id()};
+
+      hand_ranks_s[id] = hand.hand_rank();
    }
-
-   hand_t hand{cards};
-   auto id{hand.get_id()};
-
-   hand_ranks_s[id] = hand.hand_rank();
 }
 
 hand_rank_table_s::hand_rank_table_s(): hand_ranks(hand_ranks_s)
