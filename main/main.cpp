@@ -31,7 +31,7 @@ int main()
    end = clock();
    double time_taken{static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC)};
 
-   cout << "Time taken by program is : " << fixed 
+   cout << "Time taken by program is: " << fixed 
         << time_taken << setprecision(5);
 
    cout << " sec " << endl;
