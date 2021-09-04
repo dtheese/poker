@@ -53,6 +53,8 @@ hand_rank_table_s::hand_rank_table_s()
 
    hand_ranks.clear();
    dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, 52, 5, dynamic_loop_functor);
+
+   dynamic_loop.run();
 }
 
 hand_rank_table_s::~hand_rank_table_s()

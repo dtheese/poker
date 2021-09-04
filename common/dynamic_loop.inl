@@ -10,7 +10,11 @@ dynamic_loop_t<T>::dynamic_loop_t(
                                     operation_to_perform{operation_to_perform_p}
 {
    indexes.reserve(num_objects_to_select);
+}
 
+template<typename T>
+void dynamic_loop_t<T>::run()
+{
    dynamic_loop_body(
                        first_object_index,
                        first_object_index + num_objects_total - num_objects_to_select,

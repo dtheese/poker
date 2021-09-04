@@ -133,9 +133,9 @@ namespace
                cards.push_back(deck[i]);
 
             dynamic_loop_functor_2_t dynamic_loop_functor_2(cards);
-
             dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop(0, cards.size(), 5, dynamic_loop_functor_2);
 
+            dynamic_loop.run();
             ++hand_rank_count[dynamic_loop_functor_2.getResult()];
             ++hands_dealt;
          }
@@ -156,8 +156,9 @@ namespace
    iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
    {
       dynamic_loop_functor_1_t dynamic_loop_functor_1;
-
       dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop(0, 52, num_cards, dynamic_loop_functor_1);
+
+      dynamic_loop.run();
 
       return dynamic_loop_functor_1.getResult();
    }

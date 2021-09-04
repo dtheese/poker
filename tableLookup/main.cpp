@@ -77,6 +77,8 @@ int main()
    dynamic_loop_functor_t dynamic_loop_functor;
    dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, 52, NUM_CARDS, dynamic_loop_functor);
 
+   dynamic_loop.run();
+
    end = clock();
 
    const map<hand_rank_t, unsigned long long int> &hand_rank_count{dynamic_loop_functor.getHandRankCount()};

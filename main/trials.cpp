@@ -164,6 +164,8 @@ namespace
          dynamic_loop_functor_t dynamic_loop_functor{cards};
          dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, num_cards, 5, dynamic_loop_functor);
 
+         dynamic_loop.run();
+
          if (dynamic_loop_functor.getHighestHandSeen() == target_hand_rank)
             return trial_result_t{dynamic_loop_functor.getHand(), hands_dealt};
       }
