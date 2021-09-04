@@ -14,15 +14,9 @@ class deck_s
 {
    public:
       deck_s(const deck_s &) = delete;
-      deck_s(deck_s &) = delete;
-
-      deck_s(const deck_s &&) = delete;
-      deck_s(deck_s &&) = delete;
-
       void operator=(const deck_s &) = delete;
-      void operator=(deck_s &) = delete;
 
-      void operator=(const deck_s &&) = delete;
+      deck_s(deck_s &&) = delete;
       void operator=(deck_s &&) = delete;
 
       deck_s *operator&() = delete;

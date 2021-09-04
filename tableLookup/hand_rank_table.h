@@ -17,15 +17,9 @@ class hand_rank_table_s
 {
    public:
       hand_rank_table_s(const hand_rank_table_s &) = delete;
-      hand_rank_table_s(hand_rank_table_s &) = delete;
-
-      hand_rank_table_s(const hand_rank_table_s &&) = delete;
-      hand_rank_table_s(hand_rank_table_s &&) = delete;
-
       void operator=(const hand_rank_table_s &) = delete;
-      void operator=(hand_rank_table_s &) = delete;
 
-      void operator=(const hand_rank_table_s &&) = delete;
+      hand_rank_table_s(hand_rank_table_s &&) = delete;
       void operator=(hand_rank_table_s &&) = delete;
 
       hand_rank_table_s *operator&() = delete;

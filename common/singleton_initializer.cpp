@@ -20,3 +20,7 @@ singleton_initializer_s::singleton_initializer_s()
    deck_s::getInstance();
 #endif
 }
+
+singleton_initializer_s::~singleton_initializer_s()
+{
+}
