@@ -84,6 +84,9 @@ namespace
          dynamic_loop_functor_2_t(const dynamic_loop_functor_2_t &) = delete;
          dynamic_loop_functor_2_t &operator=(const dynamic_loop_functor_2_t &) = delete;
 
+         dynamic_loop_functor_2_t(dynamic_loop_functor_2_t &&) = delete;
+         dynamic_loop_functor_2_t &operator=(dynamic_loop_functor_2_t &&) = delete;
+
          void operator()(const indexes_t &indexes)
          {
             card_t cards_1[5];
@@ -118,6 +121,9 @@ namespace
 
          dynamic_loop_functor_1_t(const dynamic_loop_functor_1_t &) = delete;
          dynamic_loop_functor_1_t &operator=(const dynamic_loop_functor_1_t &) = delete;
+
+         dynamic_loop_functor_1_t(dynamic_loop_functor_1_t &&) = delete;
+         dynamic_loop_functor_1_t &operator=(dynamic_loop_functor_1_t &&) = delete;
 
          void operator()(const indexes_t &indexes)
          {

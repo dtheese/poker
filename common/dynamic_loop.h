@@ -21,6 +21,9 @@ class dynamic_loop_t
       dynamic_loop_t(const dynamic_loop_t &) = delete;
       dynamic_loop_t &operator=(const dynamic_loop_t &) = delete;
 
+      dynamic_loop_t(dynamic_loop_t &&) = delete;
+      dynamic_loop_t &operator=(dynamic_loop_t &&) = delete;
+
    private:
       void dynamic_loop_body(
                                const unsigned int first_index,

@@ -17,6 +17,9 @@ namespace
          dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
          dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
 
+         dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
+         dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
+
          void operator()(const indexes_t &indexes)
          {
             card_t cards[5];
