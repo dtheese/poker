@@ -10,6 +10,8 @@
 
 using namespace std;
 
+using hand_rank_map_t = unordered_map<unsigned long long int, hand_rank_t>;
+
 // This singleton is lazily initialized.
 class hand_rank_table_s
 {
@@ -36,7 +38,7 @@ class hand_rank_table_s
       hand_rank_table_s();
       ~hand_rank_table_s();
 
-      unordered_map<unsigned long long int, hand_rank_t> &hand_ranks;
+      hand_rank_map_t hand_ranks;
 };
 
 #include "hand_rank_table.inl"

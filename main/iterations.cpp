@@ -74,15 +74,15 @@ void evaluate_all_possible_hands(unsigned long long int num_cards)
 namespace
 {
    // *****************************************************************************
-   class iteration_functor_2_t
+   class dynamic_loop_functor_2_t
    {
       public:
-         iteration_functor_2_t(const vector<card_t> &cards_p): cards(cards_p)
+         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards(cards_p)
          {
          }
 
-         iteration_functor_2_t(const iteration_functor_2_t &) = delete;
-         iteration_functor_2_t &operator=(const iteration_functor_2_t &) = delete;
+         dynamic_loop_functor_2_t(const dynamic_loop_functor_2_t &) = delete;
+         dynamic_loop_functor_2_t &operator=(const dynamic_loop_functor_2_t &) = delete;
 
          void operator()(const indexes_t &indexes)
          {
@@ -109,15 +109,15 @@ namespace
    };
 
    // *****************************************************************************
-   class iteration_functor_1_t
+   class dynamic_loop_functor_1_t
    {
       public:
-         iteration_functor_1_t(): deck{deck_s::getInstance().getDeck()}
+         dynamic_loop_functor_1_t()
          {
          }
 
-         iteration_functor_1_t(const iteration_functor_1_t &) = delete;
-         iteration_functor_1_t &operator=(const iteration_functor_1_t &) = delete;
+         dynamic_loop_functor_1_t(const dynamic_loop_functor_1_t &) = delete;
+         dynamic_loop_functor_1_t &operator=(const dynamic_loop_functor_1_t &) = delete;
 
          void operator()(const indexes_t &indexes)
          {
@@ -126,11 +126,11 @@ namespace
             for (unsigned int i : indexes)
                cards.push_back(deck[i]);
 
-            iteration_functor_2_t iteration_functor_2(cards);
+            dynamic_loop_functor_2_t dynamic_loop_functor_2(cards);
 
-            dynamic_loop_t<iteration_functor_2_t> dynamic_loop(0, cards.size(), 5, iteration_functor_2);
+            dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop(0, cards.size(), 5, dynamic_loop_functor_2);
 
-            ++hand_rank_count[iteration_functor_2.getResult()];
+            ++hand_rank_count[dynamic_loop_functor_2.getResult()];
             ++hands_dealt;
          }
 
@@ -140,7 +140,7 @@ namespace
          }
 
       private:
-         const vector<card_t> &deck;
+         const vector<card_t> &deck{deck_s::getInstance().getDeck()};
          unsigned long long int hands_dealt{0};
          map<hand_rank_t, unsigned long long int> hand_rank_count;
          vector<card_t> cards;
@@ -149,10 +149,10 @@ namespace
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
    {
-      iteration_functor_1_t iteration_functor_1;
+      dynamic_loop_functor_1_t dynamic_loop_functor_1;
 
-      dynamic_loop_t<iteration_functor_1_t> dynamic_loop(0, 52, num_cards, iteration_functor_1);
+      dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop(0, 52, num_cards, dynamic_loop_functor_1);
 
-      return iteration_functor_1.getResult();
+      return dynamic_loop_functor_1.getResult();
    }
 }

@@ -7,35 +7,49 @@ using namespace std;
 
 namespace
 {
-   unordered_map<unsigned long long int, hand_rank_t> hand_ranks_s;
-   const auto &deck{deck_s::getInstance().getDeck()};
-
-   void operation_to_perform_2(const indexes_t &indexes)
+   class dynamic_loop_functor_t
    {
-      card_t cards[5];
-      unsigned int j{0};
+      public:
+         dynamic_loop_functor_t(hand_rank_map_t &hand_ranks_p): hand_ranks(hand_ranks_p)
+         {
+         }
 
-      for (
-             auto i{indexes.cbegin()};
-             i != indexes.cend();
-             ++i
-          )
-      {
-      for (unsigned int i : indexes)
-         cards[j++] = deck[i];
-      }
+         dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
+         dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
 
-      hand_t hand{cards};
-      auto id{hand.get_id()};
+         void operator()(const indexes_t &indexes)
+         {
+            card_t cards[5];
+            unsigned int j{0};
 
-      hand_ranks_s[id] = hand.hand_rank();
-   }
+            for (
+                   auto i{indexes.cbegin()};
+                   i != indexes.cend();
+                   ++i
+                )
+            {
+               for (unsigned int i : indexes)
+                  cards[j++] = deck[i];
+            }
+
+            hand_t hand{cards};
+            auto id{hand.get_id()};
+
+            hand_ranks[id] = hand.hand_rank();
+         }
+
+      private:
+         const vector<card_t> &deck{deck_s::getInstance().getDeck()};
+         hand_rank_map_t &hand_ranks;
+   };
 }
 
-hand_rank_table_s::hand_rank_table_s(): hand_ranks(hand_ranks_s)
+hand_rank_table_s::hand_rank_table_s()
 {
+   dynamic_loop_functor_t dynamic_loop_functor(hand_ranks);
+
    hand_ranks.clear();
-   dynamic_loop_t dynamic_loop(0, 52, 5, operation_to_perform_2);
+   dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, 52, 5, dynamic_loop_functor);
 }
 
 hand_rank_table_s::~hand_rank_table_s()

@@ -79,30 +79,48 @@ void average_random_hands_until_target_hand_rank_hit(
 // Support functions and variables
 namespace
 {
-   // Share information from random_hands_until_target_hand_rank_hit to operation_to_perform_1
-   vector<card_t> cards;
-
-   // Share information from operation_to_perform_1 to random_hands_until_target_hand_rank_hit
-   hand_t hand;
-   hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
-
-   // *****************************************************************************
-   void operation_to_perform_1(const indexes_t &indexes)
+   class dynamic_loop_functor_t
    {
-      card_t cards_1[5];
-      unsigned int j{0};
+      public:
+         dynamic_loop_functor_t(const vector<card_t> &cards_p): cards{cards_p}
+         {
+         }
 
-      for (unsigned int i : indexes)
-         cards_1[j++] = cards[i];
+         dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
+         dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
 
-      hand_t hand_1{cards_1};
+         void operator()(const indexes_t &indexes)
+         {
+            card_t cards_1[5];
+            unsigned int j{0};
 
-      if (hand_1.hand_rank() >= highest_hand_seen)
-      {
-         highest_hand_seen = hand_1.hand_rank();
-         hand = hand_1;
-      }
-   }
+            for (unsigned int i : indexes)
+               cards_1[j++] = cards[i];
+
+            hand_t hand_1{cards_1};
+
+            if (hand_1.hand_rank() >= highest_hand_seen)
+            {
+               highest_hand_seen = hand_1.hand_rank();
+               hand = hand_1;
+            }
+         }
+
+         hand_rank_t getHighestHandSeen() const
+         {
+            return highest_hand_seen;
+         }
+
+         hand_t getHand() const
+         {
+            return hand;
+         }
+
+      private:
+         const vector<card_t> &cards;
+         hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
+         hand_t hand;
+   };
 
    // Even though these are used only inside of random_hands_until_target_hand_rank_hit,
    // define them outside of the function for the sake of speed. We don't want to be
@@ -119,15 +137,15 @@ namespace
                                                          )
    {
       unsigned long long int hands_dealt{0};
+      vector<card_t> cards;
+
+      cards.reserve(num_cards);
 
       while (true)
       {
          auto deck{deck_s::getInstance().getDeck()};
 
          cards.clear();
-         cards.reserve(num_cards);
-
-         highest_hand_seen = hand_rank_t::HIGH_CARD;
 
          for (unsigned int i{52}; i > 52 - num_cards; --i)
          {
@@ -139,10 +157,12 @@ namespace
          }
 
          ++hands_dealt;
-         dynamic_loop_t<void (&)(const indexes_t &)> dynamic_loop(0, num_cards, 5, operation_to_perform_1);
 
-         if (highest_hand_seen == target_hand_rank)
-            return trial_result_t{hand, hands_dealt};
+         dynamic_loop_functor_t dynamic_loop_functor{cards};
+         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, num_cards, 5, dynamic_loop_functor);
+
+         if (dynamic_loop_functor.getHighestHandSeen() == target_hand_rank)
+            return trial_result_t{dynamic_loop_functor.getHand(), hands_dealt};
       }
    }
 }
