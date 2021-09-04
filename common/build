@@ -5,7 +5,7 @@
 # scl enable devtoolset-7 bash
 
 rm -f *.a
-g++ -std=c++14 -Wall -Wpedantic -Ofast -c *.cpp
+g++ -std=c++14 -pthread -Wall -Wpedantic -Ofast -c *.cpp
 ar cru libpoker_common.a *.o
 rm -f *.o
 
