@@ -1,5 +1,7 @@
+#include <future>
 #include <iostream>
 #include <numeric>
+#include <thread>
 
 #include "deck.h"
 #include "dynamic_loop.h"
@@ -157,8 +159,9 @@ namespace
    {
       dynamic_loop_functor_1_t dynamic_loop_functor_1;
       dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop(0, 52, num_cards, dynamic_loop_functor_1);
+      auto f(async(launch::async, &dynamic_loop_t<dynamic_loop_functor_1_t>::run, &dynamic_loop));
 
-      dynamic_loop.run();
+      f.get();
 
       return dynamic_loop_functor_1.getResult();
    }
