@@ -29,7 +29,7 @@ namespace
 
          void operator()(const indexes_t &indexes)
          {
-            unsigned long long int hand_id(1);
+            unsigned long long int hand_id{1};
 
             for (
                    auto i{indexes.begin()};
@@ -75,7 +75,7 @@ int main()
    start = clock();
 
    dynamic_loop_functor_t dynamic_loop_functor;
-   dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, 52, NUM_CARDS, dynamic_loop_functor);
+   dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, 52, NUM_CARDS, dynamic_loop_functor};
 
    dynamic_loop.run();
 
@@ -113,7 +113,7 @@ int main()
 
    cout << endl;
 
-   double time_taken = static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC);
+   double time_taken{static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC)};
 
    cout << "Time taken by program is : " << fixed 
         << time_taken << setprecision(5);

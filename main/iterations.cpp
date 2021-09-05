@@ -34,9 +34,9 @@ void evaluate_all_possible_hands(unsigned int num_cards)
    cout << "num_cards = " << num_cards << endl;
    cout << endl;
 
-   auto iteration_result(iterate_over_all_possible_hands(num_cards));
-   auto hands_dealt_l(iteration_result.hands_dealt);
-   auto hand_rank_count_l(iteration_result.hand_rank_count);
+   auto iteration_result{iterate_over_all_possible_hands(num_cards)};
+   auto hands_dealt_l{iteration_result.hands_dealt};
+   auto hand_rank_count_l{iteration_result.hand_rank_count};
 
    cout << "Hands dealt: " << hands_dealt_l << endl;
    cout << endl;
@@ -79,7 +79,7 @@ namespace
    class dynamic_loop_functor_2_t
    {
       public:
-         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards(cards_p)
+         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards{cards_p}
          {
          }
 
@@ -134,8 +134,14 @@ namespace
             for (unsigned int i : indexes)
                cards.push_back(deck[i]);
 
-            dynamic_loop_functor_2_t dynamic_loop_functor_2(cards);
-            dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop(0, cards.size(), 5, dynamic_loop_functor_2);
+            dynamic_loop_functor_2_t dynamic_loop_functor_2{cards};
+
+            dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop{
+                                                                    0,
+                                                                    static_cast<unsigned int>(cards.size()),
+                                                                    5,
+                                                                    dynamic_loop_functor_2
+                                                                 };
 
             dynamic_loop.run();
             ++hand_rank_count[dynamic_loop_functor_2.getResult()];
@@ -144,7 +150,7 @@ namespace
 
          iteration_result_t getResult() const
          {
-            return iteration_result_t(hand_rank_count, hands_dealt);
+            return iteration_result_t{hand_rank_count, hands_dealt};
          }
 
       private:
@@ -158,8 +164,8 @@ namespace
    iteration_result_t iterate_over_all_possible_hands(unsigned int num_cards)
    {
       dynamic_loop_functor_1_t dynamic_loop_functor_1;
-      dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop(0, 52, num_cards, dynamic_loop_functor_1);
-      auto f(async(launch::async, &dynamic_loop_t<dynamic_loop_functor_1_t>::run, &dynamic_loop));
+      dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop{0, 52, num_cards, dynamic_loop_functor_1};
+      auto f{async(launch::async, &dynamic_loop_t<dynamic_loop_functor_1_t>::run, &dynamic_loop)};
 
       f.get();
 

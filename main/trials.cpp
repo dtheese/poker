@@ -44,12 +44,12 @@ void average_random_hands_until_target_hand_rank_hit(
 
    for (unsigned long long int i{0}; i != target_hand_count; ++i)
    {
-      auto trial_result(
+      auto trial_result{
          random_hands_until_target_hand_rank_hit(target_hand_rank, num_cards)
-                       );
+                       };
 
-      auto hand_l(trial_result.hand);
-      auto hands_dealt(trial_result.hands_dealt);
+      auto hand_l{trial_result.hand};
+      auto hands_dealt{trial_result.hands_dealt};
 
       hand_l.print();
       cout << endl;
@@ -162,7 +162,7 @@ namespace
          ++hands_dealt;
 
          dynamic_loop_functor_t dynamic_loop_functor{cards};
-         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop(0, num_cards, 5, dynamic_loop_functor);
+         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, num_cards, 5, dynamic_loop_functor};
 
          dynamic_loop.run();
 

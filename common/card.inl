@@ -1,12 +1,12 @@
 #ifdef USE_TABLE
-inline card_t::card_t(): rank(rank_t::None), suit(suit_t::None), id(0)
+inline card_t::card_t(): rank{rank_t::None}, suit{suit_t::None}, id{0}
 #else
-inline card_t::card_t(): rank(rank_t::None), suit(suit_t::None)
+inline card_t::card_t(): rank{rank_t::None}, suit{suit_t::None}
 #endif
 {
 }
 
-inline card_t::card_t(rank_t rank_p, suit_t suit_p):rank(rank_p), suit(suit_p)
+inline card_t::card_t(rank_t rank_p, suit_t suit_p):rank{rank_p}, suit{suit_p}
 {
 #ifdef USE_TABLE
    auto index{
