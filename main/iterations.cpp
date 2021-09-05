@@ -23,11 +23,11 @@ iteration_result_t::iteration_result_t(
 // Support functions
 namespace
 {
-   iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards);
+   iteration_result_t iterate_over_all_possible_hands(unsigned int num_cards);
 }
 
 // *****************************************************************************
-void evaluate_all_possible_hands(unsigned long long int num_cards)
+void evaluate_all_possible_hands(unsigned int num_cards)
 {
    cout << endl;
    cout << "evaluate_all_possible_hands() called" << endl;
@@ -155,7 +155,7 @@ namespace
    };
 
    // *****************************************************************************
-   iteration_result_t iterate_over_all_possible_hands(unsigned long long int num_cards)
+   iteration_result_t iterate_over_all_possible_hands(unsigned int num_cards)
    {
       dynamic_loop_functor_1_t dynamic_loop_functor_1;
       dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop(0, 52, num_cards, dynamic_loop_functor_1);
