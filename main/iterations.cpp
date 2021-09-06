@@ -184,9 +184,9 @@ namespace
       map<hand_rank_t, unsigned long long int> hand_rank_count;
       unsigned long long int hands_dealt{0};
 
-      for (unsigned int first_index{0}; first_index <= 47; ++first_index)
+      for (unsigned int first_index{0}; first_index <= 47; first_index += 2)
       {
-         dynamic_loop_functor_1_t dynamic_loop_functor_1[]{{first_index}};
+         dynamic_loop_functor_1_t dynamic_loop_functor_1[]{{first_index}, {first_index + 1}};
 
          dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop[]{
                                                                    {
@@ -194,6 +194,12 @@ namespace
                                                                       52 - first_index - 1,
                                                                       num_cards - 1,
                                                                       dynamic_loop_functor_1[0]
+                                                                   },
+                                                                   {
+                                                                      (first_index + 1) + 1,
+                                                                      52 - (first_index + 1) - 1,
+                                                                      num_cards - 1,
+                                                                      dynamic_loop_functor_1[1]
                                                                    }
                                                                 };
 
@@ -202,26 +208,41 @@ namespace
                                     launch::async,
                                     &dynamic_loop_t<dynamic_loop_functor_1_t>::run,
                                     &dynamic_loop[0]
+                                 ),
+                            async(
+                                    launch::async,
+                                    &dynamic_loop_t<dynamic_loop_functor_1_t>::run,
+                                    &dynamic_loop[1]
                                  )
                          };
 
          f[0].get();
+         f[1].get();
 
-         const map<hand_rank_t, unsigned long long int> one_hand_rank_count[]{ref(dynamic_loop_functor_1[0].getHandRankCount())};
-         unsigned long long int one_hands_dealt[]{dynamic_loop_functor_1[0].getHandsDealt()};
+         const map<hand_rank_t, unsigned long long int> one_hand_rank_count[]{
+                                                                                ref(dynamic_loop_functor_1[0].getHandRankCount()),
+                                                                                ref(dynamic_loop_functor_1[1].getHandRankCount())
+                                                                             };
 
-         hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count[0].at(hand_rank_t::HIGH_CARD);
-         hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count[0].at(hand_rank_t::ONE_PAIR);
-         hand_rank_count[hand_rank_t::TWO_PAIR]        += one_hand_rank_count[0].at(hand_rank_t::TWO_PAIR);
-         hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += one_hand_rank_count[0].at(hand_rank_t::THREE_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT]        += one_hand_rank_count[0].at(hand_rank_t::STRAIGHT);
-         hand_rank_count[hand_rank_t::FLUSH]           += one_hand_rank_count[0].at(hand_rank_t::FLUSH);
-         hand_rank_count[hand_rank_t::FULL_HOUSE]      += one_hand_rank_count[0].at(hand_rank_t::FULL_HOUSE);
-         hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += one_hand_rank_count[0].at(hand_rank_t::FOUR_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += one_hand_rank_count[0].at(hand_rank_t::STRAIGHT_FLUSH);
-         hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += one_hand_rank_count[0].at(hand_rank_t::ROYAL_FLUSH);
+         unsigned long long int one_hands_dealt[]{
+                                                    dynamic_loop_functor_1[0].getHandsDealt(),
+                                                    dynamic_loop_functor_1[1].getHandsDealt()
+                                                 };
+         for (unsigned int i{0}; i <= 1; ++i)
+         {
+            hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count[i].at(hand_rank_t::HIGH_CARD);
+            hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count[i].at(hand_rank_t::ONE_PAIR);
+            hand_rank_count[hand_rank_t::TWO_PAIR]        += one_hand_rank_count[i].at(hand_rank_t::TWO_PAIR);
+            hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += one_hand_rank_count[i].at(hand_rank_t::THREE_OF_A_KIND);
+            hand_rank_count[hand_rank_t::STRAIGHT]        += one_hand_rank_count[i].at(hand_rank_t::STRAIGHT);
+            hand_rank_count[hand_rank_t::FLUSH]           += one_hand_rank_count[i].at(hand_rank_t::FLUSH);
+            hand_rank_count[hand_rank_t::FULL_HOUSE]      += one_hand_rank_count[i].at(hand_rank_t::FULL_HOUSE);
+            hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += one_hand_rank_count[i].at(hand_rank_t::FOUR_OF_A_KIND);
+            hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += one_hand_rank_count[i].at(hand_rank_t::STRAIGHT_FLUSH);
+            hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += one_hand_rank_count[i].at(hand_rank_t::ROYAL_FLUSH);
 
-         hands_dealt += one_hands_dealt[0];
+            hands_dealt += one_hands_dealt[i];
+         }
       }
 
       return iteration_result_t{hand_rank_count, hands_dealt};
