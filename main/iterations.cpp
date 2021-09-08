@@ -247,7 +247,7 @@ namespace
                                      INDEXES[2*i + 1]
                                   )
                           );
-     }
+      }
 
       for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
