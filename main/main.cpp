@@ -1,7 +1,6 @@
-#include <cstdlib>
+#include <chrono>
 #include <iomanip>
 #include <iostream>
-#include <time.h>
 
 #include "hand.h"
 #include "iterations.h"
@@ -13,9 +12,7 @@ int main()
 {
    system("date");
 
-   clock_t start, end;
-
-   start = clock();
+   auto start_time{chrono::steady_clock::now()};
 
 #if 1
    // The parameter in this function call is the hand size (5 - 52).
@@ -28,12 +25,13 @@ int main()
    average_random_hands_until_target_hand_rank_hit(hand_rank_t::ROYAL_FLUSH, 100, 5);
 #endif
 
-   end = clock();
-   double time_taken{static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC)};
+   auto stop_time{chrono::steady_clock::now()};
+   auto ticks_taken{stop_time - start_time};
+   constexpr long double tick_interval{decltype(ticks_taken)::period::den};
+   long double time_taken{static_cast<long double>(ticks_taken.count()) / tick_interval};
 
-   cout << "Time taken by program is: " << fixed 
-        << time_taken << setprecision(5);
+   cout << "Time taken by program is: " << fixed
+        << setprecision(6) << time_taken << " seconds" << endl;
 
-   cout << " sec " << endl;
    cout << endl;
 }

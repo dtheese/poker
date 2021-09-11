@@ -1,8 +1,7 @@
-#include <cstdlib>
+#include <chrono>
 #include <iomanip>
 #include <iostream>
 #include <map>
-#include <time.h>
 #include <vector>
 
 #include "deck.h"
@@ -70,16 +69,15 @@ int main()
    system("date");
    cout << endl;
 
-   clock_t start, end;
-
-   start = clock();
-
    dynamic_loop_functor_t dynamic_loop_functor;
    dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, 52, NUM_CARDS, dynamic_loop_functor};
 
+   auto start_time{chrono::steady_clock::now()};
    dynamic_loop.run();
-
-   end = clock();
+   auto stop_time{chrono::steady_clock::now()};
+   auto ticks_taken{stop_time - start_time};
+   constexpr long double tick_interval{decltype(ticks_taken)::period::den};
+   long double time_taken{static_cast<long double>(ticks_taken.count()) / tick_interval};
 
    const map<hand_rank_t, unsigned long long int> &hand_rank_count{dynamic_loop_functor.getHandRankCount()};
 
@@ -113,11 +111,8 @@ int main()
 
    cout << endl;
 
-   double time_taken{static_cast<double>(end - start) / static_cast<double>(CLOCKS_PER_SEC)};
+   cout << "Time taken by program is: " << fixed
+        << setprecision(6) << time_taken << " seconds" << endl;
 
-   cout << "Time taken by program is : " << fixed 
-        << time_taken << setprecision(5);
-
-   cout << " sec " << endl;
    cout << endl;
 }
