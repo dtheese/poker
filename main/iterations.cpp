@@ -227,12 +227,13 @@ namespace
 
       if (NUM_THREADS > 1)
       {
-         constexpr unsigned int INDEXES[NUM_THREADS]{
-                                                       0,
-                                                       3,
-                                                       6,
-                                                       12
-                                                    };
+         // NOTE: These indexes are tailored to five-card hands and four threads!
+         constexpr unsigned int START_INDEXES[NUM_THREADS]{
+                                                             0,
+                                                             3,
+                                                             6,
+                                                             12
+                                                          };
 
          map<hand_rank_t, unsigned long long int> hand_rank_count;
          unsigned long long int hands_dealt{0};
@@ -245,8 +246,8 @@ namespace
                                         launch::async,
                                         iterate_over_subset_of_hands,
                                         num_cards,
-                                        INDEXES[i],
-                                        i != NUM_THREADS - 1 ? INDEXES[i + 1] - 1: 52 - num_cards
+                                        START_INDEXES[i],
+                                        i != NUM_THREADS - 1 ? START_INDEXES[i + 1] - 1: 52 - num_cards
                                      )
                              );
          }
