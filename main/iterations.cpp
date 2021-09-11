@@ -225,48 +225,55 @@ namespace
    {
       constexpr unsigned int NUM_THREADS{4};
 
-      constexpr unsigned int INDEXES[2*NUM_THREADS]{
-                                                      0, 2,
-                                                      3, 6,
-                                                      7, 11,
-                                                      12, 47
-                                                   };
-
-      map<hand_rank_t, unsigned long long int> hand_rank_count;
-      unsigned long long int hands_dealt{0};
-      vector<future<iteration_result_t>> futures;
-
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+      if (NUM_THREADS > 1)
       {
-         futures.push_back(
-                             async(
-                                     launch::async,
-                                     iterate_over_subset_of_hands,
-                                     num_cards,
-                                     INDEXES[2*i],
-                                     INDEXES[2*i + 1]
-                                  )
-                          );
-      }
+         constexpr unsigned int INDEXES[2*NUM_THREADS]{
+                                                         0, 2,
+                                                         3, 5,
+                                                         6, 11,
+                                                         12, 47
+                                                      };
 
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+         map<hand_rank_t, unsigned long long int> hand_rank_count;
+         unsigned long long int hands_dealt{0};
+         vector<future<iteration_result_t>> futures;
+
+         for (unsigned int i{0}; i < NUM_THREADS; ++i)
+         {
+            futures.push_back(
+                                async(
+                                        launch::async,
+                                        iterate_over_subset_of_hands,
+                                        num_cards,
+                                        INDEXES[2*i],
+                                        INDEXES[2*i + 1]
+                                     )
+                             );
+         }
+
+         for (unsigned int i{0}; i < NUM_THREADS; ++i)
+         {
+            iteration_result_t results{futures[i].get()};
+
+            hand_rank_count[hand_rank_t::HIGH_CARD]       += results.hand_rank_count.at(hand_rank_t::HIGH_CARD);
+            hand_rank_count[hand_rank_t::ONE_PAIR]        += results.hand_rank_count.at(hand_rank_t::ONE_PAIR);
+            hand_rank_count[hand_rank_t::TWO_PAIR]        += results.hand_rank_count.at(hand_rank_t::TWO_PAIR);
+            hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += results.hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
+            hand_rank_count[hand_rank_t::STRAIGHT]        += results.hand_rank_count.at(hand_rank_t::STRAIGHT);
+            hand_rank_count[hand_rank_t::FLUSH]           += results.hand_rank_count.at(hand_rank_t::FLUSH);
+            hand_rank_count[hand_rank_t::FULL_HOUSE]      += results.hand_rank_count.at(hand_rank_t::FULL_HOUSE);
+            hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += results.hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
+            hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += results.hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
+            hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += results.hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
+
+            hands_dealt += results.hands_dealt;
+         }
+
+         return iteration_result_t{hand_rank_count, hands_dealt};
+      }
+      else
       {
-         iteration_result_t results{futures[i].get()};
-
-         hand_rank_count[hand_rank_t::HIGH_CARD]       += results.hand_rank_count.at(hand_rank_t::HIGH_CARD);
-         hand_rank_count[hand_rank_t::ONE_PAIR]        += results.hand_rank_count.at(hand_rank_t::ONE_PAIR);
-         hand_rank_count[hand_rank_t::TWO_PAIR]        += results.hand_rank_count.at(hand_rank_t::TWO_PAIR);
-         hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += results.hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT]        += results.hand_rank_count.at(hand_rank_t::STRAIGHT);
-         hand_rank_count[hand_rank_t::FLUSH]           += results.hand_rank_count.at(hand_rank_t::FLUSH);
-         hand_rank_count[hand_rank_t::FULL_HOUSE]      += results.hand_rank_count.at(hand_rank_t::FULL_HOUSE);
-         hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += results.hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += results.hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
-         hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += results.hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
-
-         hands_dealt += results.hands_dealt;
+         return iterate_over_subset_of_hands(num_cards, 0, 52 - num_cards);
       }
-
-      return iteration_result_t{hand_rank_count, hands_dealt};
    }
 }
