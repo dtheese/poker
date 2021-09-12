@@ -6,6 +6,7 @@
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
+#include "threading_indexes.h"
 
 #include "iterations.h"
 
@@ -23,11 +24,11 @@ iteration_result_t::iteration_result_t(
 // Support functions
 namespace
 {
-   iteration_result_t iterate_over_all_possible_hands(unsigned int num_cards);
+   iteration_result_t iterate_over_all_possible_hands(const unsigned int num_cards);
 }
 
 // *****************************************************************************
-void evaluate_all_possible_hands(unsigned int num_cards)
+void evaluate_all_possible_hands(const unsigned int num_cards)
 {
    cout << endl;
    cout << "evaluate_all_possible_hands() called" << endl;
@@ -179,9 +180,9 @@ namespace
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     unsigned int num_cards,
-                                                     unsigned int first_initial_index,
-                                                     unsigned int last_initial_index
+                                                     const unsigned int num_cards,
+                                                     const unsigned int first_initial_index,
+                                                     const unsigned int last_initial_index
                                                   )
    {
       map<hand_rank_t, unsigned long long int> hand_rank_count;
@@ -221,60 +222,53 @@ namespace
    }
 
    // *****************************************************************************
-   iteration_result_t iterate_over_all_possible_hands(unsigned int num_cards)
+   iteration_result_t iterate_over_all_possible_hands(const unsigned int num_cards)
    {
-      constexpr unsigned int NUM_THREADS{4};
+      map<hand_rank_t, unsigned long long int> hand_rank_count;
+      unsigned long long int hands_dealt{0};
+      vector<future<iteration_result_t>> futures;
 
-      if (NUM_THREADS > 1)
+      for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
-         // NOTE: These indexes are tailored to five-card hands and four threads!
-         constexpr unsigned int START_INDEXES[NUM_THREADS]{
-                                                             0,
-                                                             3,
-                                                             6,
-                                                             12
-                                                          };
+         unsigned int first_index{START_INDEXES.at(num_cards).at(NUM_THREADS)[i]};
+         unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(num_cards).at(NUM_THREADS)[i + 1] - 1
+                                                      : 52 - num_cards};
 
-         map<hand_rank_t, unsigned long long int> hand_rank_count;
-         unsigned long long int hands_dealt{0};
-         vector<future<iteration_result_t>> futures;
+         cout << "Starting a thread with:" << endl;
+         cout << "   First index: " << first_index << endl;
+         cout << "   Last index : " << last_index << endl;
 
-         for (unsigned int i{0}; i < NUM_THREADS; ++i)
-         {
-            futures.push_back(
-                                async(
-                                        launch::async,
-                                        iterate_over_subset_of_hands,
-                                        num_cards,
-                                        START_INDEXES[i],
-                                        i != NUM_THREADS - 1 ? START_INDEXES[i + 1] - 1: 52 - num_cards
-                                     )
-                             );
-         }
-
-         for (unsigned int i{0}; i < NUM_THREADS; ++i)
-         {
-            iteration_result_t results{futures[i].get()};
-
-            hand_rank_count[hand_rank_t::HIGH_CARD]       += results.hand_rank_count.at(hand_rank_t::HIGH_CARD);
-            hand_rank_count[hand_rank_t::ONE_PAIR]        += results.hand_rank_count.at(hand_rank_t::ONE_PAIR);
-            hand_rank_count[hand_rank_t::TWO_PAIR]        += results.hand_rank_count.at(hand_rank_t::TWO_PAIR);
-            hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += results.hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
-            hand_rank_count[hand_rank_t::STRAIGHT]        += results.hand_rank_count.at(hand_rank_t::STRAIGHT);
-            hand_rank_count[hand_rank_t::FLUSH]           += results.hand_rank_count.at(hand_rank_t::FLUSH);
-            hand_rank_count[hand_rank_t::FULL_HOUSE]      += results.hand_rank_count.at(hand_rank_t::FULL_HOUSE);
-            hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += results.hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
-            hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += results.hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
-            hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += results.hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
-
-            hands_dealt += results.hands_dealt;
-         }
-
-         return iteration_result_t{hand_rank_count, hands_dealt};
+         futures.push_back(
+                             async(
+                                     launch::async,
+                                     iterate_over_subset_of_hands,
+                                     num_cards,
+                                     first_index,
+                                     last_index
+                                  )
+                          );
       }
-      else
+
+      cout << endl;
+
+      for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
-         return iterate_over_subset_of_hands(num_cards, 0, 52 - num_cards);
+         iteration_result_t results{futures[i].get()};
+
+         hand_rank_count[hand_rank_t::HIGH_CARD]       += results.hand_rank_count.at(hand_rank_t::HIGH_CARD);
+         hand_rank_count[hand_rank_t::ONE_PAIR]        += results.hand_rank_count.at(hand_rank_t::ONE_PAIR);
+         hand_rank_count[hand_rank_t::TWO_PAIR]        += results.hand_rank_count.at(hand_rank_t::TWO_PAIR);
+         hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += results.hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
+         hand_rank_count[hand_rank_t::STRAIGHT]        += results.hand_rank_count.at(hand_rank_t::STRAIGHT);
+         hand_rank_count[hand_rank_t::FLUSH]           += results.hand_rank_count.at(hand_rank_t::FLUSH);
+         hand_rank_count[hand_rank_t::FULL_HOUSE]      += results.hand_rank_count.at(hand_rank_t::FULL_HOUSE);
+         hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += results.hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
+         hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += results.hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
+         hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += results.hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
+
+         hands_dealt += results.hands_dealt;
       }
+
+      return iteration_result_t{hand_rank_count, hands_dealt};
    }
 }
