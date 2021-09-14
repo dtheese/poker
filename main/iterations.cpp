@@ -33,6 +33,7 @@ void evaluate_all_possible_hands(const unsigned int num_cards)
    cout << endl;
    cout << "evaluate_all_possible_hands() called" << endl;
    cout << "num_cards = " << num_cards << endl;
+   cout << "Number of threads = " << NUM_THREADS << endl;
    cout << endl;
 
    auto iteration_result{iterate_over_all_possible_hands(num_cards)};
