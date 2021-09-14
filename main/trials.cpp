@@ -7,6 +7,7 @@
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
+#include "parameters.h"
 
 #include "trials.h"
 
@@ -21,17 +22,13 @@ trial_result_t::trial_result_t(const hand_t &hand_p, const unsigned long long in
 // Support functions
 namespace
 {
-   trial_result_t random_hands_until_target_hand_rank_hit(
-                       hand_rank_t target_hand_rank,
-                       unsigned int num_cards
-                                                         );
+   trial_result_t random_hands_until_target_hand_rank_hit(hand_rank_t target_hand_rank);
 }
 
 // *****************************************************************************
 void average_random_hands_until_target_hand_rank_hit(
                                                        hand_rank_t target_hand_rank,
-                                                       unsigned long long int target_hand_count,
-                                                       unsigned int num_cards
+                                                       unsigned long long int target_hand_count
                                                     )
 {
    cout << endl;
@@ -44,9 +41,7 @@ void average_random_hands_until_target_hand_rank_hit(
 
    for (unsigned long long int i{0}; i != target_hand_count; ++i)
    {
-      auto trial_result{
-         random_hands_until_target_hand_rank_hit(target_hand_rank, num_cards)
-                       };
+      auto trial_result{random_hands_until_target_hand_rank_hit(target_hand_rank)};
 
       auto hand_l{trial_result.hand};
       auto hands_dealt{trial_result.hands_dealt};
@@ -134,15 +129,12 @@ namespace
    default_random_engine dre{rd()};
 
    // *****************************************************************************
-   trial_result_t random_hands_until_target_hand_rank_hit(
-        hand_rank_t target_hand_rank,
-        unsigned int num_cards
-                                                         )
+   trial_result_t random_hands_until_target_hand_rank_hit(hand_rank_t target_hand_rank)
    {
       unsigned long long int hands_dealt{0};
       vector<card_t> cards;
 
-      cards.reserve(num_cards);
+      cards.reserve(NUM_CARDS);
 
       while (true)
       {
@@ -150,7 +142,7 @@ namespace
 
          cards.clear();
 
-         for (unsigned int i{52}; i > 52 - num_cards; --i)
+         for (unsigned int i{52}; i > 52 - NUM_CARDS; --i)
          {
             uniform_int_distribution<unsigned int> di{0, i - 1};
             unsigned int rand_num{di(dre)};
@@ -162,7 +154,7 @@ namespace
          ++hands_dealt;
 
          dynamic_loop_functor_t dynamic_loop_functor{cards};
-         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, num_cards, 5, dynamic_loop_functor};
+         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, NUM_CARDS, 5, dynamic_loop_functor};
 
          dynamic_loop.run();
 

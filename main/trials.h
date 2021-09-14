@@ -15,8 +15,7 @@ struct trial_result_t
 
 void average_random_hands_until_target_hand_rank_hit(
                                                        hand_rank_t target_hand_rank,
-                                                       unsigned long long int target_hand_count,
-                                                       unsigned int num_cards
+                                                       unsigned long long int target_hand_count
                                                     );
 
 #endif

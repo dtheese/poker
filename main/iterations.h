@@ -18,6 +18,6 @@ struct iteration_result_t
    const unsigned long long int hands_dealt;
 };
 
-void evaluate_all_possible_hands(const unsigned int num_cards);
+void evaluate_all_possible_hands();
 
 #endif

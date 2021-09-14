@@ -6,6 +6,7 @@
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
+#include "parameters.h"
 #include "threading_indexes.h"
 
 #include "iterations.h"
@@ -24,19 +25,19 @@ iteration_result_t::iteration_result_t(
 // Support functions
 namespace
 {
-   iteration_result_t iterate_over_all_possible_hands(const unsigned int num_cards);
+   iteration_result_t iterate_over_all_possible_hands();
 }
 
 // *****************************************************************************
-void evaluate_all_possible_hands(const unsigned int num_cards)
+void evaluate_all_possible_hands()
 {
    cout << endl;
    cout << "evaluate_all_possible_hands() called" << endl;
-   cout << "num_cards = " << num_cards << endl;
-   cout << "Number of threads = " << NUM_THREADS << endl;
+   cout << "Number of cards in a hand: " << NUM_CARDS << endl;
+   cout << "Number of threads: " << NUM_THREADS << endl;
    cout << endl;
 
-   auto iteration_result{iterate_over_all_possible_hands(num_cards)};
+   auto iteration_result{iterate_over_all_possible_hands()};
    auto hands_dealt_l{iteration_result.hands_dealt};
    auto hand_rank_count_l{iteration_result.hand_rank_count};
 
@@ -181,7 +182,7 @@ namespace
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const unsigned int num_cards,
+                                                     const unsigned int NUM_CARDS,
                                                      const unsigned int first_initial_index,
                                                      const unsigned int last_initial_index
                                                   )
@@ -196,7 +197,7 @@ namespace
          dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop{
                                                                  first_index + 1,
                                                                  52 - first_index - 1,
-                                                                 num_cards - 1,
+                                                                 NUM_CARDS - 1,
                                                                  dynamic_loop_functor_1
                                                               };
 
@@ -223,7 +224,7 @@ namespace
    }
 
    // *****************************************************************************
-   iteration_result_t iterate_over_all_possible_hands(const unsigned int num_cards)
+   iteration_result_t iterate_over_all_possible_hands()
    {
       map<hand_rank_t, unsigned long long int> hand_rank_count;
       unsigned long long int hands_dealt{0};
@@ -231,9 +232,9 @@ namespace
 
       for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
-         unsigned int first_index{START_INDEXES.at(num_cards).at(NUM_THREADS)[i]};
-         unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(num_cards).at(NUM_THREADS)[i + 1] - 1
-                                                      : 52 - num_cards};
+         unsigned int first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
+         unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
+                                                      : 52 - NUM_CARDS};
 
          cout << "Starting a thread with:" << endl;
          cout << "   First index: " << first_index << endl;
@@ -243,7 +244,7 @@ namespace
                              async(
                                      launch::async,
                                      iterate_over_subset_of_hands,
-                                     num_cards,
+                                     NUM_CARDS,
                                      first_index,
                                      last_index
                                   )
