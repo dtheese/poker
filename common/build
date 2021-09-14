@@ -4,6 +4,8 @@
 # yum install centos-release-scl
 # scl enable devtoolset-7 bash
 
+# NOTE: This file is currently unused since there are no .cpp files in common.
+
 rm -f *.a
 g++ -std=c++14 -pthread -Wall -Wpedantic -Ofast -c *.cpp
 ar cru libpoker_common.a *.o
