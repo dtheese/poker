@@ -8,6 +8,7 @@
 #include "dynamic_loop.h"
 #include "hand.h"
 #include "hand_rank_table.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -64,7 +65,13 @@ namespace
 int main()
 {
    // This version of the program works only for 5-card hands.
-   constexpr unsigned int NUM_CARDS{5};
+   if (NUM_CARDS != 5)
+   {
+      cout << "This version of the program works only for 5-card hands." << endl;
+      cout << endl;
+
+      return 1;
+   }
 
    system("date");
    cout << endl;
