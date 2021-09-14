@@ -25,6 +25,12 @@ iteration_result_t::iteration_result_t(
 // Support functions
 namespace
 {
+   constexpr unsigned int NUM_THREADS{
+                                        ((52 - NUM_CARDS + 1) < MAX_THREADS) ?
+                                        (52 - NUM_CARDS + 1)                 :
+                                        MAX_THREADS
+                                     };
+
    iteration_result_t iterate_over_all_possible_hands();
 }
 
@@ -56,7 +62,7 @@ void evaluate_all_possible_hands()
    cout << "High card         "  << hand_rank_count_l[hand_rank_t::HIGH_CARD]       << endl;
    cout << endl;
 
-   cout << "Confirming hands dealt: "         \
+   cout << "Confirming hands dealt: "                        \
         << hand_rank_count_l[hand_rank_t::HIGH_CARD]       + \
            hand_rank_count_l[hand_rank_t::ONE_PAIR]        + \
            hand_rank_count_l[hand_rank_t::TWO_PAIR]        + \
@@ -182,7 +188,6 @@ namespace
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const unsigned int NUM_CARDS,
                                                      const unsigned int first_initial_index,
                                                      const unsigned int last_initial_index
                                                   )
@@ -233,10 +238,11 @@ namespace
       for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
          unsigned int first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
+
          unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
                                                       : 52 - NUM_CARDS};
 
-         cout << "Starting a thread with:" << endl;
+         cout << "Starting a thread with these starting card indexes:" << endl;
          cout << "   First index: " << first_index << endl;
          cout << "   Last index : " << last_index << endl;
 
@@ -244,7 +250,6 @@ namespace
                              async(
                                      launch::async,
                                      iterate_over_subset_of_hands,
-                                     NUM_CARDS,
                                      first_index,
                                      last_index
                                   )

@@ -6,8 +6,6 @@
 
 using namespace std;
 
-constexpr unsigned int NUM_THREADS{4};
-
 using num_cards_t                                      = unsigned int;
 using num_threads_t                                    = unsigned int;
 using start_card_index_t                               = unsigned int;
