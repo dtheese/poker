@@ -17,8 +17,8 @@ iteration_result_t::iteration_result_t(
                      const map<hand_rank_t, unsigned long long int> hand_rank_count_p,
                      const unsigned long long int hands_dealt_p
                                       ):
-   hand_rank_count{hand_rank_count_p},
-   hands_dealt{hands_dealt_p}
+                     hand_rank_count{hand_rank_count_p},
+                     hands_dealt{hands_dealt_p}
 {
 }
 
