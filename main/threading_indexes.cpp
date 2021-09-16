@@ -146,15 +146,15 @@ const start_card_indexes_by_num_threads_by_num_cards_t START_INDEXES
                                ),
                       make_pair(
                                   2, // Number of threads
-                                  start_card_indexes_t{0,1}
+                                  start_card_indexes_t{0,3}
                                ),
                       make_pair(
                                   3, // Number of threads
-                                  start_card_indexes_t{0,1,2}
+                                  start_card_indexes_t{0,2,4}
                                ),
                       make_pair(
                                   4, // Number of threads
-                                  start_card_indexes_t{0,1,2,3}
+                                  start_card_indexes_t{0,1,3,6}
                                )
                  }
               ),
@@ -168,15 +168,15 @@ const start_card_indexes_by_num_threads_by_num_cards_t START_INDEXES
                                ),
                       make_pair(
                                   2, // Number of threads
-                                  start_card_indexes_t{0,1}
+                                  start_card_indexes_t{0,3}
                                ),
                       make_pair(
                                   3, // Number of threads
-                                  start_card_indexes_t{0,1,2}
+                                  start_card_indexes_t{0,1,4}
                                ),
                       make_pair(
                                   4, // Number of threads
-                                  start_card_indexes_t{0,1,2,3}
+                                  start_card_indexes_t{0,1,3,5}
                                )
                  }
               ),
