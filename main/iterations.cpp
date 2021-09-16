@@ -183,7 +183,7 @@ namespace
          unsigned long long int hands_dealt{0};
          map<hand_rank_t, unsigned long long int> hand_rank_count;
          vector<card_t> cards;
-         unsigned int first_index;
+         const unsigned int first_index;
    };
 
    // *****************************************************************************
