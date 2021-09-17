@@ -2,9 +2,9 @@ inline deck_s::deck_s()
 {
    deck.reserve(52);
 
-   for (suit_t suit{suit_t::First}; suit <= suit_t::Last; ++suit)
+   for (rank_t rank{rank_t::First}; rank <= rank_t::Last; ++rank)
    {
-      for (rank_t rank{rank_t::First}; rank <= rank_t::Last; ++rank)
+      for (suit_t suit{suit_t::First}; suit <= suit_t::Last; ++suit)
          deck.push_back(card_t(rank, suit));
    }
 }
