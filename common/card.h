@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#ifdef USE_TABLE
+#ifdef USE_LOOKUP_TABLE
 #include "primes.h"
 #endif
 
@@ -60,7 +60,9 @@ class card_t
       rank_t rank;
       suit_t suit;
 
-      unsigned long long int id;
+#ifdef USE_LOOKUP_TABLE
+      unsigned long long int id{0};
+#endif
 };
 
 #include "card.inl"

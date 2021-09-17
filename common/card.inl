@@ -1,14 +1,10 @@
-#ifdef USE_TABLE
-inline card_t::card_t(): rank{rank_t::None}, suit{suit_t::None}, id{0}
-#else
 inline card_t::card_t(): rank{rank_t::None}, suit{suit_t::None}
-#endif
 {
 }
 
 inline card_t::card_t(rank_t rank_p, suit_t suit_p):rank{rank_p}, suit{suit_p}
 {
-#ifdef USE_TABLE
+#ifdef USE_LOOKUP_TABLE
    auto index{
         13 * static_cast<underlying_type<suit_t>::type>(suit) +
         (static_cast<underlying_type<rank_t>::type>(rank) - 2)
@@ -30,7 +26,11 @@ inline suit_t card_t::get_suit() const
 
 inline unsigned long long int card_t::get_id() const
 {
+#ifdef USE_LOOKUP_TABLE
    return id;
+#else
+   return 0;
+#endif
 }
 
 inline bool operator<(const card_t &lhs, const card_t &rhs)

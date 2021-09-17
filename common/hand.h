@@ -8,6 +8,7 @@
 
 #include "card.h"
 #include "deck.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -42,7 +43,10 @@ class hand_t
 
    private:
       card_t cards[5];
-      unsigned long long int id;
+
+#ifdef USE_LOOKUP_TABLE
+      unsigned long long int id{1};
+#endif
 
       bool is_four_of_a_kind() const;
       bool is_a_full_house() const;

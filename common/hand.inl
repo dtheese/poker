@@ -1,42 +1,24 @@
-#ifdef USE_TABLE
-inline hand_t::hand_t(): id{0}
-{
-}
-#else
 inline hand_t::hand_t()
 {
-   // Leave member id uninitialized since it is unused in this version.
-   //
-   // We want to leave it in hand.h though since hand.h is common between
-   // this version and a version that does use member id.
 }
-#endif
 
-#ifdef USE_TABLE
-inline hand_t::hand_t(const card_t *cards_p): id{1}
+inline hand_t::hand_t(const card_t *cards_p)
 {
    for (unsigned int i{0}; i <= 4; ++i)
    {
       cards[i] = cards_p[i];
+
+#ifdef USE_LOOKUP_TABLE
       id *= cards[i].get_id();
+#endif
    }
 
-   sort(cards, cards + 5);
+   // There is no need to sort here in non-Monte Carlo situations because
+   // the cards come out of the deck in sorted order. This has proven to be
+   // a nice optimization!
+   if (MONTE_CARLO)
+      sort(cards, cards + 5);
 }
-#else
-inline hand_t::hand_t(const card_t *cards_p)
-{
-   // Leave member id uninitialized since it is unused in this version.
-   //
-   // We want to leave it in hand.h though since hand.h is common between
-   // this version and a version that does use member id.
-
-   for (unsigned int i{0}; i <= 4; ++i)
-      cards[i] = cards_p[i];
-
-   sort(cards, cards + 5);
-}
-#endif
 
 inline hand_rank_t hand_t::hand_rank() const
 {
@@ -186,7 +168,11 @@ inline bool hand_t::is_one_pair() const
 
 inline unsigned long long int hand_t::get_id() const
 {
+#ifdef USE_LOOKUP_TABLE
    return id;
+#else
+   return 0;
+#endif
 }
 
 inline void hand_t::print() const
