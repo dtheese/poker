@@ -36,4 +36,6 @@ int main()
         << setprecision(6) << time_taken << " seconds" << endl;
 
    cout << endl;
+   system("date");
+   cout << endl;
 }
