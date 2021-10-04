@@ -84,9 +84,9 @@ int main()
    auto stop_time{chrono::steady_clock::now()};
    auto ticks_taken{stop_time - start_time};
    constexpr long double tick_interval{decltype(ticks_taken)::period::den};
-   long double time_taken{static_cast<long double>(ticks_taken.count()) / tick_interval};
+   auto time_taken{static_cast<long double>(ticks_taken.count()) / tick_interval};
 
-   const map<hand_rank_t, unsigned long long int> &hand_rank_count{dynamic_loop_functor.getHandRankCount()};
+   const auto &hand_rank_count{dynamic_loop_functor.getHandRankCount()};
 
    cout << "Hands dealt: " << dynamic_loop_functor.getHandsDealt() << endl;
    cout << endl;

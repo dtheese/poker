@@ -103,7 +103,7 @@ namespace
             card_t cards_1[5];
             unsigned int j{0};
 
-            for (unsigned int i : indexes)
+            for (auto i : indexes)
                cards_1[j++] = cards[i];
 
             hand_t hand{cards_1};
@@ -151,7 +151,7 @@ namespace
             cards.clear();
             cards.push_back(deck[first_index]);
 
-            for (unsigned int i : indexes)
+            for (auto i : indexes)
                cards.push_back(deck[i]);
 
             dynamic_loop_functor_2_t dynamic_loop_functor_2{cards};
@@ -195,7 +195,7 @@ namespace
       map<hand_rank_t, unsigned long long int> hand_rank_count;
       unsigned long long int hands_dealt{0};
 
-      for (unsigned int first_index{first_initial_index}; first_index <= last_initial_index; ++first_index)
+      for (auto first_index{first_initial_index}; first_index <= last_initial_index; ++first_index)
       {
          dynamic_loop_functor_1_t dynamic_loop_functor_1{first_index};
 
@@ -208,8 +208,8 @@ namespace
 
          dynamic_loop.run();
 
-         const map<hand_rank_t, unsigned long long int> &one_hand_rank_count{dynamic_loop_functor_1.getHandRankCount()};
-         const unsigned long long int one_hands_dealt{dynamic_loop_functor_1.getHandsDealt()};
+         const auto &one_hand_rank_count{dynamic_loop_functor_1.getHandRankCount()};
+         const auto one_hands_dealt{dynamic_loop_functor_1.getHandsDealt()};
 
          hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
          hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
@@ -237,7 +237,7 @@ namespace
 
       for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
-         unsigned int first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
+         auto first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
 
          unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
                                                       : 52 - NUM_CARDS};
@@ -260,7 +260,7 @@ namespace
 
       for (unsigned int i{0}; i < NUM_THREADS; ++i)
       {
-         iteration_result_t results{futures[i].get()};
+         auto results{futures[i].get()};
 
          hand_rank_count[hand_rank_t::HIGH_CARD]       += results.hand_rank_count.at(hand_rank_t::HIGH_CARD);
          hand_rank_count[hand_rank_t::ONE_PAIR]        += results.hand_rank_count.at(hand_rank_t::ONE_PAIR);

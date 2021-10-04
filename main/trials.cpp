@@ -92,7 +92,7 @@ namespace
             card_t cards_1[5];
             unsigned int j{0};
 
-            for (unsigned int i : indexes)
+            for (auto i : indexes)
                cards_1[j++] = cards[i];
 
             hand_t hand_1{cards_1};
@@ -145,7 +145,7 @@ namespace
          for (unsigned int i{52}; i > 52 - NUM_CARDS; --i)
          {
             uniform_int_distribution<unsigned int> di{0, i - 1};
-            unsigned int rand_num{di(dre)};
+            auto rand_num{di(dre)};
 
             cards.push_back(deck[rand_num]);
             deck.erase(deck.begin() + rand_num);
