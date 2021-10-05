@@ -107,9 +107,10 @@ namespace
                cards_1[j++] = cards[i];
 
             hand_t hand{cards_1};
+            auto this_hands_rank{hand.hand_rank()};
 
-            if (hand.hand_rank() > highest_hand_seen)
-               highest_hand_seen = hand.hand_rank();
+            if (this_hands_rank > highest_hand_seen)
+               highest_hand_seen = this_hands_rank;
          }
 
          hand_rank_t getResult() const
