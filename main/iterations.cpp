@@ -143,9 +143,11 @@ namespace
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
-         // DCT: Handle cases where encoding_per_thread did not divide evenly!
          my_uint_t first_encoding{i * encodings_per_thread};
          my_uint_t last_encoding{(i + 1) * encodings_per_thread - 1};
+
+         if (i == (NUM_THREADS - 1))
+            last_encoding += combinations(52ULL, NUM_CARDS) % NUM_THREADS;
 
          cout << "Starting a thread to evaluate the hands corresponding to these encodings:" << endl;
          cout << "   First encoding: " << first_encoding << endl;
