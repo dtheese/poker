@@ -8,6 +8,6 @@
 # declare -r LIBRARIES="-L ../common -lpoker_common"
 
 rm -f poker
-g++ -std=c++14 -pthread -Wall -Wpedantic -Ofast -D USE_LOOKUP_TABLE -I . -I ../common -o poker *.cpp $LIBRARIES
+g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -Ofast -D USE_LOOKUP_TABLE -I . -I ../common -o poker *.cpp $LIBRARIES
 
 exit 0
