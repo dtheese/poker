@@ -11,7 +11,6 @@ using namespace std;
 #include "dynamic_loop.h"
 #include "hand.h"
 #include "parameters.h"
-#include "threading_indexes.h"
 #include "utilities.h"
 
 #include "iterations.h"
