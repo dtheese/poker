@@ -12,7 +12,7 @@ using namespace std;
 #include "primes.h"
 #endif
 
-enum class rank_t: unsigned int {
+enum class rank_t: unsigned long long int {
                                    First = 2,
                                    Two   = First,
                                    Three = 3,
@@ -32,7 +32,7 @@ enum class rank_t: unsigned int {
                                    None  = End + 1
                                 };
 
-enum class suit_t: unsigned int {
+enum class suit_t: unsigned long long int {
                                    First    = 0,
                                    CLUBS    = First,
                                    DIAMONDS = First + 1,

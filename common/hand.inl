@@ -4,7 +4,7 @@ inline hand_t::hand_t()
 
 inline hand_t::hand_t(const card_t *cards_p)
 {
-   for (unsigned int i{0}; i <= 4; ++i)
+   for (unsigned long long int i{0}; i <= 4; ++i)
    {
       cards[i] = cards_p[i];
 

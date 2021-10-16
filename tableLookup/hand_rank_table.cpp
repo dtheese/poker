@@ -23,7 +23,7 @@ namespace
          void operator()(const indexes_t &indexes)
          {
             card_t cards[5];
-            unsigned int j{0};
+            unsigned long long int j{0};
 
             for (
                    auto i{indexes.cbegin()};
@@ -31,7 +31,7 @@ namespace
                    ++i
                 )
             {
-               for (unsigned int i : indexes)
+               for (unsigned long long int i : indexes)
                   cards[j++] = deck[i];
             }
 

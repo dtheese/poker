@@ -90,7 +90,7 @@ namespace
          void operator()(const indexes_t &indexes)
          {
             card_t cards_1[5];
-            unsigned int j{0};
+            unsigned long long int j{0};
 
             for (auto i : indexes)
                cards_1[j++] = cards[i];
@@ -142,9 +142,9 @@ namespace
 
          cards.clear();
 
-         for (unsigned int i{52}; i > 52 - NUM_CARDS; --i)
+         for (unsigned long long int i{52}; i > 52 - NUM_CARDS; --i)
          {
-            uniform_int_distribution<unsigned int> di{0, i - 1};
+            uniform_int_distribution<unsigned long long int> di{0, i - 1};
             auto rand_num{di(dre)};
 
             cards.push_back(deck[rand_num]);

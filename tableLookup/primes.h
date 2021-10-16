@@ -17,7 +17,7 @@ class primes_s
 
       static const primes_s &getInstance();
 
-      const unsigned long long int &operator[](unsigned int i) const;
+      const unsigned long long int &operator[](unsigned long long int i) const;
 
    private:
       primes_s();

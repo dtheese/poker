@@ -25,7 +25,7 @@ iteration_result_t::iteration_result_t(
 // Support functions
 namespace
 {
-   constexpr unsigned int NUM_THREADS{
+   constexpr unsigned long long int NUM_THREADS{
                                         ((52 - NUM_CARDS + 1) < MAX_THREADS) ?
                                         (52 - NUM_CARDS + 1)                 :
                                         MAX_THREADS
@@ -101,7 +101,7 @@ namespace
          void operator()(const indexes_t &indexes)
          {
             card_t cards_1[5];
-            unsigned int j{0};
+            unsigned long long int j{0};
 
             for (auto i : indexes)
                cards_1[j++] = cards[i];
@@ -127,7 +127,7 @@ namespace
    class dynamic_loop_functor_1_t
    {
       public:
-         dynamic_loop_functor_1_t(unsigned int first_index_p): first_index{first_index_p}
+         dynamic_loop_functor_1_t(unsigned long long int first_index_p): first_index{first_index_p}
          {
             hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
             hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
@@ -159,7 +159,7 @@ namespace
 
             dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop{
                                                                     0,
-                                                                    static_cast<unsigned int>(cards.size()),
+                                                                    static_cast<unsigned long long int>(cards.size()),
                                                                     5,
                                                                     dynamic_loop_functor_2
                                                                  };
@@ -184,13 +184,13 @@ namespace
          unsigned long long int hands_dealt{0};
          map<hand_rank_t, unsigned long long int> hand_rank_count;
          vector<card_t> cards;
-         const unsigned int first_index;
+         const unsigned long long int first_index;
    };
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const unsigned int first_initial_index,
-                                                     const unsigned int last_initial_index
+                                                     const unsigned long long int first_initial_index,
+                                                     const unsigned long long int last_initial_index
                                                   )
    {
       map<hand_rank_t, unsigned long long int> hand_rank_count;
@@ -236,11 +236,11 @@ namespace
       unsigned long long int hands_dealt{0};
       vector<future<iteration_result_t>> futures;
 
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+      for (unsigned long long int i{0}; i < NUM_THREADS; ++i)
       {
          auto first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
 
-         unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
+         unsigned long long int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
                                                       : 52 - NUM_CARDS};
 
          cout << "Starting a thread with these starting card indexes:" << endl;
@@ -259,7 +259,7 @@ namespace
 
       cout << endl;
 
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+      for (unsigned long long int i{0}; i < NUM_THREADS; ++i)
       {
          auto results{futures[i].get()};
 

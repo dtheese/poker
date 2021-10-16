@@ -66,7 +66,7 @@ inline const primes_s &primes_s::getInstance()
    return instance;
 }
 
-inline const unsigned long long int &primes_s::operator[](unsigned int i) const
+inline const unsigned long long int &primes_s::operator[](unsigned long long int i) const
 {
    return primes[i];
 }
