@@ -114,6 +114,8 @@ namespace
 
       for (auto encoding{first_encoding}; encoding <= last_encoding; ++encoding)
       {
+         // DCT: Resume work here!!!
+
          // hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
          // hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
          // hand_rank_count[hand_rank_t::TWO_PAIR]        += one_hand_rank_count.at(hand_rank_t::TWO_PAIR);
