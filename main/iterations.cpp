@@ -2,6 +2,7 @@
 #include <iostream>
 #include <numeric>
 #include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -29,6 +30,7 @@ namespace
    const my_uint_t NUM_THREADS{thread::hardware_concurrency()};
 
    iteration_result_t iterate_over_all_possible_hands();
+   void decode(const my_uint_t encoding, vector<my_uint_t> &indexes);
 }
 
 // *****************************************************************************
@@ -115,6 +117,8 @@ namespace
       for (auto encoding{first_encoding}; encoding <= last_encoding; ++encoding)
       {
          // DCT: Resume work here!!!
+         vector<my_uint_t> indexes;
+         decode(encoding, indexes);
 
          // hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
          // hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
@@ -184,5 +188,39 @@ namespace
       }
 
       return iteration_result_t{hand_rank_count, hands_dealt};
+   }
+
+   void decode(const my_uint_t encoding, vector<my_uint_t> &indexes)
+   {
+      my_uint_t offset{0};
+      my_uint_t previous_index_selection{0};
+
+      for (my_uint_t index{0}; index < NUM_CARDS; ++index)
+      {
+         my_uint_t lowest_possible{index > 0 ? previous_index_selection + 1 : 0};
+         my_uint_t highest_possible{52 - NUM_CARDS + index};
+
+         // Find the *highest* ith index value whose offset increase gives a
+         // total offset less than or equal to the value we're decoding.
+         for (my_uint_t candidate{highest_possible}; candidate >= lowest_possible; --candidate)
+         {
+            my_uint_t offset_increase_due_to_candidate{
+                           index > 0 ?
+                              combinations(52ULL - (indexes[index-1] + 1), NUM_CARDS - index) -
+                              combinations(52ULL - candidate, NUM_CARDS - index)
+                                     :
+                              combinations(52ULL, NUM_CARDS) -
+                              combinations(52ULL - candidate, NUM_CARDS)
+                                                      };
+
+            if ((offset + offset_increase_due_to_candidate) <= encoding)
+            {
+               offset += offset_increase_due_to_candidate;
+               indexes.push_back(candidate);
+               previous_index_selection = candidate;
+               break;
+            }
+         }
+      }
    }
 }
