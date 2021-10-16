@@ -30,7 +30,7 @@ namespace
    const my_uint_t NUM_THREADS{thread::hardware_concurrency()};
 
    iteration_result_t iterate_over_all_possible_hands();
-   void decode(const my_uint_t encoding, vector<my_uint_t> &indexes);
+   void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes);
 }
 
 // *****************************************************************************
@@ -114,11 +114,11 @@ namespace
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
 
-      for (auto encoding{first_encoding}; encoding <= last_encoding; ++encoding)
+      for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
          // DCT: Resume work here!!!
          vector<my_uint_t> indexes;
-         decode(encoding, indexes);
+         decode(encoded_value, indexes);
 
          // hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
          // hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
@@ -143,19 +143,19 @@ namespace
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
-      const my_uint_t encodings_per_thread{combinations(52ULL, NUM_CARDS) / NUM_THREADS};
+      const my_uint_t encoded_values_per_thread{combinations(52ULL, NUM_CARDS) / NUM_THREADS};
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
-         my_uint_t first_encoding{i * encodings_per_thread};
-         my_uint_t last_encoding{(i + 1) * encodings_per_thread - 1};
+         my_uint_t first_encoding{i * encoded_values_per_thread};
+         my_uint_t last_encoding{(i + 1) * encoded_values_per_thread - 1};
 
          if (i == (NUM_THREADS - 1))
             last_encoding += combinations(52ULL, NUM_CARDS) % NUM_THREADS;
 
-         cout << "Starting a thread to evaluate the hands corresponding to these encodings:" << endl;
-         cout << "   First encoding: " << first_encoding << endl;
-         cout << "   Last encoding: " << last_encoding << endl;
+         cout << "Starting a thread to evaluate the hands corresponding to these encoded_values:" << endl;
+         cout << "   First encoded_value: " << first_encoding << endl;
+         cout << "   Last encoded_value: " << last_encoding << endl;
 
          futures.push_back(
                              async(
@@ -190,7 +190,7 @@ namespace
       return iteration_result_t{hand_rank_count, hands_dealt};
    }
 
-   void decode(const my_uint_t encoding, vector<my_uint_t> &indexes)
+   void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes)
    {
       my_uint_t offset{0};
       my_uint_t previous_index_selection{0};
@@ -213,7 +213,7 @@ namespace
                               combinations(52ULL - candidate, NUM_CARDS)
                                                       };
 
-            if ((offset + offset_increase_due_to_candidate) <= encoding)
+            if ((offset + offset_increase_due_to_candidate) <= encoded_value)
             {
                offset += offset_increase_due_to_candidate;
                indexes.push_back(candidate);
