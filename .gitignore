@@ -1,5 +1,5 @@
 poker
-experiments/
 *.swp
 *.a
 *.o
+experiments/
