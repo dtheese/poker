@@ -8,10 +8,6 @@
 
 using namespace std;
 
-#ifdef USE_LOOKUP_TABLE
-#include "primes.h"
-#endif
-
 enum class rank_t: unsigned int {
                                    First = 2,
                                    Two   = First,
@@ -52,17 +48,12 @@ class card_t
 
       rank_t get_rank() const;
       suit_t get_suit() const;
-      unsigned long long int get_id() const;
 
       friend bool operator<(const card_t &lhs, const card_t &rhs);
 
    private:
       rank_t rank;
       suit_t suit;
-
-#ifdef USE_LOOKUP_TABLE
-      unsigned long long int id{0};
-#endif
 };
 
 #include "card.inl"
