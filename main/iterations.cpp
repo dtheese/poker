@@ -26,7 +26,7 @@ iteration_result_t::iteration_result_t(
 
 namespace
 {
-   const unsigned int NUM_THREADS{thread::hardware_concurrency()};
+   const my_uint_t NUM_THREADS{thread::hardware_concurrency()};
 
    iteration_result_t iterate_over_all_possible_hands();
 }
@@ -232,13 +232,13 @@ namespace
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
-      const unsigned long long int encodings_per_thread{combinations(52ULL, NUM_CARDS) / NUM_THREADS};
+      const my_uint_t encodings_per_thread{combinations(52ULL, NUM_CARDS) / NUM_THREADS};
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
          // DCT: Handle cases where encoding_per_thread did not divide evenly!
-         unsigned long long int first_encoding{i * encodings_per_thread};
-         unsigned long long int last_encoding{(i + 1) * encodings_per_thread - 1};
+         my_uint_t first_encoding{i * encodings_per_thread};
+         my_uint_t last_encoding{(i + 1) * encodings_per_thread - 1};
 
          cout << "Starting a thread to evaluate the hands corresponding to these encodings:" << endl;
          cout << "   First encoding: " << first_encoding << endl;
