@@ -186,14 +186,14 @@ namespace
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const my_uint_t first_initial_index,
-                                                     const my_uint_t last_initial_index
+                                                     const my_uint_t first_encoding,
+                                                     const my_uint_t last_encoding
                                                   )
    {
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
 
-      for (auto first_index{first_initial_index}; first_index <= last_initial_index; ++first_index)
+      for (auto first_index{first_encoding}; first_index <= last_encoding; ++first_index)
       {
          dynamic_loop_functor_1_t dynamic_loop_functor_1{first_index};
 
