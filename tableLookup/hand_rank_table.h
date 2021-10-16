@@ -4,13 +4,15 @@
 #include <unordered_map>
 #include <vector>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
 #include "card.h"
 #include "deck.h"
 #include "hand.h"
 
-using namespace std;
-
-using hand_rank_map_t = unordered_map<unsigned long long int, hand_rank_t>;
+using hand_rank_map_t = unordered_map<my_uint_t, hand_rank_t>;
 
 // This singleton is lazily initialized.
 class hand_rank_table_s
@@ -26,7 +28,7 @@ class hand_rank_table_s
 
       static const hand_rank_table_s &getInstance();
 
-      hand_rank_t operator[](unsigned long long int i) const;
+      hand_rank_t operator[](my_uint_t i) const;
 
    private:
       hand_rank_table_s();

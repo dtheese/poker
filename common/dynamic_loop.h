@@ -5,16 +5,18 @@
 
 using namespace std;
 
-using indexes_t = vector<unsigned long long int>;
+#include "fundamental_types.h"
+
+using indexes_t = vector<my_uint_t>;
 
 template<typename T>
 class dynamic_loop_t
 {
    public:
       dynamic_loop_t(
-                       const unsigned long long int first_object_index_p,
-                       const unsigned long long int num_objects_total_p,
-                       const unsigned long long int num_objects_to_select_p,
+                       const my_uint_t first_object_index_p,
+                       const my_uint_t num_objects_total_p,
+                       const my_uint_t num_objects_to_select_p,
                        T &operation_to_perform_p
                     );
 
@@ -28,14 +30,14 @@ class dynamic_loop_t
 
    private:
       void dynamic_loop_body(
-                               const unsigned long long int first_index,
-                               const unsigned long long int last_index,
-                               const unsigned long long int current_depth
+                               const my_uint_t first_index,
+                               const my_uint_t last_index,
+                               const my_uint_t current_depth
                             );
 
-      const unsigned long long int first_object_index;
-      const unsigned long long int num_objects_total;
-      const unsigned long long int num_objects_to_select;
+      const my_uint_t first_object_index;
+      const my_uint_t num_objects_total;
+      const my_uint_t num_objects_to_select;
       T &operation_to_perform;
 
       indexes_t indexes;

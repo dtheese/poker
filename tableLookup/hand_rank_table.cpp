@@ -1,8 +1,7 @@
-using namespace std;
-
-#include "hand.h"
+#include "fundamental_types.h"
 
 #include "dynamic_loop.h"
+#include "hand.h"
 #include "hand_rank_table.h"
 
 namespace
@@ -23,7 +22,7 @@ namespace
          void operator()(const indexes_t &indexes)
          {
             card_t cards[5];
-            unsigned long long int j{0};
+            my_uint_t j{0};
 
             for (
                    auto i{indexes.cbegin()};
@@ -31,7 +30,7 @@ namespace
                    ++i
                 )
             {
-               for (unsigned long long int i : indexes)
+               for (my_uint_t i : indexes)
                   cards[j++] = deck[i];
             }
 

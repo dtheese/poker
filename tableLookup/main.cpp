@@ -4,13 +4,15 @@
 #include <map>
 #include <vector>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
 #include "hand_rank_table.h"
 #include "parameters.h"
-
-using namespace std;
 
 namespace
 {
@@ -29,7 +31,7 @@ namespace
 
          void operator()(const indexes_t &indexes)
          {
-            unsigned long long int hand_id{1};
+            my_uint_t hand_id{1};
 
             for (
                    auto i{indexes.begin()};
@@ -44,20 +46,20 @@ namespace
             ++hands_dealt;
          }
 
-         const map<hand_rank_t, unsigned long long int> &getHandRankCount() const
+         const map<hand_rank_t, my_uint_t> &getHandRankCount() const
          {
             return hand_rank_count;
          }
 
-         unsigned long long int getHandsDealt() const
+         my_uint_t getHandsDealt() const
          {
             return hands_dealt;
          }
 
       private:
          const vector<card_t> &deck{deck_s::getInstance().getDeck()};
-         map<hand_rank_t, unsigned long long int> hand_rank_count;
-         unsigned long long int hands_dealt{0};
+         map<hand_rank_t, my_uint_t> hand_rank_count;
+         my_uint_t hands_dealt{0};
          const hand_rank_table_s &hrt{hand_rank_table_s::getInstance()};
    };
 }

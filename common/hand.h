@@ -6,11 +6,13 @@
 #include <cstdlib>
 #include <iostream>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
 #include "card.h"
 #include "deck.h"
 #include "parameters.h"
-
-using namespace std;
 
 enum class hand_rank_t {
                           First = 0,
@@ -39,13 +41,13 @@ class hand_t
 
       void print() const;
       hand_rank_t hand_rank() const;
-      unsigned long long int get_id() const;
+      my_uint_t get_id() const;
 
    private:
       card_t cards[5];
 
 #ifdef USE_LOOKUP_TABLE
-      unsigned long long int id{1};
+      my_uint_t id{1};
 #endif
 
       bool is_four_of_a_kind() const;

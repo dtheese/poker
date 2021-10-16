@@ -5,7 +5,7 @@ inline const hand_rank_table_s &hand_rank_table_s::getInstance()
    return instance;
 }
 
-inline hand_rank_t hand_rank_table_s::operator[](unsigned long long int i) const
+inline hand_rank_t hand_rank_table_s::operator[](my_uint_t i) const
 {
    return hand_ranks.at(i);
 }

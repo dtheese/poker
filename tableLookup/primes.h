@@ -1,7 +1,7 @@
 #ifndef PRIMES_INCLUDED
 #define PRIMES_INCLUDED
 
-using namespace std;
+#include "fundamental_types.h"
 
 // This singleton is lazily initialized.
 class primes_s
@@ -17,13 +17,13 @@ class primes_s
 
       static const primes_s &getInstance();
 
-      const unsigned long long int &operator[](unsigned long long int i) const;
+      const my_uint_t &operator[](my_uint_t i) const;
 
    private:
       primes_s();
       ~primes_s();
 
-      unsigned long long int primes[52];
+      my_uint_t primes[52];
 };
 
 #include "primes.inl"

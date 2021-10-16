@@ -1,8 +1,8 @@
 template<typename T>
 dynamic_loop_t<T>::dynamic_loop_t(
-                                    const unsigned long long int first_object_index_p,
-                                    const unsigned long long int num_objects_total_p,
-                                    const unsigned long long int num_objects_to_select_p,
+                                    const my_uint_t first_object_index_p,
+                                    const my_uint_t num_objects_total_p,
+                                    const my_uint_t num_objects_to_select_p,
                                     T &operation_to_perform_p
                                  ): first_object_index{first_object_index_p},
                                     num_objects_total{num_objects_total_p},
@@ -24,9 +24,9 @@ void dynamic_loop_t<T>::run()
 
 template<typename T>
 void dynamic_loop_t<T>::dynamic_loop_body(
-                                            const unsigned long long int first_index,
-                                            const unsigned long long int last_index,
-                                            const unsigned long long int current_depth
+                                            const my_uint_t first_index,
+                                            const my_uint_t last_index,
+                                            const my_uint_t current_depth
                                          )
 {
    if (current_depth == num_objects_to_select)
@@ -37,7 +37,7 @@ void dynamic_loop_t<T>::dynamic_loop_body(
    }
    else
    {
-      for (unsigned long long int i{first_index}; i <= last_index; ++i)
+      for (my_uint_t i{first_index}; i <= last_index; ++i)
       {
          indexes.push_back(i);
 

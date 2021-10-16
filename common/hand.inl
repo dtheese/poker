@@ -4,7 +4,7 @@ inline hand_t::hand_t()
 
 inline hand_t::hand_t(const card_t *cards_p)
 {
-   for (unsigned long long int i{0}; i <= 4; ++i)
+   for (my_uint_t i{0}; i <= 4; ++i)
    {
       cards[i] = cards_p[i];
 
@@ -166,7 +166,7 @@ inline bool hand_t::is_one_pair() const
    return false;
 }
 
-inline unsigned long long int hand_t::get_id() const
+inline my_uint_t hand_t::get_id() const
 {
 #ifdef USE_LOOKUP_TABLE
    return id;

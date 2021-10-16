@@ -24,7 +24,7 @@ inline suit_t card_t::get_suit() const
    return suit;
 }
 
-inline unsigned long long int card_t::get_id() const
+inline my_uint_t card_t::get_id() const
 {
 #ifdef USE_LOOKUP_TABLE
    return id;

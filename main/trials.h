@@ -1,21 +1,21 @@
 #ifndef TRIALS_INCLUDED
 #define TRIALS_INCLUDED
 
-#include "hand.h"
+#include "fundamental_types.h"
 
-using namespace std;
+#include "hand.h"
 
 struct trial_result_t
 {
-   trial_result_t(const hand_t &hand_p, const unsigned long long int hands_dealt_p);
+   trial_result_t(const hand_t &hand_p, const my_uint_t hands_dealt_p);
 
    const hand_t &hand;
-   const unsigned long long int hands_dealt;
+   const my_uint_t hands_dealt;
 };
 
 void average_random_hands_until_target_hand_rank_hit(
                                                        hand_rank_t target_hand_rank,
-                                                       unsigned long long int target_hand_count
+                                                       my_uint_t target_hand_count
                                                     );
 
 #endif
