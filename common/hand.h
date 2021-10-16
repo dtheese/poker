@@ -39,14 +39,9 @@ class hand_t
 
       void print() const;
       hand_rank_t hand_rank() const;
-      unsigned long long int get_id() const;
 
    private:
       card_t cards[5];
-
-#ifdef USE_LOOKUP_TABLE
-      unsigned long long int id{1};
-#endif
 
       bool is_four_of_a_kind() const;
       bool is_a_full_house() const;
