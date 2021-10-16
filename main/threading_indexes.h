@@ -6,9 +6,11 @@
 
 using namespace std;
 
-using num_cards_t        = unsigned int;
-using num_threads_t      = unsigned int;
-using start_card_index_t = unsigned int;
+#include "fundamental_types.h"
+
+using num_cards_t        = my_uint_t;
+using num_threads_t      = my_uint_t;
+using start_card_index_t = my_uint_t;
 
 using start_card_indexes_t = vector<start_card_index_t>;
 

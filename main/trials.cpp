@@ -4,6 +4,10 @@
 #include <random>
 #include <vector>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
@@ -11,9 +15,7 @@
 
 #include "trials.h"
 
-using namespace std;
-
-trial_result_t::trial_result_t(const hand_t &hand_p, const unsigned long long int hands_dealt_p):
+trial_result_t::trial_result_t(const hand_t &hand_p, const my_uint_t hands_dealt_p):
    hand{hand_p},
    hands_dealt{hands_dealt_p}
 {
@@ -28,18 +30,18 @@ namespace
 // *****************************************************************************
 void average_random_hands_until_target_hand_rank_hit(
                                                        hand_rank_t target_hand_rank,
-                                                       unsigned long long int target_hand_count
+                                                       my_uint_t target_hand_count
                                                     )
 {
    cout << endl;
    cout << "average_random_hands_until_target_hand_rank_hit() called" << endl;
    cout << endl;
 
-   vector<unsigned long long int> hands_dealt_v;
+   vector<my_uint_t> hands_dealt_v;
 
    hands_dealt_v.reserve(target_hand_count);
 
-   for (unsigned long long int i{0}; i != target_hand_count; ++i)
+   for (my_uint_t i{0}; i != target_hand_count; ++i)
    {
       auto trial_result{random_hands_until_target_hand_rank_hit(target_hand_rank)};
 
@@ -90,7 +92,7 @@ namespace
          void operator()(const indexes_t &indexes)
          {
             card_t cards_1[5];
-            unsigned int j{0};
+            my_uint_t j{0};
 
             for (auto i : indexes)
                cards_1[j++] = cards[i];
@@ -131,7 +133,7 @@ namespace
    // *****************************************************************************
    trial_result_t random_hands_until_target_hand_rank_hit(hand_rank_t target_hand_rank)
    {
-      unsigned long long int hands_dealt{0};
+      my_uint_t hands_dealt{0};
       vector<card_t> cards;
 
       cards.reserve(NUM_CARDS);
@@ -142,9 +144,9 @@ namespace
 
          cards.clear();
 
-         for (unsigned int i{52}; i > 52 - NUM_CARDS; --i)
+         for (my_uint_t i{52}; i > 52 - NUM_CARDS; --i)
          {
-            uniform_int_distribution<unsigned int> di{0, i - 1};
+            uniform_int_distribution<my_uint_t> di{0, i - 1};
             auto rand_num{di(dre)};
 
             cards.push_back(deck[rand_num]);

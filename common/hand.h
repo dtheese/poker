@@ -6,11 +6,13 @@
 #include <cstdlib>
 #include <iostream>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
 #include "card.h"
 #include "deck.h"
 #include "parameters.h"
-
-using namespace std;
 
 enum class hand_rank_t {
                           First = 0,

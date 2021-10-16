@@ -8,7 +8,9 @@
 
 using namespace std;
 
-enum class rank_t: unsigned int {
+#include "fundamental_types.h"
+
+enum class rank_t: my_uint_t {
                                    First = 2,
                                    Two   = First,
                                    Three = 3,
@@ -28,7 +30,7 @@ enum class rank_t: unsigned int {
                                    None  = End + 1
                                 };
 
-enum class suit_t: unsigned int {
+enum class suit_t: my_uint_t {
                                    First    = 0,
                                    CLUBS    = First,
                                    DIAMONDS = First + 1,
