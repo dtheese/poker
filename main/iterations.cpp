@@ -8,6 +8,7 @@ using namespace std;
 
 #include "fundamental_types.h"
 
+#include "combinations_table.h"
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
@@ -146,7 +147,7 @@ namespace
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
          indexes_t indexes;
-         decode<52ULL, NUM_CARDS>(encoded_value, indexes);
+         decode<52, NUM_CARDS>(encoded_value, indexes);
 
          vector<card_t> cards;
 
@@ -172,10 +173,11 @@ namespace
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands()
    {
+      const combinations_table_s<my_uint_t, 52> &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
-      const my_uint_t encoded_values_per_thread{combinations(52ULL, NUM_CARDS) / NUM_THREADS};
+      const my_uint_t encoded_values_per_thread{combinations_table(52, NUM_CARDS) / NUM_THREADS};
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
@@ -183,7 +185,7 @@ namespace
          my_uint_t last_encoding{(i + 1) * encoded_values_per_thread - 1};
 
          if (i == (NUM_THREADS - 1))
-            last_encoding += combinations(52ULL, NUM_CARDS) % NUM_THREADS;
+            last_encoding += combinations_table(52, NUM_CARDS) % NUM_THREADS;
 
          cout << "Starting a thread to evaluate the hands corresponding to these encoded_values:" << endl;
          cout << "   First encoded_value: " << first_encoding << endl;
@@ -225,6 +227,7 @@ namespace
    template<my_uint_t N, my_uint_t K>
    void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes)
    {
+      const combinations_table_s<my_uint_t, 52> &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance()};
       my_uint_t offset{0};
       my_uint_t previous_index_selection{0};
 
@@ -241,11 +244,11 @@ namespace
 
             my_uint_t offset_increase_due_to_candidate{
                            index > 0 ?
-                              combinations(N - (indexes[index-1] + 1), K - index) -
-                              combinations(N - candidate, K - index)
+                              combinations_table(N - (indexes[index-1] + 1), K - index) -
+                              combinations_table(N - candidate, K - index)
                                      :
-                              combinations(N, K) -
-                              combinations(N - candidate, K)
+                              combinations_table(N, K) -
+                              combinations_table(N - candidate, K)
                                                       };
 
             if ((offset + offset_increase_due_to_candidate) > encoded_value)
@@ -261,11 +264,11 @@ namespace
 
             my_uint_t offset_increase_due_to_next_candidate{
                            index > 0 ?
-                              combinations(N - (indexes[index-1] + 1), K - index) -
-                              combinations(N - next_candidate, K - index)
+                              combinations_table(N - (indexes[index-1] + 1), K - index) -
+                              combinations_table(N - next_candidate, K - index)
                                      :
-                              combinations(N, K) -
-                              combinations(N - next_candidate, K)
+                              combinations_table(N, K) -
+                              combinations_table(N - next_candidate, K)
                                                       };
 
             if ((offset + offset_increase_due_to_next_candidate) <= encoded_value)

@@ -1,10 +1,16 @@
 #ifndef COMBINATIONS_TABLE_INCLUDED
 #define COMBINATIONS_TABLE_INCLUDED
 
+// #include <array>
+
+// using namespace std;
+
 #include "fundamental_types.h"
+
 #include "utilities.h"
 
 // This singleton is lazily initialized
+template<typename T, T N>
 class combinations_table_s
 {
    public:
@@ -18,13 +24,14 @@ class combinations_table_s
 
       static const combinations_table_s &getInstance();
 
-      my_uint_t operator()(my_uint_t i, my_uint_t j);
+      T operator()(T i, T j) const;
 
    private:
       combinations_table_s();
       ~combinations_table_s();
 
-      my_uint_t combinations_table[52][52];
+      // array<array<T, N>, N> combinations_table;
+      T combinations_table[N+1][N+1];
 };
 
 #include "combinations_table.inl"
