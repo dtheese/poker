@@ -26,9 +26,3 @@ const typename combinations_table_s<T, N>::combinations_table_t &combinations_ta
 {
    return combinations_table;
 }
-
-template<typename T, T N>
-inline T combinations_table_s<T, N>::operator()(T i, T j) const
-{
-   return combinations_table[i][j];
-}

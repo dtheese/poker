@@ -25,7 +25,6 @@ class combinations_table_s
       static const combinations_table_s &getInstance();
 
       const combinations_table_t &getTable() const;
-      T operator()(T i, T j) const;
 
    private:
       combinations_table_s();
