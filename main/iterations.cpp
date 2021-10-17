@@ -173,9 +173,7 @@ namespace
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands()
    {
-      const typename combinations_table_s<my_uint_t, 52>::combinations_table_t
-         &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance().getTable()};
-
+      const auto &combinations_table{combinations_table_s<my_uint_t, 52, 52>::getInstance().getTable()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
@@ -229,8 +227,7 @@ namespace
    template<typename T, T N, T K>
    void decode(const T encoded_value, vector<T> &indexes)
    {
-      const typename combinations_table_s<T, 52>::combinations_table_t
-         &combinations_table{combinations_table_s<T, 52>::getInstance().getTable()};
+      const auto &combinations_table{combinations_table_s<T, 52, 52>::getInstance().getTable()};
 
       T offset{0};
       T previous_index_selection{0};

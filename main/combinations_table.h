@@ -8,11 +8,11 @@ using namespace std;
 #include "utilities.h"
 
 // This singleton is lazily initialized
-template<typename T, T N>
+template<typename T, T M, T N>
 class combinations_table_s
 {
    public:
-      using combinations_table_t = array<array<T, N+1>, N+1>;
+      using combinations_table_t = array<array<T, M+1>, N+1>;
 
       combinations_table_s(const combinations_table_s &) = delete;
       void operator=(const combinations_table_s &) = delete;
