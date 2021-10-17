@@ -132,6 +132,9 @@ namespace
    {
       const vector<card_t> &deck{deck_s::getInstance().getDeck()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
+      indexes_t indexes;
+
+      indexes.reserve(NUM_CARDS);
 
       hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
       hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
@@ -146,7 +149,8 @@ namespace
 
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
-         indexes_t indexes;
+         indexes.clear();
+
          decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
 
          vector<card_t> cards;
@@ -224,10 +228,11 @@ namespace
       return iteration_result_t{hand_rank_count, hands_dealt};
    }
 
+   // DCT: Use array<> instead of vector<> here?
    template<typename T, T N, T K>
    void decode(const T encoded_value, vector<T> &indexes)
    {
-      const auto &combinations_table{combinations_table_s<T, 52, 52>::getInstance().getTable()};
+      const auto &combinations_table{combinations_table_s<T, N, N>::getInstance().getTable()};
 
       T offset{0};
       T previous_index_selection{0};
