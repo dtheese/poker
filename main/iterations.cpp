@@ -1,3 +1,4 @@
+#include<array>
 #include <future>
 #include <iostream>
 #include <numeric>
