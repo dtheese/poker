@@ -30,6 +30,8 @@ namespace
    const my_uint_t NUM_THREADS{thread::hardware_concurrency()};
 
    iteration_result_t iterate_over_all_possible_hands();
+
+   template<my_uint_t N, my_uint_t K>
    void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes);
 }
 
@@ -144,7 +146,7 @@ namespace
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
          indexes_t indexes;
-         decode(encoded_value, indexes);
+         decode<52ULL, NUM_CARDS>(encoded_value, indexes);
 
          vector<card_t> cards;
 
@@ -220,15 +222,16 @@ namespace
       return iteration_result_t{hand_rank_count, hands_dealt};
    }
 
+   template<my_uint_t N, my_uint_t K>
    void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes)
    {
       my_uint_t offset{0};
       my_uint_t previous_index_selection{0};
 
-      for (my_uint_t index{0}; index < NUM_CARDS; ++index)
+      for (my_uint_t index{0}; index < K; ++index)
       {
          my_uint_t lowest_possible{index > 0 ? previous_index_selection + 1 : 0};
-         my_uint_t highest_possible{52 - NUM_CARDS + index};
+         my_uint_t highest_possible{N - K + index};
 
          // Find the *highest* ith index value whose offset increase gives a
          // total offset less than or equal to the value we're decoding.
@@ -236,11 +239,11 @@ namespace
          {
             my_uint_t offset_increase_due_to_candidate{
                            index > 0 ?
-                              combinations(52ULL - (indexes[index-1] + 1), NUM_CARDS - index) -
-                              combinations(52ULL - candidate, NUM_CARDS - index)
+                              combinations(N - (indexes[index-1] + 1), K - index) -
+                              combinations(N - candidate, K - index)
                                      :
-                              combinations(52ULL, NUM_CARDS) -
-                              combinations(52ULL - candidate, NUM_CARDS)
+                              combinations(N, K) -
+                              combinations(N - candidate, K)
                                                       };
 
             if ((offset + offset_increase_due_to_candidate) <= encoded_value)
