@@ -235,8 +235,10 @@ namespace
 
          // Find the *highest* ith index value whose offset increase gives a
          // total offset less than or equal to the value we're decoding.
-         for (my_uint_t candidate{highest_possible}; candidate >= lowest_possible; --candidate)
+         while (true)
          {
+            my_uint_t candidate{(highest_possible + lowest_possible) / 2};
+
             my_uint_t offset_increase_due_to_candidate{
                            index > 0 ?
                               combinations(N - (indexes[index-1] + 1), K - index) -
@@ -246,13 +248,38 @@ namespace
                               combinations(N - candidate, K)
                                                       };
 
-            if ((offset + offset_increase_due_to_candidate) <= encoded_value)
+            if ((offset + offset_increase_due_to_candidate) > encoded_value)
             {
-               offset += offset_increase_due_to_candidate;
-               indexes.push_back(candidate);
-               previous_index_selection = candidate;
-               break;
+               // candidate is *not* the solution
+               highest_possible = candidate - 1;
+               continue;
             }
+
+            // candidate *could* be the solution. Check if it is by checking if candidate + 1
+            // could be the solution. That would rule out candidate being the solution.
+            my_uint_t next_candidate{candidate + 1};
+
+            my_uint_t offset_increase_due_to_next_candidate{
+                           index > 0 ?
+                              combinations(N - (indexes[index-1] + 1), K - index) -
+                              combinations(N - next_candidate, K - index)
+                                     :
+                              combinations(N, K) -
+                              combinations(N - next_candidate, K)
+                                                      };
+
+            if ((offset + offset_increase_due_to_next_candidate) <= encoded_value)
+            {
+               // candidate is *not* the solution
+               lowest_possible = candidate + 1;
+               continue;
+            }
+
+            // candidate *is* the solution
+            offset += offset_increase_due_to_candidate;
+            indexes.push_back(candidate);
+            previous_index_selection = candidate;
+            break;
          }
       }
    }
