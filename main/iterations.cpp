@@ -83,26 +83,42 @@ void evaluate_all_possible_hands()
 
 namespace
 {
-   // *****************************************************************************
    class dynamic_loop_functor_2_t
    {
       public:
+         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards{cards_p}
+         {
+         }
+
          dynamic_loop_functor_2_t(const dynamic_loop_functor_2_t &) = delete;
          dynamic_loop_functor_2_t &operator=(const dynamic_loop_functor_2_t &) = delete;
 
          dynamic_loop_functor_2_t(dynamic_loop_functor_2_t &&) = delete;
          dynamic_loop_functor_2_t &operator=(dynamic_loop_functor_2_t &&) = delete;
-   };
 
-   // *****************************************************************************
-   class dynamic_loop_functor_1_t
-   {
-      public:
-         dynamic_loop_functor_1_t(const dynamic_loop_functor_1_t &) = delete;
-         dynamic_loop_functor_1_t &operator=(const dynamic_loop_functor_1_t &) = delete;
+         void operator()(const indexes_t &indexes)
+         {
+            card_t cards_1[5];
+            my_uint_t j{0};
 
-         dynamic_loop_functor_1_t(dynamic_loop_functor_1_t &&) = delete;
-         dynamic_loop_functor_1_t &operator=(dynamic_loop_functor_1_t &&) = delete;
+            for (auto i : indexes)
+               cards_1[j++] = cards[i];
+
+            hand_t hand{cards_1};
+            auto this_hands_rank{hand.hand_rank()};
+
+            if (this_hands_rank > highest_hand_seen)
+               highest_hand_seen = this_hands_rank;
+         }
+
+         hand_rank_t getResult() const
+         {
+            return highest_hand_seen;
+         }
+
+      private:
+         const vector<card_t> &cards;
+         hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
    };
 
    // *****************************************************************************
@@ -111,30 +127,44 @@ namespace
                                                      const my_uint_t last_encoding
                                                   )
    {
+      const vector<card_t> &deck{deck_s::getInstance().getDeck()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
-      my_uint_t hands_dealt{0};
+
+      hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
+      hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
+      hand_rank_count[hand_rank_t::TWO_PAIR]        = 0;
+      hand_rank_count[hand_rank_t::THREE_OF_A_KIND] = 0;
+      hand_rank_count[hand_rank_t::STRAIGHT]        = 0;
+      hand_rank_count[hand_rank_t::FLUSH]           = 0;
+      hand_rank_count[hand_rank_t::FULL_HOUSE]      = 0;
+      hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  = 0;
+      hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  = 0;
+      hand_rank_count[hand_rank_t::ROYAL_FLUSH]     = 0;
 
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
-         // DCT: Resume work here!!!
-         vector<my_uint_t> indexes;
+         indexes_t indexes;
          decode(encoded_value, indexes);
 
-         // hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
-         // hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
-         // hand_rank_count[hand_rank_t::TWO_PAIR]        += one_hand_rank_count.at(hand_rank_t::TWO_PAIR);
-         // hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += one_hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
-         // hand_rank_count[hand_rank_t::STRAIGHT]        += one_hand_rank_count.at(hand_rank_t::STRAIGHT);
-         // hand_rank_count[hand_rank_t::FLUSH]           += one_hand_rank_count.at(hand_rank_t::FLUSH);
-         // hand_rank_count[hand_rank_t::FULL_HOUSE]      += one_hand_rank_count.at(hand_rank_t::FULL_HOUSE);
-         // hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += one_hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
-         // hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += one_hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
-         // hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += one_hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
+         vector<card_t> cards;
 
-         hands_dealt += (last_encoding - first_encoding + 1);
+         for (auto i : indexes)
+            cards.push_back(deck[i]);
+
+         dynamic_loop_functor_2_t dynamic_loop_functor_2{cards};
+
+         dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop{
+                                                                 0,
+                                                                 static_cast<my_uint_t>(cards.size()),
+                                                                 5,
+                                                                 dynamic_loop_functor_2
+                                                              };
+
+         dynamic_loop.run();
+         ++hand_rank_count[dynamic_loop_functor_2.getResult()];
       }
 
-      return iteration_result_t{hand_rank_count, hands_dealt};
+      return iteration_result_t{hand_rank_count, last_encoding - first_encoding + 1};
    }
 
    // *****************************************************************************
