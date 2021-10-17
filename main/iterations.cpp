@@ -89,7 +89,7 @@ namespace
    class dynamic_loop_functor_t
    {
       public:
-         dynamic_loop_functor_t(const vector<card_t> &cards_p): cards{cards_p}
+         dynamic_loop_functor_t(const array<card_t, NUM_CARDS> &cards_p): cards{cards_p}
          {
          }
 
@@ -120,7 +120,7 @@ namespace
          }
 
       private:
-         const vector<card_t> &cards;
+         const array<card_t, NUM_CARDS> &cards;
          hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
    };
 
@@ -149,16 +149,17 @@ namespace
       {
          decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
 
-         vector<card_t> cards;
+         array<card_t, NUM_CARDS> cards;
+         my_uint_t j{0};
 
          for (auto i : indexes)
-            cards.push_back(deck[i]);
+            cards[j++] = deck[i];
 
          dynamic_loop_functor_t dynamic_loop_functor{cards};
 
          dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{
                                                                  0,
-                                                                 static_cast<my_uint_t>(cards.size()),
+                                                                 NUM_CARDS,
                                                                  5,
                                                                  dynamic_loop_functor
                                                             };
