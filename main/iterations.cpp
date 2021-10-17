@@ -250,7 +250,7 @@ namespace
                                      :
                               combinations_table[N][K] -
                               combinations_table[N - candidate][K]
-                                                      };
+                                              };
 
             if ((offset + offset_increase_due_to_candidate) > encoded_value)
             {
@@ -270,7 +270,7 @@ namespace
                                      :
                               combinations_table[N][K] -
                               combinations_table[N - next_candidate][K]
-                                                      };
+                                                   };
 
             if ((offset + offset_increase_due_to_next_candidate) <= encoded_value)
             {
