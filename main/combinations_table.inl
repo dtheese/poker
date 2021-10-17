@@ -22,6 +22,12 @@ inline const combinations_table_s<T, N> &combinations_table_s<T, N>::getInstance
 }
 
 template<typename T, T N>
+const typename combinations_table_s<T, N>::combinations_table_t &combinations_table_s<T, N>::getTable() const
+{
+   return combinations_table;
+}
+
+template<typename T, T N>
 inline T combinations_table_s<T, N>::operator()(T i, T j) const
 {
    return combinations_table[i][j];

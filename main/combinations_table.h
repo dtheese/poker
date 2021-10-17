@@ -1,11 +1,9 @@
 #ifndef COMBINATIONS_TABLE_INCLUDED
 #define COMBINATIONS_TABLE_INCLUDED
 
-// #include <array>
+#include <array>
 
-// using namespace std;
-
-#include "fundamental_types.h"
+using namespace std;
 
 #include "utilities.h"
 
@@ -14,6 +12,8 @@ template<typename T, T N>
 class combinations_table_s
 {
    public:
+      using combinations_table_t = array<array<T, N+1>, N+1>;
+
       combinations_table_s(const combinations_table_s &) = delete;
       void operator=(const combinations_table_s &) = delete;
 
@@ -24,14 +24,14 @@ class combinations_table_s
 
       static const combinations_table_s &getInstance();
 
+      const combinations_table_t &getTable() const;
       T operator()(T i, T j) const;
 
    private:
       combinations_table_s();
       ~combinations_table_s();
 
-      // array<array<T, N>, N> combinations_table;
-      T combinations_table[N+1][N+1];
+      combinations_table_t combinations_table;
 };
 
 #include "combinations_table.inl"
