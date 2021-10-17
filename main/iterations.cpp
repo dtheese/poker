@@ -130,7 +130,7 @@ namespace
                                                      const my_uint_t last_encoding
                                                   )
    {
-      const vector<card_t> &deck{deck_s::getInstance().getDeck()};
+      const auto &deck{deck_s::getInstance().getDeck()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
       array<my_uint_t, NUM_CARDS> indexes;
 

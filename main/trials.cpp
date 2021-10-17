@@ -150,7 +150,7 @@ namespace
             auto rand_num{di(dre)};
 
             cards.push_back(deck[rand_num]);
-            deck.erase(deck.begin() + rand_num);
+            // DCT deck.erase(deck.begin() + rand_num);
          }
 
          ++hands_dealt;
