@@ -32,8 +32,8 @@ namespace
 
    iteration_result_t iterate_over_all_possible_hands();
 
-   template<my_uint_t N, my_uint_t K>
-   void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes);
+   template<typename T, T N, T K>
+   void decode(const T encoded_value, vector<T> &indexes);
 }
 
 // *****************************************************************************
@@ -147,7 +147,7 @@ namespace
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
          indexes_t indexes;
-         decode<52, NUM_CARDS>(encoded_value, indexes);
+         decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
 
          vector<card_t> cards;
 
@@ -226,27 +226,27 @@ namespace
       return iteration_result_t{hand_rank_count, hands_dealt};
    }
 
-   template<my_uint_t N, my_uint_t K>
-   void decode(const my_uint_t encoded_value, vector<my_uint_t> &indexes)
+   template<typename T, T N, T K>
+   void decode(const T encoded_value, vector<T> &indexes)
    {
-      const typename combinations_table_s<my_uint_t, 52>::combinations_table_t
-         &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance().getTable()};
+      const typename combinations_table_s<T, 52>::combinations_table_t
+         &combinations_table{combinations_table_s<T, 52>::getInstance().getTable()};
 
-      my_uint_t offset{0};
-      my_uint_t previous_index_selection{0};
+      T offset{0};
+      T previous_index_selection{0};
 
-      for (my_uint_t index{0}; index < K; ++index)
+      for (T index{0}; index < K; ++index)
       {
-         my_uint_t lowest_possible{index > 0 ? previous_index_selection + 1 : 0};
-         my_uint_t highest_possible{N - K + index};
+         T lowest_possible{index > 0 ? previous_index_selection + 1 : 0};
+         T highest_possible{N - K + index};
 
          // Find the *highest* ith index value whose offset increase gives a
          // total offset less than or equal to the value we're decoding.
          while (true)
          {
-            my_uint_t candidate{(highest_possible + lowest_possible) / 2};
+            T candidate{(highest_possible + lowest_possible) / 2};
 
-            my_uint_t offset_increase_due_to_candidate{
+            T offset_increase_due_to_candidate{
                            index > 0 ?
                               combinations_table[N - (indexes[index-1] + 1)][K - index] -
                               combinations_table[N - candidate][K - index]
@@ -264,9 +264,9 @@ namespace
 
             // candidate *could* be the solution. Check if it is by checking if candidate + 1
             // could be the solution. That would rule out candidate being the solution.
-            my_uint_t next_candidate{candidate + 1};
+            T next_candidate{candidate + 1};
 
-            my_uint_t offset_increase_due_to_next_candidate{
+            T offset_increase_due_to_next_candidate{
                            index > 0 ?
                               combinations_table[N - (indexes[index-1] + 1)][K - index] -
                               combinations_table[N - next_candidate][K - index]
