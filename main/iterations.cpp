@@ -33,7 +33,7 @@ namespace
    iteration_result_t iterate_over_all_possible_hands();
 
    template<typename T, T N, T K>
-   void decode(const T encoded_value, vector<T> &indexes);
+   void decode(const T encoded_value, array<T, K> &indexes);
 }
 
 // *****************************************************************************
@@ -132,9 +132,7 @@ namespace
    {
       const vector<card_t> &deck{deck_s::getInstance().getDeck()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
-      indexes_t indexes;
-
-      indexes.reserve(NUM_CARDS);
+      array<my_uint_t, NUM_CARDS> indexes;
 
       hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
       hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
@@ -149,8 +147,6 @@ namespace
 
       for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
       {
-         indexes.clear();
-
          decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
 
          vector<card_t> cards;
@@ -228,11 +224,10 @@ namespace
       return iteration_result_t{hand_rank_count, hands_dealt};
    }
 
-   // DCT: Use array<> instead of vector<> here?
    template<typename T, T N, T K>
-   void decode(const T encoded_value, vector<T> &indexes)
+   void decode(const T encoded_value, array<T, K> &indexes)
    {
-      const auto &combinations_table{combinations_table_s<T, N, N>::getInstance().getTable()};
+      static const auto &combinations_table{combinations_table_s<T, N, N>::getInstance().getTable()};
 
       T offset{0};
       T previous_index_selection{0};
@@ -286,7 +281,7 @@ namespace
 
             // candidate *is* the solution
             offset += offset_increase_due_to_candidate;
-            indexes.push_back(candidate);
+            indexes[index] = candidate;
             previous_index_selection = candidate;
             break;
          }
