@@ -86,18 +86,18 @@ void evaluate_all_possible_hands()
 
 namespace
 {
-   class dynamic_loop_functor_2_t
+   class dynamic_loop_functor_t
    {
       public:
-         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards{cards_p}
+         dynamic_loop_functor_t(const vector<card_t> &cards_p): cards{cards_p}
          {
          }
 
-         dynamic_loop_functor_2_t(const dynamic_loop_functor_2_t &) = delete;
-         dynamic_loop_functor_2_t &operator=(const dynamic_loop_functor_2_t &) = delete;
+         dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
+         dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
 
-         dynamic_loop_functor_2_t(dynamic_loop_functor_2_t &&) = delete;
-         dynamic_loop_functor_2_t &operator=(dynamic_loop_functor_2_t &&) = delete;
+         dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
+         dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
 
          void operator()(const indexes_t &indexes)
          {
@@ -154,17 +154,17 @@ namespace
          for (auto i : indexes)
             cards.push_back(deck[i]);
 
-         dynamic_loop_functor_2_t dynamic_loop_functor_2{cards};
+         dynamic_loop_functor_t dynamic_loop_functor{cards};
 
-         dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop{
+         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{
                                                                  0,
                                                                  static_cast<my_uint_t>(cards.size()),
                                                                  5,
-                                                                 dynamic_loop_functor_2
-                                                              };
+                                                                 dynamic_loop_functor
+                                                            };
 
          dynamic_loop.run();
-         ++hand_rank_count[dynamic_loop_functor_2.getResult()];
+         ++hand_rank_count[dynamic_loop_functor.getResult()];
       }
 
       return iteration_result_t{hand_rank_count, last_encoding - first_encoding + 1};
