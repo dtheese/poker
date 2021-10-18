@@ -133,8 +133,8 @@ namespace
 
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const my_uint_t first_encoding,
-                                                     const my_uint_t last_encoding
+                                                     const my_uint_t first_encoded_value,
+                                                     const my_uint_t last_encoded_value
                                                   )
    {
       const auto &deck{deck_s::getInstance().getDeck()};
@@ -152,7 +152,7 @@ namespace
       hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  = 0;
       hand_rank_count[hand_rank_t::ROYAL_FLUSH]     = 0;
 
-      for (auto encoded_value{first_encoding}; encoded_value <= last_encoding; ++encoded_value)
+      for (auto encoded_value{first_encoded_value}; encoded_value <= last_encoded_value; ++encoded_value)
       {
          decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
 
@@ -175,7 +175,7 @@ namespace
          ++hand_rank_count[dynamic_loop_functor.getResult()];
       }
 
-      return iteration_result_t{hand_rank_count, last_encoding - first_encoding + 1};
+      return iteration_result_t{hand_rank_count, last_encoded_value - first_encoded_value + 1};
    }
 
    // *****************************************************************************
@@ -189,22 +189,22 @@ namespace
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
-         my_uint_t first_encoding{i * encoded_values_per_thread};
-         my_uint_t last_encoding{(i + 1) * encoded_values_per_thread - 1};
+         my_uint_t first_encoded_value{i * encoded_values_per_thread};
+         my_uint_t last_encoded_value{(i + 1) * encoded_values_per_thread - 1};
 
          if (i == (NUM_THREADS - 1))
-            last_encoding += combinations_table[52][NUM_CARDS] % NUM_THREADS;
+            last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
 
          cout << "Starting a thread to evaluate the hands corresponding to these encoded_values:" << endl;
-         cout << "   First encoded_value: " << first_encoding << endl;
-         cout << "   Last encoded_value: " << last_encoding << endl;
+         cout << "   First encoded value: " << first_encoded_value << endl;
+         cout << "   Last encoded value: " << last_encoded_value << endl;
 
          futures.push_back(
                              async(
                                      launch::async,
                                      iterate_over_subset_of_hands,
-                                     first_encoding,
-                                     last_encoding
+                                     first_encoded_value,
+                                     last_encoded_value
                                   )
                           );
       }
