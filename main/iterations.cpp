@@ -29,7 +29,13 @@ iteration_result_t::iteration_result_t(
 
 namespace
 {
-   const my_uint_t NUM_THREADS{thread::hardware_concurrency()};
+   const my_uint_t MAX_THREADS{thread::hardware_concurrency()};
+
+   const my_uint_t NUM_THREADS{
+                                 combinations(52ULL, NUM_CARDS) >= MAX_THREADS ?
+                                 MAX_THREADS                                      :
+                                 combinations(52ULL, NUM_CARDS)
+                              };
 
    iteration_result_t iterate_over_all_possible_hands();
 
