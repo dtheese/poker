@@ -89,7 +89,7 @@ namespace
          dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
          dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
 
-         void operator()(const indexes_t &indexes)
+         void operator()(const dynamic_loop_t<my_uint_t, dynamic_loop_functor_t>::indexes_t &indexes)
          {
             card_t cards_1[5];
             my_uint_t j{0};
@@ -156,7 +156,9 @@ namespace
          ++hands_dealt;
 
          dynamic_loop_functor_t dynamic_loop_functor{cards};
-         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{0, NUM_CARDS, 5, dynamic_loop_functor};
+
+         dynamic_loop_t<my_uint_t, dynamic_loop_functor_t>
+              dynamic_loop{0, NUM_CARDS, 5, dynamic_loop_functor};
 
          dynamic_loop.run();
 

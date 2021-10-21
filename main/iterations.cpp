@@ -9,6 +9,7 @@ using namespace std;
 
 #include "fundamental_types.h"
 
+#include "combination_encoder.h"
 #include "combinations_table.h"
 #include "deck.h"
 #include "dynamic_loop.h"
@@ -33,14 +34,11 @@ namespace
 
    const my_uint_t NUM_THREADS{
                                  combinations(52ULL, NUM_CARDS) >= MAX_THREADS ?
-                                 MAX_THREADS                                      :
+                                 MAX_THREADS                                   :
                                  combinations(52ULL, NUM_CARDS)
                               };
 
    iteration_result_t iterate_over_all_possible_hands();
-
-   template<typename T, T N, T K>
-   void decode(const T encoded_value, array<T, K> &indexes);
 }
 
 // *****************************************************************************
@@ -106,7 +104,7 @@ namespace
          dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
          dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
 
-         void operator()(const indexes_t &indexes)
+         void operator()(const dynamic_loop_t<my_uint_t, dynamic_loop_functor_t>::indexes_t &indexes)
          {
             card_t cards_1[5];
             my_uint_t j{0};
@@ -154,7 +152,7 @@ namespace
 
       for (auto encoded_value{first_encoded_value}; encoded_value <= last_encoded_value; ++encoded_value)
       {
-         decode<my_uint_t, 52, NUM_CARDS>(encoded_value, indexes);
+         combination_encoder_t<decltype(indexes), 52, NUM_CARDS>::decode(encoded_value, indexes);
 
          array<card_t, NUM_CARDS> cards;
          my_uint_t j{0};
@@ -164,12 +162,12 @@ namespace
 
          dynamic_loop_functor_t dynamic_loop_functor{cards};
 
-         dynamic_loop_t<dynamic_loop_functor_t> dynamic_loop{
+         dynamic_loop_t<my_uint_t, dynamic_loop_functor_t> dynamic_loop{
                                                                  0,
                                                                  NUM_CARDS,
                                                                  5,
                                                                  dynamic_loop_functor
-                                                            };
+                                                                       };
 
          dynamic_loop.run();
          ++hand_rank_count[dynamic_loop_functor.getResult()];
@@ -181,7 +179,7 @@ namespace
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands()
    {
-      const auto &combinations_table{combinations_table_s<my_uint_t, 52, 52>::getInstance().getTable()};
+      const auto &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance().getTable()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
@@ -230,69 +228,5 @@ namespace
       }
 
       return iteration_result_t{hand_rank_count, hands_dealt};
-   }
-
-   template<typename T, T N, T K>
-   void decode(const T encoded_value, array<T, K> &indexes)
-   {
-      static const auto &combinations_table{combinations_table_s<T, N, N>::getInstance().getTable()};
-
-      T offset{0};
-      T previous_index_selection{0};
-
-      for (T index{0}; index < K; ++index)
-      {
-         T lowest_possible{index > 0 ? previous_index_selection + 1 : 0};
-         T highest_possible{N - K + index};
-
-         // Find the *highest* ith index value whose offset increase gives a
-         // total offset less than or equal to the value we're decoding.
-         while (true)
-         {
-            T candidate{(highest_possible + lowest_possible) / 2};
-
-            T offset_increase_due_to_candidate{
-                           index > 0 ?
-                              combinations_table[N - (indexes[index-1] + 1)][K - index] -
-                              combinations_table[N - candidate][K - index]
-                                     :
-                              combinations_table[N][K] -
-                              combinations_table[N - candidate][K]
-                                              };
-
-            if ((offset + offset_increase_due_to_candidate) > encoded_value)
-            {
-               // candidate is *not* the solution
-               highest_possible = candidate - 1;
-               continue;
-            }
-
-            // candidate *could* be the solution. Check if it is by checking if candidate + 1
-            // could be the solution. That would rule out candidate being the solution.
-            T next_candidate{candidate + 1};
-
-            T offset_increase_due_to_next_candidate{
-                           index > 0 ?
-                              combinations_table[N - (indexes[index-1] + 1)][K - index] -
-                              combinations_table[N - next_candidate][K - index]
-                                     :
-                              combinations_table[N][K] -
-                              combinations_table[N - next_candidate][K]
-                                                   };
-
-            if ((offset + offset_increase_due_to_next_candidate) <= encoded_value)
-            {
-               // candidate is *not* the solution
-               lowest_possible = candidate + 1;
-               continue;
-            }
-
-            // candidate *is* the solution
-            offset += offset_increase_due_to_candidate;
-            indexes[index] = candidate;
-            previous_index_selection = candidate;
-            break;
-         }
-      }
    }
 }
