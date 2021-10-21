@@ -4,13 +4,9 @@ inline hand_t::hand_t()
 
 inline hand_t::hand_t(const card_t *cards_p)
 {
-   for (unsigned int i{0}; i <= 4; ++i)
+   for (my_uint_t i{0}; i <= 4; ++i)
    {
       cards[i] = cards_p[i];
-
-#ifdef USE_LOOKUP_TABLE
-      id *= cards[i].get_id();
-#endif
    }
 
    // There is no need to sort here in non-Monte Carlo situations because
@@ -164,15 +160,6 @@ inline bool hand_t::is_one_pair() const
    }
 
    return false;
-}
-
-inline unsigned long long int hand_t::get_id() const
-{
-#ifdef USE_LOOKUP_TABLE
-   return id;
-#else
-   return 0;
-#endif
 }
 
 inline void hand_t::print() const

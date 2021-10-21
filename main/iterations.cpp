@@ -1,35 +1,42 @@
+#include <array>
 #include <future>
 #include <iostream>
 #include <numeric>
 #include <thread>
+#include <vector>
 
+using namespace std;
+
+#include "fundamental_types.h"
+
+#include "combination_encoder.h"
+#include "combinations_table.h"
 #include "deck.h"
 #include "dynamic_loop.h"
 #include "hand.h"
 #include "parameters.h"
-#include "threading_indexes.h"
+#include "utilities.h"
 
 #include "iterations.h"
 
-using namespace std;
-
 iteration_result_t::iteration_result_t(
-                     const map<hand_rank_t, unsigned long long int> hand_rank_count_p,
-                     const unsigned long long int hands_dealt_p
+                     const map<hand_rank_t, my_uint_t> hand_rank_count_p,
+                     const my_uint_t hands_dealt_p
                                       ):
                      hand_rank_count{hand_rank_count_p},
                      hands_dealt{hands_dealt_p}
 {
 }
 
-// Support functions
 namespace
 {
-   constexpr unsigned int NUM_THREADS{
-                                        ((52 - NUM_CARDS + 1) < MAX_THREADS) ?
-                                        (52 - NUM_CARDS + 1)                 :
-                                        MAX_THREADS
-                                     };
+   const my_uint_t MAX_THREADS{thread::hardware_concurrency()};
+
+   const my_uint_t NUM_THREADS{
+                                 combinations(52ULL, NUM_CARDS) >= MAX_THREADS ?
+                                 MAX_THREADS                                   :
+                                 combinations(52ULL, NUM_CARDS)
+                              };
 
    iteration_result_t iterate_over_all_possible_hands();
 }
@@ -84,24 +91,23 @@ void evaluate_all_possible_hands()
 
 namespace
 {
-   // *****************************************************************************
-   class dynamic_loop_functor_2_t
+   class dynamic_loop_functor_t
    {
       public:
-         dynamic_loop_functor_2_t(const vector<card_t> &cards_p): cards{cards_p}
+         dynamic_loop_functor_t(const array<card_t, NUM_CARDS> &cards_p): cards{cards_p}
          {
          }
 
-         dynamic_loop_functor_2_t(const dynamic_loop_functor_2_t &) = delete;
-         dynamic_loop_functor_2_t &operator=(const dynamic_loop_functor_2_t &) = delete;
+         dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
+         dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
 
-         dynamic_loop_functor_2_t(dynamic_loop_functor_2_t &&) = delete;
-         dynamic_loop_functor_2_t &operator=(dynamic_loop_functor_2_t &&) = delete;
+         dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
+         dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
 
-         void operator()(const indexes_t &indexes)
+         void operator()(const dynamic_loop_t<my_uint_t, dynamic_loop_functor_t>::indexes_t &indexes)
          {
             card_t cards_1[5];
-            unsigned int j{0};
+            my_uint_t j{0};
 
             for (auto i : indexes)
                cards_1[j++] = cards[i];
@@ -119,147 +125,91 @@ namespace
          }
 
       private:
-         const vector<card_t> &cards;
+         const array<card_t, NUM_CARDS> &cards;
          hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
    };
 
    // *****************************************************************************
-   class dynamic_loop_functor_1_t
-   {
-      public:
-         dynamic_loop_functor_1_t(unsigned int first_index_p): first_index{first_index_p}
-         {
-            hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
-            hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
-            hand_rank_count[hand_rank_t::TWO_PAIR]        = 0;
-            hand_rank_count[hand_rank_t::THREE_OF_A_KIND] = 0;
-            hand_rank_count[hand_rank_t::STRAIGHT]        = 0;
-            hand_rank_count[hand_rank_t::FLUSH]           = 0;
-            hand_rank_count[hand_rank_t::FULL_HOUSE]      = 0;
-            hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  = 0;
-            hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  = 0;
-            hand_rank_count[hand_rank_t::ROYAL_FLUSH]     = 0;
-         }
-
-         dynamic_loop_functor_1_t(const dynamic_loop_functor_1_t &) = delete;
-         dynamic_loop_functor_1_t &operator=(const dynamic_loop_functor_1_t &) = delete;
-
-         dynamic_loop_functor_1_t(dynamic_loop_functor_1_t &&) = delete;
-         dynamic_loop_functor_1_t &operator=(dynamic_loop_functor_1_t &&) = delete;
-
-         void operator()(const indexes_t &indexes)
-         {
-            cards.clear();
-            cards.push_back(deck[first_index]);
-
-            for (auto i : indexes)
-               cards.push_back(deck[i]);
-
-            dynamic_loop_functor_2_t dynamic_loop_functor_2{cards};
-
-            dynamic_loop_t<dynamic_loop_functor_2_t> dynamic_loop{
-                                                                    0,
-                                                                    static_cast<unsigned int>(cards.size()),
-                                                                    5,
-                                                                    dynamic_loop_functor_2
-                                                                 };
-
-            dynamic_loop.run();
-            ++hand_rank_count[dynamic_loop_functor_2.getResult()];
-            ++hands_dealt;
-         }
-
-         const map<hand_rank_t, unsigned long long int> &getHandRankCount() const
-         {
-            return hand_rank_count;
-         }
-
-         unsigned long long int getHandsDealt() const
-         {
-            return hands_dealt;
-         }
-
-      private:
-         const vector<card_t> &deck{deck_s::getInstance().getDeck()};
-         unsigned long long int hands_dealt{0};
-         map<hand_rank_t, unsigned long long int> hand_rank_count;
-         vector<card_t> cards;
-         const unsigned int first_index;
-   };
-
-   // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
-                                                     const unsigned int first_initial_index,
-                                                     const unsigned int last_initial_index
+                                                     const my_uint_t first_encoded_value,
+                                                     const my_uint_t last_encoded_value
                                                   )
    {
-      map<hand_rank_t, unsigned long long int> hand_rank_count;
-      unsigned long long int hands_dealt{0};
+      const auto &deck{deck_s::getInstance().getDeck()};
+      map<hand_rank_t, my_uint_t> hand_rank_count;
+      array<my_uint_t, NUM_CARDS> indexes;
 
-      for (auto first_index{first_initial_index}; first_index <= last_initial_index; ++first_index)
+      hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
+      hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
+      hand_rank_count[hand_rank_t::TWO_PAIR]        = 0;
+      hand_rank_count[hand_rank_t::THREE_OF_A_KIND] = 0;
+      hand_rank_count[hand_rank_t::STRAIGHT]        = 0;
+      hand_rank_count[hand_rank_t::FLUSH]           = 0;
+      hand_rank_count[hand_rank_t::FULL_HOUSE]      = 0;
+      hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  = 0;
+      hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  = 0;
+      hand_rank_count[hand_rank_t::ROYAL_FLUSH]     = 0;
+
+      for (auto encoded_value{first_encoded_value}; encoded_value <= last_encoded_value; ++encoded_value)
       {
-         dynamic_loop_functor_1_t dynamic_loop_functor_1{first_index};
+         combination_encoder_t<decltype(indexes), 52, NUM_CARDS>::decode(encoded_value, indexes);
 
-         dynamic_loop_t<dynamic_loop_functor_1_t> dynamic_loop{
-                                                                 first_index + 1,
-                                                                 52 - first_index - 1,
-                                                                 NUM_CARDS - 1,
-                                                                 dynamic_loop_functor_1
-                                                              };
+         array<card_t, NUM_CARDS> cards;
+         my_uint_t j{0};
+
+         for (auto i : indexes)
+            cards[j++] = deck[i];
+
+         dynamic_loop_functor_t dynamic_loop_functor{cards};
+
+         dynamic_loop_t<my_uint_t, dynamic_loop_functor_t> dynamic_loop{
+                                                                 0,
+                                                                 NUM_CARDS,
+                                                                 5,
+                                                                 dynamic_loop_functor
+                                                                       };
 
          dynamic_loop.run();
-
-         const auto &one_hand_rank_count{dynamic_loop_functor_1.getHandRankCount()};
-         const auto one_hands_dealt{dynamic_loop_functor_1.getHandsDealt()};
-
-         hand_rank_count[hand_rank_t::HIGH_CARD]       += one_hand_rank_count.at(hand_rank_t::HIGH_CARD);
-         hand_rank_count[hand_rank_t::ONE_PAIR]        += one_hand_rank_count.at(hand_rank_t::ONE_PAIR);
-         hand_rank_count[hand_rank_t::TWO_PAIR]        += one_hand_rank_count.at(hand_rank_t::TWO_PAIR);
-         hand_rank_count[hand_rank_t::THREE_OF_A_KIND] += one_hand_rank_count.at(hand_rank_t::THREE_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT]        += one_hand_rank_count.at(hand_rank_t::STRAIGHT);
-         hand_rank_count[hand_rank_t::FLUSH]           += one_hand_rank_count.at(hand_rank_t::FLUSH);
-         hand_rank_count[hand_rank_t::FULL_HOUSE]      += one_hand_rank_count.at(hand_rank_t::FULL_HOUSE);
-         hand_rank_count[hand_rank_t::FOUR_OF_A_KIND]  += one_hand_rank_count.at(hand_rank_t::FOUR_OF_A_KIND);
-         hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  += one_hand_rank_count.at(hand_rank_t::STRAIGHT_FLUSH);
-         hand_rank_count[hand_rank_t::ROYAL_FLUSH]     += one_hand_rank_count.at(hand_rank_t::ROYAL_FLUSH);
-
-         hands_dealt += one_hands_dealt;
+         ++hand_rank_count[dynamic_loop_functor.getResult()];
       }
 
-      return iteration_result_t{hand_rank_count, hands_dealt};
+      return iteration_result_t{hand_rank_count, last_encoded_value - first_encoded_value + 1};
    }
 
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands()
    {
-      map<hand_rank_t, unsigned long long int> hand_rank_count;
-      unsigned long long int hands_dealt{0};
+      const auto &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance().getTable()};
+      map<hand_rank_t, my_uint_t> hand_rank_count;
+      my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
+      const my_uint_t encoded_values_per_thread{combinations_table[52][NUM_CARDS] / NUM_THREADS};
 
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+      for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
-         auto first_index{START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i]};
+         my_uint_t first_encoded_value{i * encoded_values_per_thread};
+         my_uint_t last_encoded_value{(i + 1) * encoded_values_per_thread - 1};
 
-         unsigned int last_index{i != NUM_THREADS - 1 ? START_INDEXES.at(NUM_CARDS).at(NUM_THREADS)[i + 1] - 1
-                                                      : 52 - NUM_CARDS};
+         if (i == (NUM_THREADS - 1))
+            last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
 
-         cout << "Starting a thread with these starting card indexes:" << endl;
-         cout << "   First index: " << first_index << endl;
-         cout << "   Last index : " << last_index << endl;
+         cout << "Starting thread " << i << " to evaluate the hands corresponding to these encoded_values:" << endl;
+         cout << "   First encoded value: " << first_encoded_value << endl;
+         cout << "   Last encoded value: " << last_encoded_value << endl;
 
          futures.push_back(
                              async(
                                      launch::async,
                                      iterate_over_subset_of_hands,
-                                     first_index,
-                                     last_index
+                                     first_encoded_value,
+                                     last_encoded_value
                                   )
                           );
       }
 
       cout << endl;
 
-      for (unsigned int i{0}; i < NUM_THREADS; ++i)
+      for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
          auto results{futures[i].get()};
 

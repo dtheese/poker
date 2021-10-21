@@ -1,8 +1,8 @@
 #ifndef DECK_INCLUDED
 #define DECK_INCLUDED
 
+#include <array>
 #include <type_traits>
-#include <vector>
 
 #include "card.h"
 #include "utilities.h"
@@ -13,6 +13,8 @@ using namespace std;
 class deck_s
 {
    public:
+      using deck_t = array<card_t, 52>;
+
       deck_s(const deck_s &) = delete;
       void operator=(const deck_s &) = delete;
 
@@ -23,13 +25,13 @@ class deck_s
 
       static const deck_s &getInstance();
 
-      const vector<card_t> &getDeck() const;
+      const deck_t &getDeck() const;
 
    private:
       deck_s();
       ~deck_s();
 
-      vector<card_t> deck;
+      deck_t deck;
 };
 
 #include "deck.inl"

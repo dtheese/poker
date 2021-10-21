@@ -5,17 +5,17 @@
 
 using namespace std;
 
-using indexes_t = vector<unsigned int>;
-
-template<typename T>
+template<typename T1, typename T2>
 class dynamic_loop_t
 {
    public:
+      using indexes_t = vector<T1>;
+
       dynamic_loop_t(
-                       const unsigned int first_object_index_p,
-                       const unsigned int num_objects_total_p,
-                       const unsigned int num_objects_to_select_p,
-                       T &operation_to_perform_p
+                       const T1 first_object_index_p,
+                       const T1 num_objects_total_p,
+                       const T1 num_objects_to_select_p,
+                       T2 &operation_to_perform_p
                     );
 
       dynamic_loop_t(const dynamic_loop_t &) = delete;
@@ -28,15 +28,15 @@ class dynamic_loop_t
 
    private:
       void dynamic_loop_body(
-                               const unsigned int first_index,
-                               const unsigned int last_index,
-                               const unsigned int current_depth
+                               const T1 first_index,
+                               const T1 last_index,
+                               const T1 current_depth
                             );
 
-      const unsigned int first_object_index;
-      const unsigned int num_objects_total;
-      const unsigned int num_objects_to_select;
-      T &operation_to_perform;
+      const T1 first_object_index;
+      const T1 num_objects_total;
+      const T1 num_objects_to_select;
+      T2 &operation_to_perform;
 
       indexes_t indexes;
 };

@@ -4,14 +4,6 @@ inline card_t::card_t(): rank{rank_t::None}, suit{suit_t::None}
 
 inline card_t::card_t(rank_t rank_p, suit_t suit_p):rank{rank_p}, suit{suit_p}
 {
-#ifdef USE_LOOKUP_TABLE
-   auto index{
-        13 * static_cast<underlying_type<suit_t>::type>(suit) +
-        (static_cast<underlying_type<rank_t>::type>(rank) - 2)
-             };
-
-   id = primes_s::getInstance()[index];
-#endif
 }
 
 inline rank_t card_t::get_rank() const
@@ -22,15 +14,6 @@ inline rank_t card_t::get_rank() const
 inline suit_t card_t::get_suit() const
 {
    return suit;
-}
-
-inline unsigned long long int card_t::get_id() const
-{
-#ifdef USE_LOOKUP_TABLE
-   return id;
-#else
-   return 0;
-#endif
 }
 
 inline bool operator<(const card_t &lhs, const card_t &rhs)
