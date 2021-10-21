@@ -30,23 +30,20 @@ void combination_encoder_t<T, N1, K1>::decode(const typename T::value_type encod
    auto x(encoded_value);
    typename T::value_type index{0};
 
-   while (true)
+   while (k != 0)
    {
-      if (n == 0 && k == 0)
-         break;
-
-      typename T::value_type c{k > 0 ? combinations_table[n-1][k-1] : 0};
+      auto c{combinations_table[n-1][k-1]};
 
       if (x < c)
       {
          indexes[index++] = N1 - n;
-         --n;
          --k;
       }
       else
       {
          x -= c;
-         --n;
       }
+
+      --n;
    }
 }
