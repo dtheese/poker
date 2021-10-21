@@ -195,7 +195,7 @@ namespace
          if (i == (NUM_THREADS - 1))
             last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
 
-         cout << "Starting a thread to evaluate the hands corresponding to these encoded_values:" << endl;
+         cout << "Starting thread " << i << " to evaluate the hands corresponding to these encoded_values:" << endl;
          cout << "   First encoded value: " << first_encoded_value << endl;
          cout << "   Last encoded value: " << last_encoded_value << endl;
 
