@@ -30,6 +30,7 @@ class combinations_table_s
       combinations_table_s();
       ~combinations_table_s();
 
+      // Zero initialize all elements with {}
       combinations_table_t combinations_table{};
 };
 
