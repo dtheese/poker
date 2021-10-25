@@ -1,7 +1,6 @@
 #ifndef UTILITIES_INCLUDED
 #define UTILITIES_INCLUDED
 
-#include <cassert>
 #include <type_traits>
 
 using namespace std;
