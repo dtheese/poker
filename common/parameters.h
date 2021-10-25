@@ -7,6 +7,4 @@
 constexpr my_uint_t NUM_CARDS{5};
 static_assert(NUM_CARDS >= 5 && NUM_CARDS <= 52, "NUM_CARDS must be in the range 5 - 52, inclusive");
 
-// Allowed values: true, false
-constexpr bool MONTE_CARLO{false};
 #endif

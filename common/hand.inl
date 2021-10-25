@@ -12,8 +12,8 @@ inline hand_t::hand_t(const card_t *cards_p)
    // There is no need to sort here in non-Monte Carlo situations because
    // the cards come out of the deck in sorted order. This has proven to be
    // a nice optimization!
-   if (MONTE_CARLO)
-      sort(cards, cards + 5);
+   // if (MONTE_CARLO)
+   //   sort(cards, cards + 5);
 }
 
 inline hand_rank_t hand_t::hand_rank() const
