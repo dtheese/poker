@@ -1,9 +1,4 @@
 inline
-hand_t::hand_t()
-{
-}
-
-inline
 hand_t::hand_t(const array<card_t, 5> &cards_p): cards{cards_p}
 {
    // There is no need to sort here in non-Monte Carlo situations because

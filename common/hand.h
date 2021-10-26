@@ -37,7 +37,8 @@ void print_hand_rank(hand_rank_t hand_rank);
 class hand_t
 {
    public:
-      hand_t();
+      hand_t() = delete;
+
       explicit hand_t(const array<card_t, 5> &cards_p);
 
       void print() const;
