@@ -1,5 +1,5 @@
 template<typename T, typename T::value_type N1, typename T::value_type K1>
-const typename combinations_table_s<typename T::value_type, N1>::combinations_table_t
+const combinations_table_t<typename T::value_type, N1>
 &combination_encoder_t<T, N1, K1>::combinations_table{
      combinations_table_s<typename T::value_type, N1>::getInstance().getTable()
                                                      };

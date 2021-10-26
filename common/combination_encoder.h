@@ -15,7 +15,7 @@ class combination_encoder_t
 
    private:
       static
-      const typename combinations_table_s<typename T::value_type, N1>::combinations_table_t &combinations_table;
+      const combinations_table_t<typename T::value_type, N1> &combinations_table;
 };
 
 #include "combination_encoder.inl"

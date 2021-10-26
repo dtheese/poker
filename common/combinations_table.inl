@@ -22,8 +22,9 @@ inline const combinations_table_s<T, N1> &combinations_table_s<T, N1>::getInstan
 }
 
 template<typename T, T N1>
-inline const typename combinations_table_s<T, N1>::combinations_table_t
-       &combinations_table_s<T, N1>::getTable() const
+inline
+const combinations_table_t<T, N1>
+&combinations_table_s<T, N1>::getTable() const
 {
    return combinations_table;
 }
