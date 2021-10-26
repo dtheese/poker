@@ -20,7 +20,7 @@ inline const deck_s &deck_s::getInstance()
    return instance;
 }
 
-inline const deck_s::deck_t &deck_s::getDeck() const
+inline const deck_t &deck_s::getDeck() const
 {
    return deck;
 }

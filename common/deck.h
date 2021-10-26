@@ -9,12 +9,12 @@
 
 using namespace std;
 
+using deck_t = array<card_t, 52>;
+
 // This singleton is lazily initialized.
 class deck_s
 {
    public:
-      using deck_t = array<card_t, 52>;
-
       deck_s(const deck_s &) = delete;
       void operator=(const deck_s &) = delete;
 

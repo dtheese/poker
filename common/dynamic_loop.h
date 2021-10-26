@@ -5,12 +5,13 @@
 
 using namespace std;
 
+template<typename T1>
+using indexes_t = vector<T1>;
+
 template<typename T1, typename T2>
 class dynamic_loop_t
 {
    public:
-      using indexes_t = vector<T1>;
-
       dynamic_loop_t(
                        const T1 first_object_index_p,
                        const T1 num_objects_total_p,
@@ -38,7 +39,7 @@ class dynamic_loop_t
       const T1 num_objects_to_select;
       T2 &operation_to_perform;
 
-      indexes_t indexes;
+      indexes_t<T1> indexes;
 };
 
 #include "dynamic_loop.inl"
