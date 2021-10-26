@@ -5,6 +5,7 @@ const combinations_table_t<typename T::value_type, N1>
                                                      };
 
 template<typename T, typename T::value_type N1, typename T::value_type K1>
+inline
 typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes)
 {
    auto offset{combinations_table[N1][K1] - combinations_table[N1 - indexes[0]][K1]};
@@ -23,6 +24,7 @@ typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes
 }
 
 template<typename T, typename T::value_type N1, typename T::value_type K1>
+inline
 void combination_encoder_t<T, N1, K1>::decode(const typename T::value_type encoded_value, T &indexes)
 {
    auto n{N1};

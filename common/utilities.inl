@@ -1,5 +1,6 @@
 template<typename T>
-inline T &operator ++(T &e)
+inline
+T &operator ++(T &e)
 {
     e = T(static_cast<typename underlying_type<T>::type>(e) + 1);
 
@@ -8,6 +9,7 @@ inline T &operator ++(T &e)
 
 template<typename T>
 constexpr
+inline
 T combinations(const T n, const T r)
 {
    T k{r > n - r ? n - r : r};

@@ -1,8 +1,10 @@
-inline hand_t::hand_t()
+inline
+hand_t::hand_t()
 {
 }
 
-inline hand_t::hand_t(const card_t *cards_p)
+inline
+hand_t::hand_t(const card_t *cards_p)
 {
    for (my_uint_t i{0}; i <= 4; ++i)
    {
@@ -16,7 +18,8 @@ inline hand_t::hand_t(const card_t *cards_p)
    //   sort(cards, cards + 5);
 }
 
-inline hand_rank_t hand_t::hand_rank() const
+inline
+hand_rank_t hand_t::hand_rank() const
 {
    if (is_a_full_house())
       return hand_rank_t::FULL_HOUSE;
@@ -78,7 +81,8 @@ inline hand_rank_t hand_t::hand_rank() const
    return hand_rank_t::HIGH_CARD;
 }
 
-inline bool hand_t::is_four_of_a_kind() const
+inline
+bool hand_t::is_four_of_a_kind() const
 {
    if (
          cards[0].get_rank() == cards[3].get_rank() ||
@@ -91,7 +95,8 @@ inline bool hand_t::is_four_of_a_kind() const
    return false;
 }
 
-inline bool hand_t::is_a_full_house() const
+inline
+bool hand_t::is_a_full_house() const
 {
    if (
          (
@@ -110,7 +115,8 @@ inline bool hand_t::is_a_full_house() const
    return false;
 }
 
-inline bool hand_t::is_three_of_a_kind() const
+inline
+bool hand_t::is_three_of_a_kind() const
 {
    if (
          cards[0].get_rank() == cards[2].get_rank() ||
@@ -124,7 +130,8 @@ inline bool hand_t::is_three_of_a_kind() const
    return false;
 }
 
-inline bool hand_t::is_two_pair() const
+inline
+bool hand_t::is_two_pair() const
 {
    if (
          (
@@ -147,7 +154,8 @@ inline bool hand_t::is_two_pair() const
    return false;
 }
 
-inline bool hand_t::is_one_pair() const
+inline
+bool hand_t::is_one_pair() const
 {
    if (
          cards[0].get_rank() == cards[1].get_rank() ||
@@ -162,13 +170,15 @@ inline bool hand_t::is_one_pair() const
    return false;
 }
 
-inline void hand_t::print() const
+inline
+void hand_t::print() const
 {
    for (const card_t &card : cards)
       card.print();
 }
 
-inline void print_hand_rank(hand_rank_t hand_rank)
+inline
+void print_hand_rank(hand_rank_t hand_rank)
 {
    switch (hand_rank)
    {

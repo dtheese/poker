@@ -1,4 +1,5 @@
-inline deck_s::deck_s()
+inline
+deck_s::deck_s()
 {
    my_uint_t j{0};
 
@@ -9,18 +10,21 @@ inline deck_s::deck_s()
    }
 }
 
-inline deck_s::~deck_s()
+inline
+deck_s::~deck_s()
 {
 }
 
-inline const deck_s &deck_s::getInstance()
+inline
+const deck_s &deck_s::getInstance()
 {
    static deck_s instance;
 
    return instance;
 }
 
-inline const deck_t &deck_s::getDeck() const
+inline
+const deck_t &deck_s::getDeck() const
 {
    return deck;
 }

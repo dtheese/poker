@@ -1,4 +1,5 @@
 template<typename T1, typename T2>
+inline
 dynamic_loop_t<T1, T2>::dynamic_loop_t(
                                          const T1 first_object_index_p,
                                          const T1 num_objects_total_p,
@@ -13,6 +14,7 @@ dynamic_loop_t<T1, T2>::dynamic_loop_t(
 }
 
 template<typename T1, typename T2>
+inline
 void dynamic_loop_t<T1, T2>::run()
 {
    dynamic_loop_body(
