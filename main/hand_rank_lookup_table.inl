@@ -13,7 +13,7 @@ inline hand_rank_lookup_table_s::hand_rank_lookup_table_s()
       for (auto i : indexes)
          cards[j++] = deck[i];
 
-      hand_t hand{cards.data()};
+      hand_t hand{cards};
       hand_rank_lookup_table[encoded_value] = hand.hand_rank();
    }
 }

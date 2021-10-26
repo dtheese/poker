@@ -4,13 +4,8 @@ hand_t::hand_t()
 }
 
 inline
-hand_t::hand_t(const card_t *cards_p)
+hand_t::hand_t(const array<card_t, 5> &cards_p): cards{cards_p}
 {
-   for (my_uint_t i{0}; i <= 4; ++i)
-   {
-      cards[i] = cards_p[i];
-   }
-
    // There is no need to sort here in non-Monte Carlo situations because
    // the cards come out of the deck in sorted order. This has proven to be
    // a nice optimization!

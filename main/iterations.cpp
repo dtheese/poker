@@ -107,7 +107,7 @@ namespace
 
          void operator()(const indexes_t<my_uint_t> &indexes)
          {
-            card_t cards_1[5];
+            array<card_t, 5> cards_1;
             my_uint_t j{0};
 
             for (auto i : indexes)
