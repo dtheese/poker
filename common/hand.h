@@ -2,6 +2,7 @@
 #define HAND_INCLUDED
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
@@ -43,7 +44,7 @@ class hand_t
       hand_rank_t hand_rank() const;
 
    private:
-      card_t cards[5];
+      array<card_t, 5> cards;
 
       bool is_four_of_a_kind() const;
       bool is_a_full_house() const;
