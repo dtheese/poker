@@ -30,7 +30,7 @@ inline const hand_rank_lookup_table_s &hand_rank_lookup_table_s::getInstance()
 }
 
 inline
-const hand_rank_lookup_table_s::hand_rank_lookup_table_t
+const hand_rank_lookup_table_t
 &hand_rank_lookup_table_s::getLookupTable() const
 {
    return hand_rank_lookup_table;

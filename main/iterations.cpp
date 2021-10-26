@@ -127,7 +127,7 @@ namespace
 
       private:
          const
-         hand_rank_lookup_table_s::hand_rank_lookup_table_t
+         hand_rank_lookup_table_t
          &hand_rank_lookup_table{hand_rank_lookup_table_s::getInstance().getLookupTable()};
 
          const array<card_t, NUM_CARDS> &cards;

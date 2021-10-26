@@ -12,11 +12,11 @@ using namespace std;
 #include "parameters.h"
 #include "utilities.h"
 
+using hand_rank_lookup_table_t = array<hand_rank_t, combinations(52, 5)>;
+
 class hand_rank_lookup_table_s
 {
    public:
-      using hand_rank_lookup_table_t = array<hand_rank_t, combinations(52, 5)>;
-
       hand_rank_lookup_table_s(const hand_rank_lookup_table_s &) = delete;
       void operator=(const hand_rank_lookup_table_s &) = delete;
 
