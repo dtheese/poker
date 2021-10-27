@@ -95,7 +95,8 @@ namespace
    class dynamic_loop_functor_t
    {
       public:
-         dynamic_loop_functor_t(const array<card_t, NUM_CARDS> &cards_p): cards{cards_p}
+         dynamic_loop_functor_t(const array<my_uint_t, NUM_CARDS> &indexes_all_p):
+         indexes_all{indexes_all_p}
          {
          }
 
@@ -105,16 +106,20 @@ namespace
          dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
          dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
 
-         void operator()(const indexes_t<my_uint_t> &indexes)
+         void operator()(const indexes_t<my_uint_t> &indexes_5)
          {
-            array<card_t, 5> cards_1;
+            array<my_uint_t, 5> indexes_into_deck{};
             my_uint_t j{0};
 
-            for (auto i : indexes)
-               cards_1[j++] = cards[i];
+            for (auto i : indexes_5)
+               indexes_into_deck[j++] = indexes_all[i];
 
-            hand_t hand{cards_1};
-            auto this_hands_rank{hand.hand_rank()};
+            auto encoded_value_5{
+                 combination_encoder_t<decltype(indexes_into_deck), 52, 5>::
+                 encode(indexes_into_deck)
+                                };
+
+            auto this_hands_rank{hand_rank_lookup_table[encoded_value_5]};
 
             if (this_hands_rank > highest_hand_seen)
                highest_hand_seen = this_hands_rank;
@@ -130,7 +135,7 @@ namespace
          hand_rank_lookup_table_t
          &hand_rank_lookup_table{hand_rank_lookup_table_s::getInstance().getLookupTable()};
 
-         const array<card_t, NUM_CARDS> &cards;
+         const array<my_uint_t, NUM_CARDS> &indexes_all;
          hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
    };
 
@@ -140,9 +145,7 @@ namespace
                                                      const my_uint_t last_encoded_value
                                                   )
    {
-      const auto &deck{deck_s::getInstance().getDeck()};
       map<hand_rank_t, my_uint_t> hand_rank_count;
-      array<my_uint_t, NUM_CARDS> indexes;
 
       hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
       hand_rank_count[hand_rank_t::ONE_PAIR]        = 0;
@@ -155,17 +158,18 @@ namespace
       hand_rank_count[hand_rank_t::STRAIGHT_FLUSH]  = 0;
       hand_rank_count[hand_rank_t::ROYAL_FLUSH]     = 0;
 
-      for (auto encoded_value{first_encoded_value}; encoded_value <= last_encoded_value; ++encoded_value)
+      for (
+             auto encoded_value{first_encoded_value};
+             encoded_value <= last_encoded_value;
+             ++encoded_value
+          )
       {
-         combination_encoder_t<decltype(indexes), 52, NUM_CARDS>::decode(encoded_value, indexes);
+         array<my_uint_t, NUM_CARDS> indexes_all{};
 
-         array<card_t, NUM_CARDS> cards;
-         my_uint_t j{0};
+         combination_encoder_t<decltype(indexes_all), 52, NUM_CARDS>::
+              decode(encoded_value, indexes_all);
 
-         for (auto i : indexes)
-            cards[j++] = deck[i];
-
-         dynamic_loop_functor_t dynamic_loop_functor{cards};
+         dynamic_loop_functor_t dynamic_loop_functor{indexes_all};
 
          dynamic_loop_t<my_uint_t, dynamic_loop_functor_t> dynamic_loop{
                                                                  0,
@@ -184,7 +188,9 @@ namespace
    // *****************************************************************************
    iteration_result_t iterate_over_all_possible_hands()
    {
-      const auto &combinations_table{combinations_table_s<my_uint_t, 52>::getInstance().getTable()};
+      const auto &combinations_table{combinations_table_s<my_uint_t, 52>::
+           getInstance().getTable()};
+
       map<hand_rank_t, my_uint_t> hand_rank_count;
       my_uint_t hands_dealt{0};
       vector<future<iteration_result_t>> futures;
@@ -198,7 +204,10 @@ namespace
          if (i == (NUM_THREADS - 1))
             last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
 
-         cout << "Starting thread " << i << " to evaluate the hands corresponding to these encoded_values:" << endl;
+         cout << "Starting thread " << i
+              << " to evaluate the hands corresponding to these encoded_values:"
+              << endl;
+
          cout << "   First encoded value: " << first_encoded_value << endl;
          cout << "   Last encoded value: " << last_encoded_value << endl;
 
