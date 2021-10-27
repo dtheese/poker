@@ -12,6 +12,10 @@ template<typename T>
 constexpr
 T combinations(const T n, const T r);
 
+template<typename T>
+constexpr
+T power(T n, T r);
+
 #include "utilities.inl"
 
 #endif

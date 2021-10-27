@@ -24,3 +24,26 @@ T combinations(const T n, const T r)
 
    return rval;
 }
+
+template<typename T>
+constexpr
+T power(T n, T r)
+{
+   T rval{1};
+
+   while (true)
+   {
+      if (r & 1)
+         rval *= n;
+
+      r >>= 1;
+
+      if (!r)
+         break;
+
+      n *= n;
+   }
+
+   return rval;
+}
+
