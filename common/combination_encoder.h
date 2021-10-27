@@ -2,6 +2,7 @@
 #define COMBINATION_ENCODER
 
 #include "combinations_table.h"
+#include "utilities.h"
 
 template<typename T, typename T::value_type N1, typename T::value_type K1>
 class combination_encoder_t
@@ -14,6 +15,8 @@ class combination_encoder_t
       void decode(const typename T::value_type encoded_value, T &indexes);
 
    private:
+      using T1 = typename T::value_type;
+
       static
       const combinations_table_t<typename T::value_type, N1> &combinations_table;
 };

@@ -8,11 +8,9 @@ template<typename T, typename T::value_type N1, typename T::value_type K1>
 inline
 typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes)
 {
-   using T1 = typename T::value_type;
-
    if (indexes.size() == 5)
    {
-      typename T::value_type offset{0};
+      T1 offset{0};
 
       auto a0{indexes[0]};
       auto a1{indexes[1]};
@@ -40,7 +38,7 @@ typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes
    {
       auto offset{combinations_table[N1][K1] - combinations_table[N1 - indexes[0]][K1]};
 
-      for (typename T::value_type index{1}; index < K1; ++index)
+      for (T1 index{1}; index < K1; ++index)
       {
          auto offset_due_to_current_index{
               combinations_table[N1 - (indexes[index-1] + 1)][K1 - index] -
@@ -61,7 +59,7 @@ void combination_encoder_t<T, N1, K1>::decode(const typename T::value_type encod
    auto n{N1};
    auto k{K1};
    auto x(encoded_value);
-   typename T::value_type index{0};
+   T1 index{0};
 
    while (k != 0)
    {
