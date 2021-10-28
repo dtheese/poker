@@ -4,6 +4,6 @@ rm -f poker
 
 # This is my preferred compiler invocation. However, this has been seen in some
 # cases to generate incorrect code. If this happens, try less aggressive optimization.
-g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -Ofast -I . -I ../common -o poker *.cpp
+g++ -std=c++17 -pthread -Wall -Wpedantic -Wextra -Ofast -I . -I ../common -o poker *.cpp
 
 exit 0
