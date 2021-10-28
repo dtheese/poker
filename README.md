@@ -14,14 +14,7 @@ This program uses as many threads as the hardware it is running on will support.
 To control the hand size, edit **common/parameters.h**, set **NUM_CARDS** to the desired value, and rebuild (described below).
 
 ## Build Environment
-This project was built under CentOS 7 with **g++** and conforms to **C++14**.
-
-CentOS 7 does not support **C++14** by default. This support may be obtained by executing these commands:  
-\# Do this one time only  
-**yum install centos-release-scl**
-
-\# Do this at the start of every shell session where you build this program  
-**scl enable devtoolset-7 bash**
+This project was built under CentOS 8 with **g++** and conforms to **C++17**.
 
 ## Obtaining, Building, and Running the Project
 You can create a local clone of this project with this command:  
