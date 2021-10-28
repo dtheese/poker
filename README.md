@@ -1,26 +1,26 @@
-# Project to Count Frequency of 5-card Poker Hands Contained within N-card Hands (5 <= N <= 52)
+# Project to Count Frequency of 5-card Poker Hands Contained within K-card Hands (5 <= K <= 52)
 
-Directory **main** contains a version of the program that enumerates all possible N-card hands and determines each hand's rank by direct evaluation of the hand.
+Directories **main** and **common** contain source for a program that indirectly enumerates all possible K-card poker hands (5 <= K <= 52) and determines each hand's rank. The count of each rank is then presented.
 
-The version of the program in directory **main** also has a second mode of operation. In this alternate mode of operation, hands are randomly generated until a target hand rank has been achieved a specified number of times. The intent of this mode is to check that the hand frequencies are coming out close to what is expected over a large number of trials.
+This program works as follows.
 
-The mode of operation for the version of the program in directory **main** is selected in the file **main.cpp** with the use of a **\#if** preprocessor statement.
+A unique integer (an "encoding") in the range 0..2,598,959 is associated with every possible 5-card poker hand (of which there are 2,598,960). A pre-computed lookup table (an array indexed by an encoding) is created at startup. Given an encoding, this lookup table returns the rank of the hand the encoding represents.
 
-Directory **tableLookup** is an experimental version of the program where I pre-construct a lookup table to determine a hand's rank. Then, as with directory **main**, the program enumerates all possible 5-card hands and determines each hand's rank, but it does so by using the lookup table instead of by direct evaluation. This version of the program works only for 5-card hands, not N-card hands.
+The program then proceeds to indirectly enumerate all K-card poker hands by looping over all integers in 0..C(52,K)-1. Each such integer represents the unique encoding of a K-card poker hand. That encoding is then decoded into the K-card poker hand it represents. Then, each possible 5-card combination of these K cards is considered. Each such 5-card hand's rank is obtained by encoding that 5-card hand and using the encoding to find the 5-card hand's rank in the lookup table. The highest-rank of all 5-card hands contained within a K-card hand is then returned as the rank of the K-card hand.
 
-The **common** directory contains files that are common to both versions of this program.
+This program uses as many threads as the hardware it is running on will support.
 
-After empirical timing tests, C-style arrays are generally preferred to std::vector or std::array.
+## Setting the Hand Size (K)
+To control the hand size, edit **common/parameters.h**, set **NUM_CARDS** to the desired value, and rebuild (described below).
 
-This project was built under CentOS 7.
+## Build Environment
+This project was built under CentOS 7 with **g++** and conforms to **C++14**.
 
-This project conforms to C++14. It will not build under C++11 due to an issue with type deduction and use of uniform initialization.
-
-CentOS 7 does not support C++14 by default. This support may be obtained by executing these commands:  
+CentOS 7 does not support **C++14** by default. This support may be obtained by executing these commands:  
 \# Do this one time only  
 **yum install centos-release-scl**
 
-\# Do this in every shell session where you build this program  
+\# Do this at the start of every shell session where you build this program  
 **scl enable devtoolset-7 bash**
 
 ## Obtaining, Building, and Running the Project
@@ -28,14 +28,8 @@ You can create a local clone of this project with this command:
 **git clone https://github.com/dtheese/poker**
 
 The program can then be built as follows:  
-**cd poker/common**  
+**cd poker/main**
 **./build**
-
-**cd ../main**  
-OR  
-**cd ../tableLookup**  
-
-**./build**  
 
 The program can then be run as follows:  
 **./poker**
