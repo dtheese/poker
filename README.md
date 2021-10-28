@@ -1,4 +1,4 @@
-# Project to Count Frequency of 5-card Poker Hands Contained within K-card Hands (5 <= K <= 52)
+# Project to Count Frequency of 5-Card Poker Hands Contained within K-card Hands (5 <= K <= 52)
 
 Directories **main** and **common** contain source for a program that indirectly enumerates all possible K-card poker hands (5 <= K <= 52) and determines each hand's rank. The count of each rank is then presented.
 
@@ -6,7 +6,7 @@ This program works as follows.
 
 A unique integer (an "encoding") in the range 0..2,598,959 is associated with every possible 5-card poker hand (of which there are 2,598,960). A pre-computed lookup table (an array indexed by an encoding) is created at startup. Given an encoding, this lookup table returns the rank of the hand the encoding represents.
 
-The program then proceeds to indirectly enumerate all K-card poker hands by looping over all integers in 0..C(52,K)-1. Each such integer represents the unique encoding of a K-card poker hand. That encoding is then decoded into the K-card poker hand it represents. Then, each possible 5-card combination of these K cards is considered. Each such 5-card hand's rank is obtained by encoding that 5-card hand and using the encoding to find the 5-card hand's rank in the lookup table. The highest-rank of all 5-card hands contained within a K-card hand is then returned as the rank of the K-card hand.
+The program then proceeds to indirectly enumerate all K-card poker hands by looping over all integers in 0..C(52,K)-1. Each such integer represents the unique encoding of a K-card poker hand. That encoding is then decoded into the K-card poker hand it represents. Then, each possible 5-card combination of these K cards is considered. Each such 5-card hand's rank is obtained by encoding that 5-card hand and using the encoding to find the 5-card hand's rank in the lookup table. The highest rank of all 5-card hands contained within a K-card hand is then returned as the rank of the K-card hand.
 
 This program uses as many threads as the hardware it is running on will support.
 
