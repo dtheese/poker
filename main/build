@@ -4,27 +4,10 @@
 # yum install centos-release-scl
 # scl enable devtoolset-7 bash
 
-# This is needed only if common has any .cpp files.
-# declare -r LIBRARIES="-L ../common -lpoker_common"
-
 rm -f poker
 
-# This is my preferred compiler invocation. However, the generated executable does
-# not function properly in one of my program variants. An assertion that should not
-# be hit gets hit.
+# This is my preferred compiler invocation. However, this has been seen in some
+# cases to generate incorrect code. If this happens, try less aggressive optimization.
 g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -Ofast -I . -I ../common -o poker *.cpp $LIBRARIES
-
-
-# Backing off from -Ofast --> -O3 --> -O2 --> -O1 also produces an executable that
-# does not work for one of my program variants.
-# g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -O1 -I . -I ../common -o poker *.cpp $LIBRARIES
-
-
-# Supposedly equivalent to -O1, but generated executable works fine.
-# g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -fauto-inc-dec -fbranch-count-reg -fcombine-stack-adjustments -fcompare-elim -fcprop-registers -fdce -fdefer-pop -fdelayed-branch -fdse -fforward-propagate -fguess-branch-probability -fif-conversion2 -fif-conversion -finline-functions-called-once -fipa-pure-const -fipa-profile -fipa-reference -fmerge-constants -fmove-loop-invariants -freorder-blocks -fshrink-wrap -fshrink-wrap-separate -fsplit-wide-types -fssa-backprop -fssa-phiopt -ftree-bit-ccp -ftree-ccp -ftree-ch -ftree-coalesce-vars -ftree-copy-prop -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop -ftree-fre -ftree-phiprop -ftree-sink -ftree-slsr -ftree-sra -ftree-pta -ftree-ter -funit-at-a-time -fomit-frame-pointer -I . -I ../common -o poker *.cpp $LIBRARIES
-
-
-# Supposedly equivalent to -O1, but without -fdelayed-branch (unsupported on my hardware)
-# g++ -std=c++14 -pthread -Wall -Wpedantic -Wextra -fauto-inc-dec -fbranch-count-reg -fcombine-stack-adjustments -fcompare-elim -fcprop-registers -fdce -fdefer-pop -fdse -fforward-propagate -fguess-branch-probability -fif-conversion2 -fif-conversion -finline-functions-called-once -fipa-pure-const -fipa-profile -fipa-reference -fmerge-constants -fmove-loop-invariants -freorder-blocks -fshrink-wrap -fshrink-wrap-separate -fsplit-wide-types -fssa-backprop -fssa-phiopt -ftree-bit-ccp -ftree-ccp -ftree-ch -ftree-coalesce-vars -ftree-copy-prop -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop -ftree-fre -ftree-phiprop -ftree-sink -ftree-slsr -ftree-sra -ftree-pta -ftree-ter -funit-at-a-time -fomit-frame-pointer -I . -I ../common -o poker *.cpp $LIBRARIES
 
 exit 0
