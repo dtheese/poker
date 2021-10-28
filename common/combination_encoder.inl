@@ -8,7 +8,7 @@ template<typename T, typename T::value_type N1, typename T::value_type K1>
 inline
 typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes)
 {
-   if (indexes.size() == 5)
+   if (N1 == 52 && K1 == 5)
    {
       T1 offset{0};
 
