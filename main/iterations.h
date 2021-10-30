@@ -11,13 +11,15 @@ using namespace std;
 
 struct iteration_result_t
 {
+   explicit iteration_result_t();
+
    iteration_result_t(
                         const map<hand_rank_t, my_uint_t> hand_rank_count_p,
                         const my_uint_t hands_dealt_p
                      );
 
-   const map<hand_rank_t, my_uint_t> hand_rank_count;
-   const my_uint_t hands_dealt;
+   map<hand_rank_t, my_uint_t> hand_rank_count;
+   my_uint_t hands_dealt;
 };
 
 void evaluate_all_possible_hands();
