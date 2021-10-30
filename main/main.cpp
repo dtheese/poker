@@ -17,6 +17,7 @@ int main()
 
    auto start_time{chrono::steady_clock::now()};
 
+   // if constexpr is a C++17 feature
    if constexpr (TRIALS == 0)
       evaluate_all_possible_hands();
    else
