@@ -11,7 +11,9 @@ using namespace std;
 
 int main()
 {
+#ifndef _WIN32
    system("date");
+#endif
 
    auto start_time{chrono::steady_clock::now()};
 
@@ -29,6 +31,10 @@ int main()
         << setprecision(6) << time_taken << " seconds" << endl;
 
    cout << endl;
+
+#ifndef _WIN32
    system("date");
+#endif
+
    cout << endl;
 }
