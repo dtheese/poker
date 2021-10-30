@@ -3,5 +3,5 @@ poker
 *.a
 *.o
 experiments/
-main/Debug
-main/Release
+Debug
+Release
