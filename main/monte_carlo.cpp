@@ -24,11 +24,7 @@ namespace
 
    const my_uint_t MAX_HW_THREADS{thread::hardware_concurrency()};
 
-   const my_uint_t NUM_THREADS{
-                                 TRIALS < MAX_HW_THREADS  ?
-                                 TRIALS                   :
-                                 MAX_HW_THREADS
-                              };
+   const auto NUM_THREADS{min({THREADS_LIMIT, MAX_HW_THREADS, TRIALS})};
 
    // Seed a deterministic random number generator with a true random number.
    // Prepare a uniform random number generator.

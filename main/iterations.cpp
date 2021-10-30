@@ -36,11 +36,15 @@ namespace
 {
    const my_uint_t MAX_HW_THREADS{thread::hardware_concurrency()};
 
-   const my_uint_t NUM_THREADS{
-                                 combinations(52ULL, NUM_CARDS) >= MAX_HW_THREADS ?
-                                 MAX_HW_THREADS                                   :
-                                 combinations(52ULL, NUM_CARDS)
-                              };
+   const auto NUM_THREADS{
+                            min(
+                                  {
+                                     THREADS_LIMIT,
+                                     combinations(52ULL, NUM_CARDS),
+                                     MAX_HW_THREADS
+                                  }
+                               )
+                         };
 
    iteration_result_t iterate_over_subset_of_hands(
                                                      const my_uint_t first_encoded_value,
