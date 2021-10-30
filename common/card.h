@@ -43,7 +43,7 @@ enum class suit_t: my_uint_t {
 class card_t
 {
    public:
-      card_t();
+      explicit card_t();
       card_t(rank_t rank_p, suit_t suit_p);
       void print() const;
 
