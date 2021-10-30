@@ -12,10 +12,11 @@ using namespace std;
 #include "combination_encoder.h"
 #include "dynamic_loop_functor.h"
 #include "fundamental_types.h"
-#include "monte_carlo.h"
 #include "parameters.h"
 #include "print_mutex.h"
 #include "utilities.h"
+
+#include "monte_carlo.h"
 
 namespace
 {
