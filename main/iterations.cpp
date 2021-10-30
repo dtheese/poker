@@ -1,6 +1,7 @@
 #include <array>
 #include <future>
 #include <iostream>
+#include <mutex>
 #include <numeric>
 #include <thread>
 #include <vector>
@@ -17,6 +18,7 @@ using namespace std;
 #include "hand.h"
 #include "hand_rank_lookup_table.h"
 #include "parameters.h"
+#include "print_mutex.h"
 #include "utilities.h"
 
 #include "iterations.h"
@@ -155,32 +157,36 @@ namespace
       vector<future<iteration_result_t>> futures;
       const my_uint_t encoded_values_per_thread{combinations_table[52][NUM_CARDS] / NUM_THREADS};
 
-      for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {
-         my_uint_t first_encoded_value{i * encoded_values_per_thread};
-         my_uint_t last_encoded_value{(i + 1) * encoded_values_per_thread - 1};
+         lock_guard<mutex> lg{print_mutex};
 
-         if (i == (NUM_THREADS - 1))
-            last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
+         for (my_uint_t i{0}; i < NUM_THREADS; ++i)
+         {
+            my_uint_t first_encoded_value{i * encoded_values_per_thread};
+            my_uint_t last_encoded_value{(i + 1) * encoded_values_per_thread - 1};
 
-         cout << "Starting thread " << i
-              << " to evaluate the hands corresponding to these encoded values:"
-              << endl;
+            if (i == (NUM_THREADS - 1))
+               last_encoded_value += combinations_table[52][NUM_CARDS] % NUM_THREADS;
 
-         cout << "   First encoded value: " << first_encoded_value << endl;
-         cout << "   Last encoded value: " << last_encoded_value << endl;
+            cout << "Starting thread " << i
+                 << " to evaluate the hands corresponding to these encoded values:"
+                 << endl;
 
-         futures.push_back(
-                             async(
-                                     launch::async,
-                                     iterate_over_subset_of_hands,
-                                     first_encoded_value,
-                                     last_encoded_value
-                                  )
-                          );
+            cout << "   First encoded value: " << first_encoded_value << endl;
+            cout << "   Last encoded value: " << last_encoded_value << endl;
+
+            futures.push_back(
+                                async(
+                                        launch::async,
+                                        iterate_over_subset_of_hands,
+                                        first_encoded_value,
+                                        last_encoded_value
+                                     )
+                             );
+         }
+
+         cout << endl;
       }
-
-      cout << endl;
 
       for (my_uint_t i{0}; i < NUM_THREADS; ++i)
       {

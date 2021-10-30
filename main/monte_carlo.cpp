@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <mutex>
 #include <random>
 #include <thread>
 #include <vector>
@@ -13,6 +14,7 @@ using namespace std;
 #include "fundamental_types.h"
 #include "monte_carlo.h"
 #include "parameters.h"
+#include "print_mutex.h"
 #include "utilities.h"
 
 namespace
@@ -53,25 +55,29 @@ void monte_carlo_simulation()
 
    vector<future<map<hand_rank_t, my_uint_t>>> futures;
 
-   for (my_uint_t i{0}; i < NUM_THREADS; ++i)
    {
-      if (i == (NUM_THREADS - 1))
-         trials_per_thread += TRIALS % NUM_THREADS;
+      lock_guard<mutex> lg{print_mutex};
 
-      cout << "Starting thread " << i
-           << " to run " << trials_per_thread << " trials"
-           << endl;
+      for (my_uint_t i{0}; i < NUM_THREADS; ++i)
+      {
+         if (i == (NUM_THREADS - 1))
+            trials_per_thread += TRIALS % NUM_THREADS;
 
-      futures.push_back(
-                          async(
-                                  launch::async,
-                                  iterate_over_subset_of_trials,
-                                  trials_per_thread
-                               )
-                       );
+         cout << "Starting thread " << i
+              << " to run " << trials_per_thread << " trials"
+              << endl;
+
+         futures.push_back(
+                             async(
+                                     launch::async,
+                                     iterate_over_subset_of_trials,
+                                     trials_per_thread
+                                  )
+                          );
+      }
+
+      cout << endl;
    }
-
-   cout << endl;
 
    for (my_uint_t i{0}; i < NUM_THREADS; ++i)
    {
@@ -94,43 +100,43 @@ void monte_carlo_simulation()
 
    count = hand_rank_count[hand_rank_t::ROYAL_FLUSH];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Royal flush       "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Royal flush       "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::STRAIGHT_FLUSH];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Straight flush    "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Straight flush    "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::FOUR_OF_A_KIND];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Four of a kind    "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Four of a kind    "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::FULL_HOUSE];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Full house        "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Full house        "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::FLUSH];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Flush             "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Flush             "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::STRAIGHT];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Straight          "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Straight          "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::THREE_OF_A_KIND];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Three of a kind   "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Three of a kind   "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::TWO_PAIR];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "Two pair          "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "Two pair          "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::ONE_PAIR];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "One pair          "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "One pair          "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    count = hand_rank_count[hand_rank_t::HIGH_CARD];
    frequency = static_cast<long double>(TRIALS) / count;
-   cout << "High card         "  << setw(15) << count     << "     1 in " << setprecision(6) << frequency << endl;
+   cout << "High card         "  << setw(15) << fixed << count     << "     1 in " << setprecision(6) << frequency << endl;
 
    cout << endl;
 

@@ -11,4 +11,7 @@ static_assert(NUM_CARDS >= 5 && NUM_CARDS <= 52, "NUM_CARDS must be in the range
 // Setting TRIALS > 0 will result in a Monte Carlo simulation of TRIALS trials.
 constexpr my_uint_t TRIALS{0};
 
+// This controls whether or not individual hands are printed as they are considered.
+constexpr bool PRINT{false};
+
 #endif
