@@ -34,11 +34,11 @@ iteration_result_t::iteration_result_t(
 
 namespace
 {
-   const my_uint_t MAX_THREADS{thread::hardware_concurrency()};
+   const my_uint_t MAX_HW_THREADS{thread::hardware_concurrency()};
 
    const my_uint_t NUM_THREADS{
-                                 combinations(52ULL, NUM_CARDS) >= MAX_THREADS ?
-                                 MAX_THREADS                                   :
+                                 combinations(52ULL, NUM_CARDS) >= MAX_HW_THREADS ?
+                                 MAX_HW_THREADS                                   :
                                  combinations(52ULL, NUM_CARDS)
                               };
 

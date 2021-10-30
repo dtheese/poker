@@ -22,12 +22,12 @@ namespace
 {
    constexpr my_uint_t NUM_HANDS{combinations(52ULL, NUM_CARDS)};
 
-   const my_uint_t MAX_THREADS{thread::hardware_concurrency()};
+   const my_uint_t MAX_HW_THREADS{thread::hardware_concurrency()};
 
    const my_uint_t NUM_THREADS{
-                                 TRIALS < MAX_THREADS  ?
-                                 TRIALS                :
-                                 MAX_THREADS
+                                 TRIALS < MAX_HW_THREADS  ?
+                                 TRIALS                   :
+                                 MAX_HW_THREADS
                               };
 
    // Seed a deterministic random number generator with a true random number.
