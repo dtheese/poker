@@ -13,6 +13,7 @@ using namespace std;
 #include "combinations_table.h"
 #include "deck.h"
 #include "dynamic_loop.h"
+#include "dynamic_loop_functor.h"
 #include "hand.h"
 #include "hand_rank_lookup_table.h"
 #include "parameters.h"
@@ -38,6 +39,11 @@ namespace
                                  MAX_THREADS                                   :
                                  combinations(52ULL, NUM_CARDS)
                               };
+
+   iteration_result_t iterate_over_subset_of_hands(
+                                                     const my_uint_t first_encoded_value,
+                                                     const my_uint_t last_encoded_value
+                                                  );
 
    iteration_result_t iterate_over_all_possible_hands();
 }
@@ -92,53 +98,6 @@ void evaluate_all_possible_hands()
 
 namespace
 {
-   class dynamic_loop_functor_t
-   {
-      public:
-         dynamic_loop_functor_t(const array<my_uint_t, NUM_CARDS> &indexes_all_p):
-         indexes_all{indexes_all_p}
-         {
-         }
-
-         dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
-         dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;
-
-         dynamic_loop_functor_t(dynamic_loop_functor_t &&) = delete;
-         dynamic_loop_functor_t &operator=(dynamic_loop_functor_t &&) = delete;
-
-         void operator()(const indexes_t<my_uint_t> &indexes_5)
-         {
-            array<my_uint_t, 5> indexes_into_deck{};
-            my_uint_t j{0};
-
-            for (auto i : indexes_5)
-               indexes_into_deck[j++] = indexes_all[i];
-
-            auto encoded_value_5{
-                 combination_encoder_t<decltype(indexes_into_deck), 52, 5>::
-                 encode(indexes_into_deck)
-                                };
-
-            auto this_hands_rank{hand_rank_lookup_table[encoded_value_5]};
-
-            if (this_hands_rank > highest_hand_seen)
-               highest_hand_seen = this_hands_rank;
-         }
-
-         hand_rank_t getResult() const
-         {
-            return highest_hand_seen;
-         }
-
-      private:
-         const
-         hand_rank_lookup_table_t
-         &hand_rank_lookup_table{hand_rank_lookup_table_s::getInstance().getLookupTable()};
-
-         const array<my_uint_t, NUM_CARDS> &indexes_all;
-         hand_rank_t highest_hand_seen{hand_rank_t::HIGH_CARD};
-   };
-
    // *****************************************************************************
    iteration_result_t iterate_over_subset_of_hands(
                                                      const my_uint_t first_encoded_value,

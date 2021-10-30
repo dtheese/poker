@@ -4,6 +4,7 @@
 
 #include "hand.h"
 #include "iterations.h"
+#include "monte_carlo.h"
 #include "parameters.h"
 
 using namespace std;
@@ -14,7 +15,10 @@ int main()
 
    auto start_time{chrono::steady_clock::now()};
 
-   evaluate_all_possible_hands();
+   if constexpr (TRIALS == 0)
+      evaluate_all_possible_hands();
+   else
+      monte_carlo_simulation();
 
    auto stop_time{chrono::steady_clock::now()};
    auto ticks_taken{stop_time - start_time};
