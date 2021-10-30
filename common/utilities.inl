@@ -1,4 +1,5 @@
 template<typename T>
+constexpr
 inline
 T &operator ++(T &e)
 {

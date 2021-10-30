@@ -6,6 +6,7 @@
 using namespace std;
 
 template<typename T>
+constexpr
 T &operator ++(T &e);
 
 template<typename T>
