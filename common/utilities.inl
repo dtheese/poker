@@ -28,6 +28,7 @@ T combinations(const T n, const T r)
 
 template<typename T>
 constexpr
+inline
 T power(T n, T r)
 {
    T rval{1};
