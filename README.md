@@ -38,7 +38,7 @@ You can create a local clone of this project with this command:
 Edit **common/parameters.h** to select any particular behavior, as described above.
 
 The program can then be built as follows:  
-**cd poker/main**
+**cd poker/main**  
 **./build**
 
 The program can then be run as follows:  
