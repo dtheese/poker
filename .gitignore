@@ -6,3 +6,5 @@ experiments/
 Debug
 Release
 .vs/
+gmon.out
+profile_results.txt
