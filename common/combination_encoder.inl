@@ -19,17 +19,17 @@ typename T::value_type combination_encoder_t<T, N1, K1>::encode(const T &indexes
       auto a3{indexes[3]};
       auto a4{indexes[4]};
 
-      offset += power(a0,(T1) 5) + 5*4801*power(a0,(T1) 3) + 6*4797999*a0;
-      offset += 30*33*power(a1,(T1) 3) + 30*80817*a1;
-      offset += 20*power(a2,(T1) 3) + 20*7499*a2;
+      offset += a0*a0*a0*a0*a0 + 5*4801*a0*a0*a0 + 6*4797999*a0;
+      offset += 30*33*a1*a1*a1 + 30*80817*a1;
+      offset += 20*a2*a2*a2 + 20*7499*a2;
       offset += 60*101*a3;
       offset += 120*a4;
 
-      offset -= (5*49*power(a0,(T1) 4) + 5*235151*power(a0,(T1) 2));
-      offset -= (5*power(a1,(T1) 4) + 5*14699*power(a1,(T1) 2));
-      offset -= 120*25*power(a2,(T1) 2);
-      offset -= 60*power(a3,(T1) 2);
-      offset -= (T1) 120*22152;
+      offset -= 5*49*a0*a0*a0*a0 + 5*235151*a0*a0;
+      offset -= 5*a1*a1*a1*a1 + 5*14699*a1*a1;
+      offset -= 120*25*a2*a2;
+      offset -= 60*a3*a3;
+      offset -= ((T1) 120)*22152;
 
       offset /= (T1) 120;
 
