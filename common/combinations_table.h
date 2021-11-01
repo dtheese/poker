@@ -28,7 +28,7 @@ class combinations_table_s
       const combinations_table_t<T, N1> &getTable() const;
 
    private:
-      explicit combinations_table_s();
+      combinations_table_s();
       ~combinations_table_s();
 
       // Zero initialize all elements with {}

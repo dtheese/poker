@@ -28,7 +28,7 @@ class deck_s
       const deck_t &getDeck() const;
 
    private:
-      explicit deck_s();
+      deck_s();
       ~deck_s();
 
       deck_t deck;

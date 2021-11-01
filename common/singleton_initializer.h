@@ -15,7 +15,7 @@ class singleton_initializer_s
       singleton_initializer_s *operator&() = delete;
 
    private:
-      explicit singleton_initializer_s();
+      singleton_initializer_s();
       ~singleton_initializer_s();
 
       static singleton_initializer_s instance;
