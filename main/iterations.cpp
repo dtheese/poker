@@ -45,7 +45,7 @@ namespace
                                   {
                                      THREADS_LIMIT,
                                      combinations(52ULL, NUM_CARDS),
-                                     MAX_HW_THREADS
+                                     MAX_HW_THREADS > 0 ? MAX_HW_THREADS : 1
                                   }
                                )
                          };
