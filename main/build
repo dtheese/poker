@@ -1,5 +1,33 @@
 #!/bin/bash
 
+set -o nounset
+set -o errexit
+set -o pipefail
+
+declare -r HEADER_TEST_DIR=header_tests
+
+mkdir -p $HEADER_TEST_DIR
+
+for ONE_FILE in $(ls *.h ../common/*.h)
+do
+   FILENAME_BASE=$(basename $ONE_FILE)
+   FILENAME_NO_SUFFIX=${FILENAME_BASE%.*}
+   HEADER_TEST=$HEADER_TEST_DIR/${FILENAME_NO_SUFFIX}_header_test.cpp
+
+   if [[ ! -f $HEADER_TEST ]]; then
+      echo "#include \"$FILENAME_BASE\"" >  $HEADER_TEST
+      echo ""                            >> $HEADER_TEST
+      echo "int main()"                  >> $HEADER_TEST
+      echo "{"                           >> $HEADER_TEST
+      echo "}"                           >> $HEADER_TEST
+   fi
+done
+
+cd $HEADER_TEST_DIR
+g++ -std=c++17 -pthread -Wall -Wpedantic -Wextra -Ofast -c -I .. -I ../../common *.cpp
+rm -f *.o
+
+cd ..
 rm -f poker
 
 # This is my preferred compiler invocation. However, this has been seen in some
