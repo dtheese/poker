@@ -25,9 +25,10 @@ done
 
 cd $HEADER_TEST_DIR
 g++ -std=c++17 -pthread -Wall -Wpedantic -Wextra -Ofast -c -I .. -I ../../common *.cpp
-rm -f *.o
+rm -f *.o *.cpp
 
 cd ..
+rmdir $HEADER_TEST_DIR
 rm -f poker
 
 # This is my preferred compiler invocation. However, this has been seen in some
