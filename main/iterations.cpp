@@ -1,5 +1,6 @@
 #include <array>
 #include <future>
+#include <iomanip>
 #include <iostream>
 #include <mutex>
 #include <numeric>
@@ -74,16 +75,106 @@ void evaluate_all_possible_hands()
    cout << "Hands dealt: " << hands_dealt_l << endl;
    cout << endl;
 
-   cout << "Royal flush       "  << hand_rank_count_l[hand_rank_t::ROYAL_FLUSH]     << endl;
-   cout << "Straight flush    "  << hand_rank_count_l[hand_rank_t::STRAIGHT_FLUSH]  << endl;
-   cout << "Four of a kind    "  << hand_rank_count_l[hand_rank_t::FOUR_OF_A_KIND]  << endl;
-   cout << "Full house        "  << hand_rank_count_l[hand_rank_t::FULL_HOUSE]      << endl;
-   cout << "Flush             "  << hand_rank_count_l[hand_rank_t::FLUSH]           << endl;
-   cout << "Straight          "  << hand_rank_count_l[hand_rank_t::STRAIGHT]        << endl;
-   cout << "Three of a kind   "  << hand_rank_count_l[hand_rank_t::THREE_OF_A_KIND] << endl;
-   cout << "Two pair          "  << hand_rank_count_l[hand_rank_t::TWO_PAIR]        << endl;
-   cout << "One pair          "  << hand_rank_count_l[hand_rank_t::ONE_PAIR]        << endl;
-   cout << "High card         "  << hand_rank_count_l[hand_rank_t::HIGH_CARD]       << endl;
+   cout << "Royal flush       "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::ROYAL_FLUSH]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::ROYAL_FLUSH]
+        << endl;
+
+   cout << "Straight flush    "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::STRAIGHT_FLUSH]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::STRAIGHT_FLUSH]
+        << endl;
+
+   cout << "Four of a kind    "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::FOUR_OF_A_KIND]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::FOUR_OF_A_KIND]
+        << endl;
+
+   cout << "Full house        "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::FULL_HOUSE]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::FULL_HOUSE]
+        << endl;
+
+   cout << "Flush             "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::FLUSH]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::FLUSH]
+        << endl;
+
+   cout << "Straight          "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::STRAIGHT]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::STRAIGHT]
+        << endl;
+
+   cout << "Three of a kind   "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::THREE_OF_A_KIND]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::THREE_OF_A_KIND]
+        << endl;
+
+   cout << "Two pair          "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::TWO_PAIR]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::TWO_PAIR]
+        << endl;
+
+   cout << "One pair          "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::ONE_PAIR]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::ONE_PAIR]
+        << endl;
+
+   cout << "High card         "
+        << setw(15)
+        << fixed
+        << hand_rank_count_l[hand_rank_t::HIGH_CARD]
+        << "     1 in "
+        << setprecision(6)
+        << static_cast<long double>(hands_dealt_l) /
+           hand_rank_count_l[hand_rank_t::HIGH_CARD]
+        << endl;
+
    cout << endl;
 
    cout << "Confirming hands dealt: "                        \
