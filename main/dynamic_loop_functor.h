@@ -14,7 +14,7 @@ using namespace std;
 class dynamic_loop_functor_t
 {
    public:
-      dynamic_loop_functor_t(const array<my_uint_t, NUM_CARDS> &indexes_all_p);
+      explicit dynamic_loop_functor_t(const array<my_uint_t, NUM_CARDS> &indexes_all_p);
 
       dynamic_loop_functor_t(const dynamic_loop_functor_t &) = delete;
       dynamic_loop_functor_t &operator=(const dynamic_loop_functor_t &) = delete;

@@ -8,3 +8,4 @@ Release
 .vs/
 gmon.out
 profile_results.txt
+cppcheck_work_folder/

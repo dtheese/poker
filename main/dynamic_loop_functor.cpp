@@ -14,10 +14,13 @@ indexes_all{indexes_all_p}
 void dynamic_loop_functor_t::operator()(const indexes_t<my_uint_t> &indexes_5)
 {
    array<my_uint_t, 5> indexes_into_deck{};
-   my_uint_t j{0};
 
-   for (auto i : indexes_5)
-      indexes_into_deck[j++] = indexes_all[i];
+   {
+      my_uint_t j{0};
+
+      for (auto i : indexes_5)
+         indexes_into_deck[j++] = indexes_all[i];
+   }
 
    auto encoded_value_5{
         combination_encoder_t<decltype(indexes_into_deck), 52, 5>::
@@ -34,10 +37,13 @@ void dynamic_loop_functor_t::operator()(const indexes_t<my_uint_t> &indexes_5)
    {
       const deck_t &deck{deck_s::getInstance().getDeck()};
       array<card_t, 5> cards;
-      my_uint_t j{0};
 
-      for (auto i : indexes_into_deck)
-         cards[j++] = deck[i];
+      {
+         my_uint_t j{0};
+
+         for (auto i : indexes_into_deck)
+            cards[j++] = deck[i];
+      }
 
       hand_t hand{cards};
 

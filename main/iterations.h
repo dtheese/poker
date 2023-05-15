@@ -14,7 +14,7 @@ struct iteration_result_t
    iteration_result_t();
 
    iteration_result_t(
-                        const map<hand_rank_t, my_uint_t> hand_rank_count_p,
+                        const map<hand_rank_t, my_uint_t> &hand_rank_count_p,
                         const my_uint_t hands_dealt_p
                      );
 
