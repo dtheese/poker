@@ -3,7 +3,6 @@
 #include <iostream>
 #include <map>
 #include <mutex>
-#include <random>
 #include <thread>
 #include <vector>
 
@@ -14,6 +13,7 @@ using namespace std;
 #include "fundamental_types.h"
 #include "parameters.h"
 #include "print_mutex.h"
+#include "prng.h"
 #include "utilities.h"
 
 #include "monte_carlo.h"
@@ -33,12 +33,6 @@ namespace
                                   }
                                )
                          };
-
-   // Seed a deterministic random number generator with a true random number.
-   // Prepare a uniform random number generator.
-   random_device rd;
-   default_random_engine dre{rd()};
-   uniform_int_distribution<my_uint_t> di{0, NUM_HANDS - 1};
 
    map<hand_rank_t, my_uint_t> iterate_over_subset_of_trials(const my_uint_t trials);
 }
@@ -165,6 +159,8 @@ namespace
 {
    map<hand_rank_t, my_uint_t> iterate_over_subset_of_trials(const my_uint_t trials)
    {
+      thread_local prng_t<my_uint_t> prng{0, NUM_HANDS - 1};
+
       map<hand_rank_t, my_uint_t> hand_rank_count;
 
       hand_rank_count[hand_rank_t::HIGH_CARD]       = 0;
@@ -184,7 +180,7 @@ namespace
 
       for (my_uint_t i{trials}; i != 0; --i)
       {
-         auto encoded_value{di(dre)};
+         my_uint_t encoded_value{prng.rand()};
 
          array<my_uint_t, NUM_CARDS> indexes{};
 
