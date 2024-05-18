@@ -24,7 +24,7 @@ do
 done
 
 cd $HEADER_TEST_DIR
-g++ -std=c++17 -pthread -Wall -Wpedantic -Wextra -Ofast -c -I .. -I ../../common *.cpp
+g++ -std=c++20 -pthread -Wall -Wpedantic -Wextra -Ofast -c -I .. -I ../../common *.cpp
 rm -f *.o *.cpp
 
 cd ..
@@ -33,6 +33,6 @@ rm -f poker
 
 # This is my preferred compiler invocation. However, this has been seen in some
 # cases to generate incorrect code. If this happens, try less aggressive optimization.
-g++ -std=c++17 -pthread -Wall -Wpedantic -Wextra -Ofast -I . -I ../common -o poker *.cpp ../common/*.cpp
+g++ -std=c++20 -pthread -Wall -Wpedantic -Wextra -Ofast -I . -I ../common -o poker *.cpp ../common/*.cpp
 
 exit 0
