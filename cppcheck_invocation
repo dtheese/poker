@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cppcheck --std=c++17 --enable=all -I common -I main --cppcheck-build-dir=cppcheck_work_folder common/*.cpp main/*.cpp

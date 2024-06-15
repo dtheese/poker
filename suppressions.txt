@@ -1,0 +1,12 @@
+// This file contains a list of error suppressions for cppcheck to use
+
+// Ths prevents complaints about not seeing standard library headers
+missingIncludeSystem
+
+// These prevent the following false positive:
+// error: Syntax error. Unexpected tokens in initializer. [internalAstError]
+// constexpr long double tick_interval{decltype(ticks_taken)::period::den};
+internalAstError:main/main.cpp
+
+// Suppress other unwanted warnings
+knownConditionTrueFalse:common/combination_encoder.inl
